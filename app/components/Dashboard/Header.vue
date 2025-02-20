@@ -1,31 +1,39 @@
 <template>
-  <div class="fixed right-0 top-0 flex gap-2 items-center w-full text-gray-500 p-3 lg:w-[calc(100%-16rem)]">
-    <Button>
-      <Icon name="lucide:panel-left" class="p-2 " /> | 
-    </Button>
-    <UBreadcrumb :items="items" variant="link"/>
+  <div
+    :class="!isToggle ? 'lg:w-[calc(100%-var(--sidebar-compact))]' : ''"
+    class="header"
+  >
+    <div class="flex items-center">
+      <UButton color="neutral" variant="ghost" class="cursor-pointer" @click="toggle">
+        <Icon name="lucide:panel-left" />
+      </UButton>
+      |
+      <UBreadcrumb class="ml-2" :items="items" variant="link" />
+    </div>
+    <div>
+      <UButton color="neutral" variant="ghost" class="cursor-pointer">
+        <Icon name="lucide:moon-star" />
+      </UButton>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+const isToggle = useState("toggle", () => true);
+
+const toggle = () => {
+  isToggle.value = !isToggle.value;
+};
 const items = ref([
   {
-    label: 'Home',
-    icon: 'i-lucide-house'
+    label: "Home",
+    icon: "i-lucide-home",
   },
   {
-    label: 'Components',
-    icon: 'i-lucide-box',
-    to: '/components'
+    label: "Dashboard",
+    to: "/components",
   },
-  {
-    label: 'Breadcrumb',
-    icon: 'i-lucide-link',
-    to: '/components/breadcrumb'
-  }
-])
+]);
 </script>
 
-<style>
-
-</style>
+<style></style>
