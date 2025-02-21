@@ -2,12 +2,18 @@
 @import "@nuxt/ui";
 
 @custom-variant dark (&:where(.dark, .dark *));
-@theme {
+
+@plugin 'tailwind-scrollbar';
+:root {
+  --ui-bg:var(--sidebar-background)
   --ui-primary: var(--primary);
   --ui-secondary: var(--secondary);
   --ui-error: var(--destructive);
+  --ui-border: var(--border);
+  --ui-text-dimmed:var(--foreground);
 
   --font-sans: "Public Sans", sans-serif;
+  --font-poppins: "Poppins", system-ui, sans-serif;
   --background: hsl(0 0% 100%);
   --foreground: hsl(0 0% 3.9%);
 
@@ -53,57 +59,78 @@
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
+.dark {
+  --ui-bg:var(--sidebar-background);
+  --ui-primary: var(--primary);
+  --ui-secondary: var(--secondary);
+  --ui-error: var(--destructive);
+  --ui-border: var(--border);
+
+  --background: hsl(0 0% 3.9%);
+  --foreground: hsl(0 0% 98%);
+
+  --muted: hsl(0 0% 14.9%);
+  --muted-foreground: hsl(0 0% 63.9%);
+
+  --popover: hsl(0 0% 3.9%);
+  --popover-foreground: hsl(0 0% 98%);
+
+  --card: hsl(0 0% 3.9%);
+  --card-foreground: hsl(0 0% 98%);
+
+  --border: hsl(0 0% 14.9%);
+  --input: hsl(0 0% 14.9%);
+
+  --primary: hsl(0 0% 98%);
+  --primary-foreground: hsl(0 0% 9%);
+
+  --secondary: hsl(0 0% 14.9%);
+  --secondary-foreground: hsl(0 0% 98%);
+
+  --accent: hsl(0 0% 14.9%);
+  --accent-foreground: hsl(0 0% 98%);
+
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(0 0% 98%);
+
+  --ring: hsl(0 0% 83.1%);
+
+  --sidebar-background: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
 @layer components {
-  .sidebar {
-    @apply relative w-(--msidebar) lg:w-(--sidebar) h-screen border-r-[1px] bg-(--sidebar-background) rounded-r-lg z-50;
+  /* .sidebar {
+    @apply fixed z-50 top-0 left-0 h-screen transition-transform lg:relative lg:translate-x-0 w-(--msidebar) lg:w-(--sidebar) border-r-[1px] bg-(--sidebar-background) rounded-r-lg ;
+  } */
+
+  /* .header {
+    @apply fixed z-30  right-0 top-0 flex  justify-between items-center  text-gray-500 py-4 pr-4 pl-2 lg:w-[calc(100%-var(--sidebar))] shadow-sm;
   }
+   */
+  /* .footer-sidebar{
+    @apply fixed left-0 bottom-0 w-(--msidebar) lg:w-(--sidebar) flex items-center bg-white rounded-sm shadow-lg py-2 px-2;
+  } */
 
-  .header {
-    @apply fixed right-0 top-0 flex justify-between items-center w-full text-gray-500 py-4 pr-4 pl-2 lg:w-[calc(100%-var(--sidebar))] shadow-sm;
-  }
-}
-
-@layer theme {
-  .dark {
-    --background: hsl(0 0% 3.9%);
-    --foreground: hsl(0 0% 98%);
-
-    --muted: hsl(0 0% 14.9%);
-    --muted-foreground: hsl(0 0% 63.9%);
-
-    --popover: hsl(0 0% 3.9%);
-    --popover-foreground: hsl(0 0% 98%);
-
-    --card: hsl(0 0% 3.9%);
-    --card-foreground: hsl(0 0% 98%);
-
-    --border: hsl(0 0% 14.9%);
-    --input: hsl(0 0% 14.9%);
-
-    --primary: hsl(0 0% 98%);
-    --primary-foreground: hsl(0 0% 9%);
-
-    --secondary: hsl(0 0% 14.9%);
-    --secondary-foreground: hsl(0 0% 98%);
-
-    --accent: hsl(0 0% 14.9%);
-    --accent-foreground: hsl(0 0% 98%);
-
-    --destructive: hsl(0 62.8% 30.6%);
-    --destructive-foreground: hsl(0 0% 98%);
-
-    --ring: hsl(0 0% 83.1%);
-
-    --sidebar-background: hsl(240 5.9% 10%);
-    --sidebar-foreground: hsl(240 4.8% 95.9%);
-    --sidebar-primary: hsl(224.3 76.3% 48%);
-    --sidebar-primary-foreground: hsl(0 0% 100%);
-    --sidebar-accent: hsl(240 3.7% 15.9%);
-    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-    --sidebar-border: hsl(240 3.7% 15.9%);
-    --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  .custom-scrollbar {
+    @apply [&::-webkit-scrollbar]:w-1
+           [&::-webkit-scrollbar-track]:rounded-full
+           [&::-webkit-scrollbar-track]:bg-gray-100
+           [&::-webkit-scrollbar-thumb]:rounded-full
+           [&::-webkit-scrollbar-thumb]:bg-gray-300
+           dark:[&::-webkit-scrollbar-track]:bg-gray-500
+           dark:[&::-webkit-scrollbar-thumb]:bg-black/60
+           cursor-pointer;
   }
 }
+
+
 
 @layer base {
   h1 {
@@ -128,6 +155,6 @@
   }
 
   * {
-    @apply border-(--border);
+    @apply border-(--ui-border);
   }
 }

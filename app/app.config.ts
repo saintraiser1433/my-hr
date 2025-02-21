@@ -1,3 +1,5 @@
+
+
 export default defineAppConfig({
   // https://ui3.nuxt.dev/getting-started/theme#design-system
   ui: {
@@ -12,9 +14,20 @@ export default defineAppConfig({
     },
     navigationMenu: {
       slots: {
-        // link: 'group relative w-full flex items-center text-black gap-1.5 font-medium text-sm before:absolute before:z-[-1] before:rounded-[calc(var(--ui-radius)*1.5)] focus:outline-none focus-visible:outline-none dark:focus-visible:outline-none focus-visible:before:ring-inset focus-visible:before:ring-2',
-        link: 'cursor-pointer px-3 py-2 text-sm text-(--foreground) ',
-      }
+
+        link: 'cursor-pointer px-3 py-2 text-sm  font-light cursor-pointer px-3 py-2 text-[13px]',
+      },
+      compoundVariants: [
+        {
+          orientation: 'vertical',
+          collapsed: false,
+          class: {
+            childList: 'ms-5 border-s border-(--ui-border) dark:border-(--ui-border)',
+            childItem: 'ps-1.5 -ms-px'
+          }
+        },
+      ],
+
 
     },
     breadcrumb: {
@@ -24,7 +37,7 @@ export default defineAppConfig({
       variants: {
         active: {
           true: {
-            link: 'text-slate-950 font-semibold'
+            link: 'text-(--foreground) dark:text-(--foreground)  font-medium'
           },
           false: {
             link: 'text-(--ui-text-muted) font-medium'
