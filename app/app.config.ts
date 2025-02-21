@@ -30,6 +30,19 @@ export default defineAppConfig({
 
 
     },
+    button: {
+      slots: {
+        base: 'cursor-pointer'
+      }
+    },
+
+    dropdownMenu: {
+      slots: {
+        content: 'bg-(--sidebar-background) dark:bg-(--sidebar-background)',
+        item: 'cursor-pointer',
+        itemLabel: 'text-xs',
+      }
+    },
     breadcrumb: {
       slots: {
         link: 'text-sm'
@@ -45,11 +58,6 @@ export default defineAppConfig({
         }
       },
     },
-    button: {
-      defaultVariants: {
-        // Set default button color to neutral
-        // color: 'neutral'
-      }
-    }
+
   }
 })

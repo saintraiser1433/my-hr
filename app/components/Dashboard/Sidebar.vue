@@ -1,27 +1,37 @@
 <template>
   <aside
-    :class="isToggle ? '-translate-x-full lg:translate-x-0 lg:w-(--sidebar-compact)' : 'translate-x-0 w-(--msidebar) lg:w-(--sidebar)'"
-    class="flex transition-all ease-in-out h-full z-50 fixed top-0 left-0 bg-(--sidebar-background) border-r-[1px] rounded-r-sm flex-col">
+    :class="
+      isToggle
+        ? '-translate-x-full lg:translate-x-0 lg:w-(--sidebar-compact)'
+        : 'translate-x-0 w-(--msidebar) lg:w-(--sidebar)'
+    "
+    class="flex transition-all ease-in-out h-full z-50 fixed top-0 left-0 bg-(--sidebar-background) border-r-[1px] rounded-r-sm flex-col"
+  >
     <div class="flex items-center gap-2 px-3 h-14 flex-none">
-      <div class="relative flex items-center justify-center p-1 rounded-lg bg-gray-700 dark:bg-gray-800">
+      <div
+        class="relative flex items-center justify-center p-1 rounded-lg bg-gray-700 dark:bg-gray-800"
+      >
         <NuxtImg src="/logo/seait.png" quality="20" width="24" height="24"></NuxtImg>
       </div>
       <div v-if="!isToggle" class="flex flex-col">
         <h4 class="font-bold">SUPERHURE</h4>
         <span class="text-[10px]">E-HR SYSTEM</span>
-
       </div>
     </div>
     <USeparator></USeparator>
-    <UNavigationMenu :items="items" orientation="vertical"
+    <UNavigationMenu
+      :items="items"
+      orientation="vertical"
       :class="isToggle ? 'lg:w-(--sidebar-compact)' : 'lg:w-(--sidebar)'"
-      class="overflow-y-auto custom-scrollbar px-2 flex-2" :ui="{
+      class="overflow-y-auto custom-scrollbar px-2 flex-2"
+      :ui="{
         linkLabel: isToggle ? 'lg:hidden' : '',
         childItem: isToggle ? 'lg:hidden' : '',
         label: 'text-xs text-gray-600 font-medium dark:text-gray-400',
         link: 'text-(--foreground)  dark:text-(--foreground)',
-        linkLeadingIcon: 'text-(--foreground) dark:text-(--foreground)'
-      }">
+        linkLeadingIcon: 'text-(--foreground) dark:text-(--foreground)',
+      }"
+    >
       <template v-if="isToggle" #components-trailing>
         <span></span>
       </template>
@@ -32,21 +42,28 @@
 
     <!-- custom-scrollbar -->
 
-    <footer class="flex  relative items-center rounded-sm shadow-lg py-2 px-2">
-      <UDropdownMenu arrow class="w-full" :items="itemss" :content="{
-
-        align: 'center',
-        side: 'top',
-
-      }" :ui="{
-        content: 'w-64  overflow-hidden relative lg:left-55 lg:-bottom-15 ',
-        item: 'cursor-pointer text-xs font-medium'
-
-      }">
-
-        <UButton class="cursor-pointer flex" label="Open" color="neutral" variant="ghost">
-          <div class="rounded-md  bg-gray-400 text-white dark:bg-gray-800 px-2 py-1">JD</div>
-          <div v-if="!isToggle" class="flex flex-col items-center justify-start px-2 flex-1">
+    <footer class="flex relative items-center justify-center rounded-sm shadow-lg">
+      <UDropdownMenu
+        arrow
+        class="w-full"
+        :items="itemss"
+        :content="{
+          align: 'center',
+          side: 'top',
+        }"
+        :ui="{
+          content: 'w-64 lg:w-52  overflow-hidden relative',
+          item: 'cursor-pointer text-xs font-medium',
+        }"
+      >
+        <UButton class="flex justify-center" label="Open" color="neutral" variant="ghost">
+          <div class="rounded-md bg-gray-400 text-white dark:bg-gray-800 px-2 py-1">
+            JD
+          </div>
+          <div
+            v-if="!isToggle"
+            class="flex flex-col items-center justify-start px-2 flex-1"
+          >
             <h5>Johnrey Decosta</h5>
             <span class="text-xs">Administrator</span>
           </div>
@@ -55,33 +72,37 @@
           </div>
         </UButton>
       </UDropdownMenu>
-
     </footer>
   </aside>
 </template>
 
 <script setup>
 const isToggle = useState("toggle");
+const handleMenuClick = (item) => {
+  if (item.children) {
+    toggle(); // Only toggle if the menu item has children (collapsible)
+  }
+};
+const toggle = () => {
+  alert("me");
+  isToggle.value = !isToggle.value;
+};
 const itemss = ref([
   {
-    label: 'Profile',
-    icon: 'i-lucide-user',
-
+    label: "Profile",
+    icon: "i-lucide-user",
   },
-  { type: 'separator' },
+  { type: "separator" },
   {
-    label: 'Billing',
-    icon: 'i-lucide-credit-card',
-
+    label: "Billing",
+    icon: "i-lucide-credit-card",
   },
-  { type: 'separator' },
+  { type: "separator" },
   {
-    label: 'Log out',
-    icon: 'i-lucide-cog',
-
-  }
-  
-])
+    label: "Log out",
+    icon: "i-lucide-cog",
+  },
+]);
 const items = ref([
   [
     {
@@ -91,7 +112,7 @@ const items = ref([
     {
       label: "Home",
       icon: "i-lucide-book-open",
-      to: "/composable/",
+      to: "/admin",
       slot: "home",
     },
 
