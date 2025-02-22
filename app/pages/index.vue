@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { h, resolveComponent } from 'vue'
 import type { TableColumn } from '@nuxt/ui'
+import type { Column } from '@tanstack/vue-table'
 
 const UBadge = resolveComponent('UBadge')
+const UButton = resolveComponent('UButton')
+const UDropdownMenu = resolveComponent('UDropdownMenu')
 
 type Payment = {
   id: string
@@ -53,12 +56,12 @@ const data = ref<Payment[]>([
 const columns: TableColumn<Payment>[] = [
   {
     accessorKey: 'id',
-    header: '#',
+    header: ({ column }) => getHeader(column, 'ID'),
     cell: ({ row }) => `#${row.getValue('id')}`
   },
   {
     accessorKey: 'date',
-    header: 'Date',
+    header: ({ column }) => getHeader(column, 'Date'),
     cell: ({ row }) => {
       return new Date(row.getValue('date')).toLocaleString('en-US', {
         day: 'numeric',
@@ -71,7 +74,7 @@ const columns: TableColumn<Payment>[] = [
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: ({ column }) => getHeader(column, 'Status'),
     cell: ({ row }) => {
       const color = {
         paid: 'success' as const,
@@ -86,11 +89,11 @@ const columns: TableColumn<Payment>[] = [
   },
   {
     accessorKey: 'email',
-    header: 'Email'
+    header: ({ column }) => getHeader(column, 'Email')
   },
   {
     accessorKey: 'amount',
-    header: () => h('div', { class: 'text-right' }, 'Amount'),
+    header: ({ column }) => h('div', { class: 'text-right' }, getHeader(column, 'Amount')),
     cell: ({ row }) => {
       const amount = Number.parseFloat(row.getValue('amount'))
 
@@ -103,23 +106,80 @@ const columns: TableColumn<Payment>[] = [
     }
   }
 ]
+
+function getHeader(column: Column<Payment>, label: string) {
+  const isSorted = column.getIsSorted()
+
+  return h(
+    UDropdownMenu,
+    {
+      content: {
+        align: 'start'
+      },
+      items: [
+        {
+          label: 'Asc',
+          type: 'checkbox',
+          icon: 'i-lucide-arrow-up-narrow-wide',
+          checked: isSorted === 'asc',
+          onSelect: () => {
+            if (isSorted === 'asc') {
+              column.clearSorting()
+            } else {
+              column.toggleSorting(false)
+            }
+          }
+        },
+        {
+          label: 'Desc',
+          icon: 'i-lucide-arrow-down-wide-narrow',
+          type: 'checkbox',
+          checked: isSorted === 'desc',
+          onSelect: () => {
+            if (isSorted === 'desc') {
+              column.clearSorting()
+            } else {
+              column.toggleSorting(true)
+            }
+          }
+        }
+      ]
+    },
+    () =>
+      h(UButton, {
+        color: 'neutral',
+        variant: 'ghost',
+        label,
+        icon: isSorted
+          ? isSorted === 'asc'
+            ? 'i-lucide-arrow-up-narrow-wide'
+            : 'i-lucide-arrow-down-wide-narrow'
+          : 'i-lucide-arrow-up-down',
+        class: '-mx-2.5 data-[state=open]:bg-(--ui-bg-elevated)'
+      })
+  )
+}
+
+const sorting = ref([
+  {
+    id: 'id',
+    desc: false
+  }
+])
+const test = () => {
+  data.value.push({
+    id: '123217',
+    date: '2024-03-10T19:45:00',
+    status: 'paid',
+    email: 'dasdasdsa@example.com',
+    amount: 529
+  })
+  alert('me');
+}
 </script>
 
 <template>
-  <template>
-    <UCard>
-      <template #header>
-        
-      </template>
-
-      <UTable :data="data" :columns="columns" class="flex-1" />
-
-      <template #footer>
-      
-      </template>
-    </UCard>
-  </template>
-
-
-
+  {{ data }}
+  <UButton @click="test">dasdsa</UButton>
+  <UTable :key="data.length" v-model:sorting="sorting" :data="data" :columns="columns" class="flex-1" />
 </template>

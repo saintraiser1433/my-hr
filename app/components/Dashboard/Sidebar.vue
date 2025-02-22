@@ -28,8 +28,7 @@
         linkLabel: isToggle ? 'lg:hidden' : '',
         childItem: isToggle ? 'lg:hidden' : '',
         label: 'text-xs text-gray-600 font-medium dark:text-gray-400',
-        link: 'text-(--foreground)  dark:text-(--foreground)',
-        linkLeadingIcon: 'text-(--foreground) dark:text-(--foreground)',
+
       }"
     >
       <template v-if="isToggle" #components-trailing>

@@ -4,7 +4,7 @@ export default defineAppConfig({
   // https://ui3.nuxt.dev/getting-started/theme#design-system
   ui: {
     colors: {
-      primary: 'indigo',
+      primary: 'primary',
       secondary: 'gray',
       success: 'emerald',
       info: 'blue',
@@ -14,8 +14,7 @@ export default defineAppConfig({
     },
     navigationMenu: {
       slots: {
-
-        link: 'cursor-pointer px-3 py-2 text-sm  font-light cursor-pointer px-3 py-2 text-[13px]',
+        link: 'cursor-pointer px-3 py-2 text-sm  font-light cursor-pointer px-3 py-2 text-[13px]  ',
       },
       compoundVariants: [
         {
@@ -26,21 +25,93 @@ export default defineAppConfig({
             childItem: 'ps-1.5 -ms-px'
           }
         },
+        {
+          disabled: false,
+          active: false,
+          variant: 'pill',
+          class: {
+            link: 'hover:text-(--primary-foreground)  dark:hover:text-(--primary-foreground) text-(--foreground) dark:text-(--foreground)  hover:before:bg-(--ui-primary) dark:hover:before:bg-(--ui-primary) transition-colors before:transition-colors',
+            linkLeadingIcon: 'text-(--foreground) group-hover:text-(--primary-foreground) transition-colors'
+          }
+        },
+
+        {
+          color: 'neutral',
+          variant: 'pill',
+          active: true,
+          class: {
+            link: 'text-(--primary-foreground)',
+            linkLeadingIcon: 'text-(--primary-foreground) group-data-[state=open]:text-(--primary-foreground)'
+          }
+        },
+        {
+          variant: 'pill',
+          active: true,
+          highlight: false,
+          class: {
+            link: 'before:bg-(--primary)'
+          }
+        },
+
       ],
 
 
+      defaultVariants: {
+        color: 'neutral',
+        highlightColor: 'neutral',
+        variant: 'pill'
+      }
+
+
     },
-    button: {
+   
+
+    formField: {
       slots: {
-        base: 'cursor-pointer'
+        error: 'text-xs font-bold',
+        label: 'text-xs'
+      }
+    },
+    modal: {
+      slots: {
+        overlay: 'bg-white/90 dark:bg-black/80',
+        footer: 'sm:px-4 py-3 justify-end',
+        body: 'sm:p-4',
+        header: 'sm:px-4 py-3',
+        description:'text-xs'
       }
     },
 
+    button: {
+      slots: {
+        base: 'cursor-pointer'
+      },
+      compoundVariants: [
+        {
+          color: 'neutral',
+          variant: 'solid',
+          class: 'text-white dark:text-black bg-(--ui-bg-inverted) hover:bg-(--ui-bg-inverted)/90 disabled:bg-(--ui-bg-inverted) aria-disabled:bg-(--ui-bg-inverted) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ui-border-inverted)'
+        }],
+      defaultVariants: {
+        color: 'neutral',
+        variant: 'solid',
+        size: 'sm'
+
+      }
+    },
+
+
     dropdownMenu: {
       slots: {
-        content: 'bg-(--sidebar-background) dark:bg-(--sidebar-background)',
+        content: 'bg-(--ui-bg) dark:bg-(--ui-bg)',
         item: 'cursor-pointer',
         itemLabel: 'text-xs',
+      },
+      defaultVariants: {
+        color: 'neutral',
+        variant: 'solid',
+        size: 'sm'
+
       }
     },
     breadcrumb: {
@@ -57,6 +128,12 @@ export default defineAppConfig({
           }
         }
       },
+      defaultVariants: {
+        color: 'neutral',
+        variant: 'solid',
+        size: 'sm'
+
+      }
     },
 
   }

@@ -7,7 +7,7 @@
     "
     class="flex w-full max-w-full fixed z-30 right-0 top-0 flex-none h-14 justify-between items-center transition-all ease-in-out text-gray-500 pr-4 pl-2 border-b-[1px]"
   >
-    <div class="flex items-center">
+    <div class="flex items-center gap-1">
       <UButton color="neutral" variant="ghost" @click="toggle">
         <Icon name="lucide:panel-left" />
       </UButton>
@@ -25,7 +25,7 @@
         <UButton
           :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
           color="neutral"
-          variant="ghost"
+          variant="soft"
           @click="isDark = !isDark"
         />
 

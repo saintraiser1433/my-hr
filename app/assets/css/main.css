@@ -5,15 +5,15 @@
 
 @plugin 'tailwind-scrollbar';
 :root {
-  --ui-bg:var(--sidebar-background)
+  --font-sans: "Public Sans", sans-serif;
+  --font-poppins: "Poppins", system-ui, sans-serif;
+  --ui-border-accented: var(--border);
+  --ui-bg: var(--sidebar-background);
   --ui-primary: var(--primary);
   --ui-secondary: var(--secondary);
   --ui-error: var(--destructive);
   --ui-border: var(--border);
-  --ui-text-dimmed:var(--foreground);
 
-  --font-sans: "Public Sans", sans-serif;
-  --font-poppins: "Poppins", system-ui, sans-serif;
   --background: hsl(0 0% 100%);
   --foreground: hsl(0 0% 3.9%);
 
@@ -60,7 +60,8 @@
 }
 
 .dark {
-  --ui-bg:var(--sidebar-background);
+  --ui-border-accented: var(--border);
+  --ui-bg: var(--sidebar-background);
   --ui-primary: var(--primary);
   --ui-secondary: var(--secondary);
   --ui-error: var(--destructive);
@@ -106,6 +107,10 @@
 }
 
 @layer components {
+  .base-text {
+    @apply text-xs;
+  }
+
   /* .sidebar {
     @apply fixed z-50 top-0 left-0 h-screen transition-transform lg:relative lg:translate-x-0 w-(--msidebar) lg:w-(--sidebar) border-r-[1px] bg-(--sidebar-background) rounded-r-lg ;
   } */
@@ -130,8 +135,6 @@
   }
 }
 
-
-
 @layer base {
   h1 {
     @apply text-xl lg:text-3xl;
@@ -150,8 +153,8 @@
   }
 
   body {
-    font-family: var(--font-sans);
-    @apply bg-(--background) text-(--foreground);
+    font-family: var(--font-poppins);
+    @apply bg-(--background) text-(--foreground) text-sm;
   }
 
   * {
