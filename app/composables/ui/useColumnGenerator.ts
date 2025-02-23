@@ -11,12 +11,16 @@ export function useTableColumns(UButton: Component) {
   const createColumn = <T>(
     key: keyof T,
     label: string,
-    cellRenderer?: (row: any) => any
+    sortable: boolean = true,
+    cellRenderer?: (row: any) => any,
+
   ): TableColumn<T> => ({
     accessorKey: key as string,
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
-
+      if (!sortable) {
+        return h("span", {}, label);
+      }
       return h(UButton, {
         color: "neutral",
         variant: "ghost",
@@ -31,6 +35,7 @@ export function useTableColumns(UButton: Component) {
         onClick: () => column.toggleSorting(column.getIsSorted() === "asc"),
       });
     },
+
     cell: ({ row }) =>
       cellRenderer ? cellRenderer(row) : h("span", {}, row.getValue(key as string)),
   });

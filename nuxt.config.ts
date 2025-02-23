@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     },
   },
 
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', 'sweetalert2/dist/sweetalert2.min.css', 'vue3-toastify/dist/index.css'],
   colorMode: {
     classSuffix: "",
     preference: "light",
@@ -47,7 +47,7 @@ export default defineNuxtConfig({
     compatibilityVersion: 4
   },
   imports: {
-    dirs: ["constants/*.ts","types/*.ts", "store/*.ts", "utils/*.ts", "composables/*.ts", "composables/*/*.ts"],
+    dirs: ["constants/*.ts", "types/*.ts", "store/*.ts", "utils/*.ts", "composables/*.ts", "composables/*/*.ts"],
   },
   runtimeConfig: {
     // gitSecretKey: process.env.GITHUB_SECRET_KEY,

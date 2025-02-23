@@ -12,6 +12,12 @@ export default defineAppConfig({
       error: 'rose',
       neutral: 'slate',
     },
+    table: {
+      slots: {
+        th: ' p-0 px-5 py-0 text-xs text-(--foreground)',
+        td: 'p-0 px-5 py-2 text-xs text-(--foreground)',
+      }
+    },
     navigationMenu: {
       slots: {
         link: 'cursor-pointer px-3 py-2 text-sm  font-light cursor-pointer px-3 py-2 text-[13px]  ',
@@ -64,7 +70,7 @@ export default defineAppConfig({
 
 
     },
-   
+
 
     formField: {
       slots: {
@@ -78,7 +84,7 @@ export default defineAppConfig({
         footer: 'sm:px-4 py-3 justify-end',
         body: 'sm:p-4',
         header: 'sm:px-4 py-3',
-        description:'text-xs'
+        description: 'text-xs'
       }
     },
 

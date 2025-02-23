@@ -8,9 +8,9 @@ export default defineNuxtPlugin((nuxtApp) => {
             // if (token.value) {
             //     // options.headers.set('Content-Type', 'application/json');
             //     // options.headers.set('Content-Type', 'multipart/form-data');
-               
+
             // }
-            options.headers.set('Authorization', `Bearer null`)
+            // options.headers.set('Authorization', `Bearer null`)
         },
         async onResponseError({ response }) {
             if (response.status === 401) {
