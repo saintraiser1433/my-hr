@@ -3,14 +3,7 @@ import 'dotenv/config';
 export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: '2024-11-27',
-  modules: [
-    '@nuxt/ui',
-    '@nuxt/eslint',
-    '@nuxt/icon',
-    '@nuxtjs/svg-sprite',
-    '@nuxt/image',
-    '@vueuse/nuxt',
-  ],
+  modules: ['@nuxt/ui', '@nuxt/eslint', '@nuxt/icon', '@nuxtjs/svg-sprite', '@nuxt/image', '@vueuse/nuxt'],
   app: {
     head: {
       title: "SUPERHURE",

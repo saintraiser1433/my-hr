@@ -1,10 +1,23 @@
 export interface Timestamped {
-    createdAt?: Date;
-    updatedAt?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface ApiResponse<T> {
-    status: number,
-    message: string,
-    data?: T,
+  status: number;
+  message: string;
+  data?: T;
+}
+
+export interface BreadcrumbItem {
+  label: string;
+  icon?: string;
+  to?: string;
+}
+
+export interface MenuItem {
+  label: string;
+  icon?: string;
+  to?: string;
+  children?: MenuItem[];
 }

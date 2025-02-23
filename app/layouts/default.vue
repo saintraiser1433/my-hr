@@ -29,7 +29,8 @@ const toggle = () => {
       v-if="!isToggle"
       @click="toggle"
       class="fixed inset-0 bg-black opacity-80 z-30 lg:hidden"
-    ></div>
+    >
+  </div>
   </div>
 
   <!-- //main -->
