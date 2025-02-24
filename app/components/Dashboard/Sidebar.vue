@@ -25,7 +25,7 @@
       <template v-if="isToggle" #components-trailing>
         <span></span>
       </template>
-      <template v-if="isToggle" #composables-trailing>
+      <template v-if="isToggle" #components-trailing>
         <span></span>
       </template>
     </UNavigationMenu>

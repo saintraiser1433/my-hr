@@ -84,6 +84,7 @@ export default defineAppConfig({
         footer: 'sm:px-4 py-3 justify-end',
         body: 'sm:p-4',
         header: 'sm:px-4 py-3',
+        title:'text-sm capitalize',
         description: 'text-xs'
       }
     },

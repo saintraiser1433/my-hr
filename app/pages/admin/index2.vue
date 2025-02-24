@@ -167,7 +167,7 @@ const sorting = ref([
     desc: false,
   },
 ]);
-const test = () => {
+const add = () => {
   data.value = [
     ...data.value,
     {
@@ -180,21 +180,34 @@ const test = () => {
   ];
 };
 
+const update = () => {
+  data.value = data.value.map((item) => item.id === "123217" ? {
+    id: "123217",
+    date: "2024-03-10T19:45:00",
+    status: "failed",
+    email: "dasdasdsa@example.com",
+    amount: 123,
+  } : item)
+};
+
+const deletes = () => {
+  data.value = data.value.filter((item) => item.id !== "4597");
+};
+
+
+
 const edit = () => {
   data.value = data.value.map((item) =>
     item.id === "4598" ? { ...item, status: "paid" } : item
   );
 };
 
-const deletes = () => {
-  data.value = data.value.filter((item) => item.id !== "4600");
-};
+
 </script>
 
 <template>
-  {{ data }}
-  <UButton @click="test">dasdsa</UButton>
-  <UButton @click="edit">dasdsa</UButton>
+  <UButton @click="add">dasdsa</UButton>
+  <UButton @click="edit">update</UButton>
   <UButton @click="deletes">delete</UButton>
   <UTable v-model:sorting="sorting" :data="data" :columns="columns" class="flex-1" />
 </template>

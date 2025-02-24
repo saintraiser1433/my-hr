@@ -2,9 +2,39 @@ import type { NitroFetchRequest, $Fetch } from 'nitropack'
 
 
 
-export const repository = <T>(fetch: $Fetch<T, NitroFetchRequest>) => ({
-    //course
+export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, basePath: string) => ({
 
+    async add(body: T): Promise<ApiResponse<T>> {
+        return fetch<ApiResponse<T>>(`${basePath}`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: { 'Content-Type': 'application/json' },
+        });
+    },
+
+    async update(body: T): Promise<ApiResponse<T>> {
+        return fetch<ApiResponse<T>>(`${basePath}/${(body as any).id}`, {
+            method: 'PUT',
+            body: JSON.stringify(body),
+            headers: { 'Content-Type': 'application/json' },
+        });
+    },
+
+    async delete(id: number): Promise<ApiResponse<T>> {
+        return fetch<ApiResponse<T>>(`${basePath}/${id}`, {
+            method: 'DELETE',
+        });
+    },
+
+    async getFiltered(id: number): Promise<ApiResponse<T[]>> {
+        return fetch<ApiResponse<T[]>>(`${basePath}/${id}`)
+    },
+
+    async getAll(): Promise<ApiResponse<T[]>> {
+        return fetch<ApiResponse<T[]>>(`${basePath}`)
+    },
+
+    
 
 
     async addCourse(body: CourseModel): Promise<T> {
@@ -14,6 +44,9 @@ export const repository = <T>(fetch: $Fetch<T, NitroFetchRequest>) => ({
         })
     },
 
+
+
+    //trial
     async updateCourse(body: CourseModel): Promise<T> {
         return fetch<T>(`/course/${body.course_id}`, {
             method: 'PUT',
@@ -37,7 +70,12 @@ export const repository = <T>(fetch: $Fetch<T, NitroFetchRequest>) => ({
 
 
 
-  
+
+
+
+
+
+
 
     //dashboard model
 
