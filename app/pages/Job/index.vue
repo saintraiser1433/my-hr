@@ -82,30 +82,50 @@ const remove = (id: number) => {
 const resetForm = () => {
   Object.assign(requirementsForm, initialState);
 };
-
 const toggleModal = () => {
   resetForm();
-  openModal(`Create Requirements`);
+  openModal(`Create Job Offer`);
 };
+
+import type { FormSubmitEvent } from "@nuxt/ui";
+const { $joi } = useNuxtApp();
+const schema = $joi.object({
+  email: $joi.string().required(),
+  password: $joi.string().min(8).required(),
+});
+
+const state = reactive({
+  email: undefined,
+  password: undefined,
+});
+
+const toast = useToast();
+async function onSubmit(event: FormSubmitEvent<any>) {
+  toast.add({
+    title: "Success",
+    description: "The form has been submitted.",
+    color: "success",
+  });
+  console.log(event.data);
+}
 </script>
 
 <template>
-  <RequirementsForm
+  <JobForm
     @data-requirements="submit"
     v-model:state="requirementsForm"
     :title="title"
     v-model:open="isOpen"
   />
   <div class="flex flex-col items-center lg:items-start mb-3">
-    <h2 class="font-extrabold text-2xl">Requirements Module</h2>
-    <span class="text-sm">Here's a list of requirements available!</span>
+    <h2 class="font-extrabold text-2xl">Job Offers Module</h2>
+    <span class="text-sm">Here's a list of Job offers !</span>
   </div>
-
-  <RequirementsList :data="requirementsData" @update="edit" @delete="remove">
+  <JobList :data="requirementsData" @update="edit" @delete="remove">
     <template #actions>
       <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
-        >Add Requirements</UButton
+        >Add Job Offer</UButton
       >
     </template>
-  </RequirementsList>
+  </JobList>
 </template>

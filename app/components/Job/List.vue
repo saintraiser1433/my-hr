@@ -3,43 +3,61 @@ import { ref } from "vue";
 import type { TableColumn } from "@nuxt/ui";
 import { getPaginationRowModel } from "@tanstack/vue-table";
 const UButton = resolveComponent("UButton") as Component;
-defineProps({
+
+const props = defineProps({
   data: {
-    type: Array as PropType<CourseModel[]>,
+    type: Array as PropType<RequirementModel[]>,
     required: true,
     default: () => [],
   },
 });
 
 const emits = defineEmits<{
-  (e: "update", payload: CourseModel): void;
+  (e: "update", payload: RequirementModel): void;
   (e: "delete", id: number): void;
 }>();
+
+const pagination = ref({
+  pageIndex: 0,
+  pageSize: 20,
+});
+const globalFilter = ref("");
+const table = useTemplateRef("table");
+
+const { createColumn } = useTableColumns(UButton);
 
 const handleDelete = (id: number) => {
   emits("delete", id);
 };
 
-const handleUpdate = (item: CourseModel) => {
+const handleUpdate = (item: JobModel) => {
   emits("update", item);
 };
 
-const { createColumn } = useTableColumns(UButton);
-const columns: TableColumn<CourseModel>[] = [
-  createColumn("course_id", "#", true, (row) => `${row.index + 1}`),
-  createColumn("description", "Course Name", true, (row) =>
-    h("span", { class: "capitalize" }, row.getValue("description"))
+const columns: TableColumn<any>[] = [
+  createColumn("increment", "#", true, (row) => `${row.index + 1}`),
+  createColumn("title", "Job Title", true, (row) =>
+    h("span", { class: "capitalize" }, row.getValue("title"))
   ),
-  createColumn("score", "Score", true),
+  createColumn("description", "Description", true, (row) =>
+    h("div", { class: "capitalize text-wrap" }, row.getValue("description"))
+  ),
   createColumn("action", "Action", false),
 ];
 
-const pagination = ref({
-  pageIndex: 0,
-  pageSize: 30,
-});
-const globalFilter = ref("");
-const table = ref(null);
+const refreshTable = () => {
+  pagination.value = { ...pagination.value }; // Trigger reactivity
+};
+
+watch(
+  () => props.data,
+  (newVal, oldVal) => {
+    if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+      refreshTable();
+      console.log("me");
+    }
+  }
+);
 </script>
 
 <template>
@@ -76,14 +94,14 @@ const table = ref(null);
             color="primary"
             variant="outline"
             size="sm"
-            @click="handleDelete(row.original.course_id || 0)"
+            @click="handleDelete(row.original.id || 0)"
           >
             <Icon name="lucide:x"></Icon>
           </UButton>
         </div>
       </template>
     </UTable>
-
-    <UITablePagination v-if="table" :table="table"> </UITablePagination>
+    <UITablePagination v-if="table" :table="table" v-model:page="pagination.pageSize">
+    </UITablePagination>
   </UCard>
 </template>

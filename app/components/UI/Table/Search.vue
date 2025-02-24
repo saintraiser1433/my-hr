@@ -17,6 +17,7 @@ const globalFilter = defineModel<string>('search',{ required: true });
   >
     <div class="flex items-center gap-2">
       <UInput
+        type="search"
         color="neutral"
         class="w-full"
         v-model="globalFilter"

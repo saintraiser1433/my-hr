@@ -3,7 +3,7 @@ import 'dotenv/config';
 export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: '2024-11-27',
-  modules: ['@nuxt/ui', '@nuxt/eslint', '@nuxt/icon', '@nuxtjs/svg-sprite', '@nuxt/image', '@vueuse/nuxt'],
+  modules: ['@nuxt/ui', '@nuxt/eslint', '@nuxt/icon', '@nuxtjs/svg-sprite', '@nuxt/image', '@vueuse/nuxt', 'nuxt-tiptap-editor'],
   app: {
     head: {
       title: "SUPERHURE",
@@ -51,6 +51,12 @@ export default defineNuxtConfig({
       // baseURL: process.env.NUXT_PUBLIC_BASE_URL,
       // gitClientID: process.env.GITHUB_CLIENT_ID,
       // storageURL: process.env.STORAGE_URL
+    },
+  },
+  tiptap: {
+    prefix: 'Tiptap',
+    lowlight: {
+      theme: 'github-dark',
     },
   },
   ssr: false,

@@ -45,21 +45,31 @@ const submitForm = () => {
     v-model:open="open"
     description=" "
     :title="title"
-    :ui="{ content: 'max-w-sm' }"
+    :ui="{ content: 'max-w-6xl' }"
   >
     <template #body>
       <UForm
         ref="formRef"
         :schema="schema"
-        :state="model"
+        :state="state"
         class="space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="Title" name="title" required>
-          <UITextInput v-model.trim="model.title" placeholder="Enter Title" />
+        <UFormField label="Job Title" name="email">
+          <UITextInput />
         </UFormField>
-        <UFormField label="Description" name="description" required>
-          <UITextInput v-model.trim="model.description" placeholder="Enter description" />
+
+        <UFormField label="Description" name="password">
+          <UITiptapEditor />
+        </UFormField>
+        <UFormField label="Availability" name="email">
+          <UITextInput class="w-1/2" type="number" />
+        </UFormField>
+        <UFormField label="Department" name="password">
+          <USelectMenu class="w-1/2" size="sm" />
+        </UFormField>
+        <UFormField label="Job Background Image" name="password">
+          <UInput type="file" class="w-1/2" size="sm" />
         </UFormField>
       </UForm>
     </template>

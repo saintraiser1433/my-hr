@@ -8,7 +8,7 @@
   --font-sans: "Public Sans", sans-serif;
   --font-poppins: "Poppins", system-ui, sans-serif;
   --ui-border-accented: var(--border);
-  --ui-bg: var(--sidebar-background);
+  --ui-bg: var(--background);
   --ui-primary: var(--primary);
   --ui-secondary: var(--secondary);
   --ui-error: var(--destructive);
@@ -61,7 +61,7 @@
 
 .dark {
   --ui-border-accented: var(--border);
-  --ui-bg: var(--sidebar-background);
+  --ui-bg: var(--background);
   --ui-primary: var(--primary);
   --ui-secondary: var(--secondary);
   --ui-error: var(--destructive);

@@ -2,11 +2,11 @@
 import { h, resolveComponent } from "vue";
 import type { TableColumn } from "@nuxt/ui";
 import type { Column } from "@tanstack/vue-table";
-
+import { getPaginationRowModel } from "@tanstack/vue-table";
 const UBadge = resolveComponent("UBadge");
 const UButton = resolveComponent("UButton");
 const UDropdownMenu = resolveComponent("UDropdownMenu");
-
+import { triggerRef } from "vue";
 type Payment = {
   id: string;
   date: string;
@@ -167,9 +167,8 @@ const sorting = ref([
     desc: false,
   },
 ]);
-const add = () => {
-  data.value = [
-    ...data.value,
+const add = async () => {
+  data.value = data.value.slice().concat([
     {
       id: "123217",
       date: "2024-03-10T19:45:00",
@@ -177,37 +176,73 @@ const add = () => {
       email: "dasdasdsa@example.com",
       amount: 529,
     },
-  ];
+  ]);
+  refreshTable();
 };
 
-const update = () => {
-  data.value = data.value.map((item) => item.id === "123217" ? {
-    id: "123217",
-    date: "2024-03-10T19:45:00",
-    status: "failed",
-    email: "dasdasdsa@example.com",
-    amount: 123,
-  } : item)
+const refreshTable = () => {
+  pagination.value = { ...pagination.value }; // Trigger reactivity
 };
 
-const deletes = () => {
+const update = async () => {
+  data.value = data.value.map((item) =>
+    item.id === "123217"
+      ? {
+          id: "123217",
+          date: "2024-03-10T19:45:00",
+          status: "failed",
+          email: "dasdasdsa@example.com",
+          amount: 123,
+        }
+      : item
+  );
+  refreshTable();
+  await nextTick();
+};
+
+const deletes = async () => {
   data.value = data.value.filter((item) => item.id !== "4597");
+  refreshTable();
 };
 
-
-
-const edit = () => {
+const edit = async () => {
   data.value = data.value.map((item) =>
     item.id === "4598" ? { ...item, status: "paid" } : item
   );
+  refreshTable();
 };
-
-
+const pagination = ref({
+  pageIndex: 0,
+  pageSize: 10,
+});
+const globalFilter = ref("");
+const table = useTemplateRef("table");
 </script>
 
 <template>
   <UButton @click="add">dasdsa</UButton>
   <UButton @click="edit">update</UButton>
   <UButton @click="deletes">delete</UButton>
-  <UTable v-model:sorting="sorting" :data="data" :columns="columns" class="flex-1" />
+  <UTable
+    sticky
+    class="overflow-y-auto custom-scrollbar h-100 lg:h-170 cursor-auto"
+    ref="table"
+    v-model:global-filter="globalFilter"
+    v-model:pagination="pagination"
+    :pagination-options="{
+      getPaginationRowModel: getPaginationRowModel(),
+    }"
+    :data="data"
+    :columns="columns"
+  />
+
+  {{ table?.tableApi.getRowCount() }}
+  <div class="flex justify-center border-t border-(--ui-border) pt-4">
+    <UPagination
+      :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
+      :items-per-page="table?.tableApi?.getState().pagination.pageSize"
+      :total="table?.tableApi?.getFilteredRowModel().rows.length"
+      @update:page="(p) => table?.tableApi?.setPageIndex(p - 1)"
+    />
+  </div>
 </template>

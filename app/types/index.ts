@@ -18,7 +18,8 @@ export interface BreadcrumbItem {
 export interface MenuItem {
   label: string;
   icon?: string;
+  type?: string;
   to?: string;
-  slot?:string;
+  slot?: string;
   children?: MenuItem[];
 }
