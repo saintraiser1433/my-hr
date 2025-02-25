@@ -50,7 +50,7 @@ export default defineNuxtConfig({
       baseURL: process.env.BASE_API_URL,
       // baseURL: process.env.NUXT_PUBLIC_BASE_URL,
       // gitClientID: process.env.GITHUB_CLIENT_ID,
-      // storageURL: process.env.STORAGE_URL
+      storageURL: process.env.STORAGE_URL_JOB
     },
   },
   tiptap: {

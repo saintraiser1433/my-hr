@@ -30,16 +30,8 @@ export const MENU_ITEMS: MenuItem[] = [
       { label: "SE Performance", icon: "i-hugeicons-peer-to-peer-03", to: "/performance/superior" },
     ],
   },
-  {
-    label: "Screening",
-    icon: "i-fluent-task-list-square-16-regular",
-    slot: "components",
-    children: [
-      { label: "Manage Screening", icon: "i-hugeicons-task-done-01", to: "/screening/manage" },
-      { label: "Assign Job Screening", icon: "i-fluent-task-list-add-20-filled", to: "/screening/assign" },
-    ],
-  },
   { label: "Job Offers", icon: "i-fluent-mdl2-recruitment-management", to: "/job" },
+  { label: "Screening", icon: "i-hugeicons-task-done-01", to: "/screening" },
   { label: "Requirements", icon: "i-carbon-document-requirements", to: "/requirements" },
   { label: "Settings", icon: "i-mdi-cogs", to: "/settings" },
 ];

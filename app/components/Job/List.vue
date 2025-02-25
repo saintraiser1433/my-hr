@@ -30,14 +30,16 @@ const handleUpdate = (item: JobModel) => {
   emits("update", item);
 };
 
-const handleView = (item:JobModel) => {
+const handleView = (item: JobModel) => {
   emits("view", item);
-}
+};
 
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
   createColumn("title", "Job Title", true, (row) => row.getValue("title")),
-  createColumn("departmentTitle", "Department", true, (row) => row.getValue("departmentTitle")),
+  createColumn("departmentTitle", "Department", true, (row) =>
+    row.getValue("departmentTitle")
+  ),
   createColumn("totalAvailable", "Available", false),
   createColumn("status", "Status", false),
   createColumn("action", "Action", false),
@@ -45,41 +47,48 @@ const columns: TableColumn<any>[] = [
 
 function getDropdownActions(user: User): DropdownMenuItem[][] {
   return [
-
     [
       {
-        label: 'View',
-        icon: 'i-lucide-eye',
+        label: "Assign",
+        icon: "i-hugeicons-assignments",
+        onSelect: async () => {
+          await navigateTo({ name: "Job-jobId", params: { jobId: Number(user.id) } });
+        },
+      },
+      {
+        type: "separator",
+      },
+      {
+        label: "View",
+        icon: "i-lucide-eye",
         onSelect: () => {
           handleView({ ...user, id: Number(user.id) });
-        }
+        },
       },
       {
-        type: 'separator'
+        type: "separator",
       },
       {
-        label: 'Edit',
-        icon: 'i-lucide-edit',
+        label: "Edit",
+        icon: "i-lucide-edit",
         onSelect: () => {
           handleUpdate({ ...user, id: Number(user.id) });
-        }
+        },
       },
       {
-        type: 'separator'
+        type: "separator",
       },
       {
-        label: 'Delete',
-        icon: 'i-lucide-trash',
-        color: 'error',
+        label: "Delete",
+        icon: "i-lucide-trash",
+        color: "error",
         onSelect: () => {
           handleDelete(Number(user.id));
-
-        }
-      }
-    ]
-  ]
+        },
+      },
+    ],
+  ];
 }
-
 
 watch(
   () => props.data,
@@ -89,10 +98,7 @@ watch(
     }
   }
 );
-
 </script>
-
-
 
 <template>
   <UITableSearch v-model:search="globalFilter" v-if="table" :table="table">
@@ -100,37 +106,34 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard :ui="{
-    root: 'overflow-hidden ',
-    body: 'p-0 sm:p-0',
-    footer: 'p-0 sm:px-0',
-  }">
-    <UTable sticky class="overflow-y-auto custom-scrollbar h-100 lg:h-170 cursor-auto" ref="table"
-      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
+  <UCard
+    :ui="{
+      root: 'overflow-hidden ',
+      body: 'p-0 sm:p-0',
+      footer: 'p-0 sm:px-0',
+    }"
+  >
+    <UTable
+      sticky
+      class="overflow-y-auto custom-scrollbar h-100 lg:h-170 cursor-auto"
+      ref="table"
+      v-model:global-filter="globalFilter"
+      v-model:pagination="pagination"
+      :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }" :data="data" :columns="columns">
+      }"
+      :data="data"
+      :columns="columns"
+    >
       <template #status-cell="{ row }">
         <UBadge v-if="row.original.status" color="neutral" variant="solid">Active</UBadge>
         <UBadge v-else color="neutral" variant="outline">Inactive</UBadge>
       </template>
 
-
       <template #action-cell="{ row }">
         <UDropdownMenu :items="getDropdownActions(row.original)">
           <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
         </UDropdownMenu>
-        <!-- <div class="flex items-center gap-2">
-          <UButton color="secondary" variant="solid" size="sm" @click="handleDelete(row.original.id || 0)">
-            <Icon name="lucide:eye"></Icon>
-          </UButton>
-          <UButton size="sm" @click="handleUpdate(row.original)">
-            <Icon name="lucide:edit"></Icon>
-          </UButton>
-          <UButton color="primary" variant="outline" size="sm" @click="handleDelete(row.original.id || 0)">
-            <Icon name="lucide:x"></Icon>
-          </UButton>
-
-        </div> -->
       </template>
     </UTable>
     <UITablePagination v-if="table" :table="table" v-model:page="pagination.pageSize">
