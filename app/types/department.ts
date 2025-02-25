@@ -1,5 +1,5 @@
 export interface DepartmentModel {
-    id: number;
-    title: string;
+    id?: number;
+    title?: string;
     status?: boolean;
 }

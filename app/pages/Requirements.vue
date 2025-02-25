@@ -90,22 +90,22 @@ const toggleModal = () => {
 </script>
 
 <template>
-  <RequirementsForm
-    @data-requirements="submit"
-    v-model:state="requirementsForm"
-    :title="title"
-    v-model:open="isOpen"
-  />
-  <div class="flex flex-col items-center lg:items-start mb-3">
-    <h2 class="font-extrabold text-2xl">Requirements Module</h2>
-    <span class="text-sm">Here's a list of requirements available!</span>
+  <div v-if="status === 'pending'">
+    Gwapo
+  </div>
+  <div v-else>
+    <RequirementsForm @data-requirements="submit" v-model:state="requirementsForm" :title="title"
+      v-model:open="isOpen" />
+    <div class="flex flex-col items-center lg:items-start mb-3">
+      <h2 class="font-extrabold text-2xl">Requirements Module</h2>
+      <span class="text-sm">Here's a list of requirements available!</span>
+    </div>
+
+    <RequirementsList :data="requirementsData" @update="edit" @delete="remove">
+      <template #actions>
+        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add Requirements</UButton>
+      </template>
+    </RequirementsList>
   </div>
 
-  <RequirementsList :data="requirementsData" @update="edit" @delete="remove">
-    <template #actions>
-      <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
-        >Add Requirements</UButton
-      >
-    </template>
-  </RequirementsList>
 </template>

@@ -20,7 +20,7 @@ const toggle = () => {
           ? 'lg:w-[calc(100%-var(--sidebar-compact))]'
           : 'lg:w-[calc(100%-var(--sidebar))]'
       "
-      class="absolute transition-all ease-in-out right-0 top-0 h-full max-w-full w-full mt-16 p-5"
+      class="absolute transition-all ease-in-out right-0 top-0  max-w-full w-full mt-16 p-5"
     >
       <slot />
     </main>

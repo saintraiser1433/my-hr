@@ -43,6 +43,9 @@ const addImage = () => {
   };
   fileInput.click();
 };
+const focusEditor = () => {
+  editor.value?.commands.focus()
+}
 
 const lowlight = createLowlight(allLanguages);
 const editor = useEditor({
@@ -294,8 +297,9 @@ onBeforeUnmount(() => {
     </div>
 
     <TiptapEditorContent
-      class="w-full cursor-default h-52 overflow-auto custom-scrollbar border-x border-b px-2 dark:border-(--border) dark:bg-(--background)"
+      class="w-full text-xs cursor-default h-78 overflow-auto custom-scrollbar border-x border-b px-2 dark:border-(--border) dark:bg-(--background)"
       :editor="editor"
+      @click="focusEditor"
     />
   </div>
 </template>

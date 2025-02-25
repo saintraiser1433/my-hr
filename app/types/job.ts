@@ -1,13 +1,14 @@
 import type { JobScreeningModel } from "./screening";
 
 export interface JobModel extends Timestamped {
-    id: number;
-    title: string;
-    description: string;
-    totalAvailable: number;
-    department_id?: number;
-    department?: string,
+    id?: number;
+    title?: string;
+    description?: string;
+    totalAvailable?: number;
+    departmentsId?: number;
+    department?: DepartmentModel,
     status?: boolean;
-    imagePath?: string;
+    headerImage?:string;
+    file?: object;
     JobScreening?: JobScreeningModel[];
 }

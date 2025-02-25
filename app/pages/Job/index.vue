@@ -18,56 +18,95 @@ const initialState = {
   id: undefined,
   title: undefined,
   description: undefined,
+  totalAvailable: undefined,
+  departmentsId: undefined,
+  status: undefined
 };
-const requirementsForm = reactive<RequirementModel>({ ...initialState });
-const requirementsData = ref<RequirementModel[]>([]);
-const requirementsRepo = repository<RequirementModel>($api, "/requirements");
+const jobForm = reactive<JobModel>({ ...initialState });
+const jobData = ref<JobModel[]>([]);
+const viewedJob = ref<JobModel | null>({});
+const isViewing = ref(false);
+const jobRepo = repository<JobModel>($api, "/job");
+const { data: department, status: statusDept, error: errorDept } = await useAPI<DepartmentModel[]>("/department", {
+  transform: (item) => {
+    return item.filter((item) => item.status).map((items) => ({
+      ...items
+    }))
+  },
+  server: false,
+});
 
-const { data, status, error } = await useAPI<RequirementModel[]>("/requirements");
+const { data, status, error } = await useAPI<JobModel[]>("/job", {
+  transform: (item) => {
+    return item.map((item) => ({
+      ...item,
+      departmentTitle: item.department?.title
+    }))
+  },
+  server: false,
+});
 if (data.value) {
-  requirementsData.value = data.value;
+  jobData.value = data.value;
 }
 if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
 
-const submit = async (response: RequirementModel) => {
+if (errorDept.value) {
+  $toast.error(errorDept.value.message || "Failed to fetch items");
+}
+
+
+
+
+const submit = async (response: JobModel) => {
   try {
+    const { file, ...finalData } = response;
+
     if (!isUpdate.value) {
-      const res = await requirementsRepo.add(response); //error on this code
-      requirementsData.value = [...requirementsData.value, res.data as RequirementModel];
+      const res = await jobRepo.addWithImage(finalData, file);
+      jobData.value = [...jobData.value, res.data as JobModel];
       $toast.success(res.message);
     } else {
-      const res = await requirementsRepo.update(response); //error on this code
+      const res = await jobRepo.updateWithImage(finalData, file);
       if (res.data) {
-        const data = res.data as RequirementModel;
-        requirementsData.value = requirementsData.value.map((item) =>
+        const data = res.data as JobModel;
+        jobData.value = jobData.value.map((item) =>
           item.id === data.id ? data : item
         );
       }
-
       $toast.success(res.message);
     }
+
     resetModal();
   } catch (error) {
     return handleApiError(error);
   }
 };
 
-const edit = (response: RequirementModel) => {
-  requirementsForm.id = response.id;
-  requirementsForm.description = response.description;
-  requirementsForm.title = response.title;
+const edit = (response: JobModel) => {
+  isViewing.value = false;
+  jobForm.id = response.id;
+  jobForm.description = response.description;
+  jobForm.title = response.title;
+  jobForm.totalAvailable = response.totalAvailable;
+  jobForm.departmentsId = response.departmentsId;
+  jobForm.status = response.status;
   updateModal(`${response.title}`);
 };
+
+const view = (response: JobModel) => {
+  isViewing.value = true;
+  viewedJob.value = { ...response };
+}
 
 const remove = (id: number) => {
   setAlert("warning", "Are you sure you want to delete?", "", "Confirm delete").then(
     async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await requirementsRepo.delete(id);
-          requirementsData.value = requirementsData.value.filter(
+          const response = await jobRepo.delete(id);
+          jobData.value = jobData.value.filter(
             (item) => item.id !== id
           );
           $toast.success(response.message);
@@ -79,53 +118,31 @@ const remove = (id: number) => {
   );
 };
 
+
+
 const resetForm = () => {
-  Object.assign(requirementsForm, initialState);
+  Object.assign(jobForm, initialState);
+
 };
 const toggleModal = () => {
   resetForm();
   openModal(`Create Job Offer`);
 };
-
-import type { FormSubmitEvent } from "@nuxt/ui";
-const { $joi } = useNuxtApp();
-const schema = $joi.object({
-  email: $joi.string().required(),
-  password: $joi.string().min(8).required(),
-});
-
-const state = reactive({
-  email: undefined,
-  password: undefined,
-});
-
-const toast = useToast();
-async function onSubmit(event: FormSubmitEvent<any>) {
-  toast.add({
-    title: "Success",
-    description: "The form has been submitted.",
-    color: "success",
-  });
-  console.log(event.data);
-}
 </script>
 
 <template>
-  <JobForm
-    @data-requirements="submit"
-    v-model:state="requirementsForm"
-    :title="title"
-    v-model:open="isOpen"
-  />
+ 
+  <JobContent v-model:open="isViewing" :data="viewedJob"></JobContent>
+
+  <JobForm @data-job="submit" :department="department" v-model:state="jobForm" :is-update="isUpdate" :title="title"
+    v-model:open="isOpen" />
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl">Job Offers Module</h2>
     <span class="text-sm">Here's a list of Job offers !</span>
   </div>
-  <JobList :data="requirementsData" @update="edit" @delete="remove">
+  <JobList :data="jobData" @update="edit" @delete="remove" @view="view">
     <template #actions>
-      <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
-        >Add Job Offer</UButton
-      >
+      <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add Job Offer</UButton>
     </template>
   </JobList>
 </template>

@@ -8,7 +8,6 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
         return fetch<ApiResponse<T>>(`${basePath}`, {
             method: 'POST',
             body: JSON.stringify(body),
-            headers: { 'Content-Type': 'application/json' },
         });
     },
 
@@ -16,7 +15,6 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
         return fetch<ApiResponse<T>>(`${basePath}/${(body as any).id}`, {
             method: 'PUT',
             body: JSON.stringify(body),
-            headers: { 'Content-Type': 'application/json' },
         });
     },
 
@@ -34,8 +32,63 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
         return fetch<ApiResponse<T[]>>(`${basePath}`)
     },
 
-    
 
+    //add with image:
+
+    async addWithImage(body: JobModel, file: any): Promise<ApiResponse<T>> {
+        const formData = new FormData();
+
+        Object.entries(body).forEach(([key, value]) => {
+            if (value !== undefined) {  // Only append if value is not undefined
+                formData.append(key, String(value));
+            }
+        });
+
+        if (file) {
+            formData.append("file", file);
+        }
+
+        return fetch<ApiResponse<T>>(`${basePath}`, {
+            method: 'POST',
+            body: formData,
+        });
+    },
+
+    async updateWithImage(body: JobModel, file: any): Promise<ApiResponse<T>> {
+        const formData = new FormData();
+
+        // Append object fields to FormData
+        Object.entries(body).forEach(([key, value]) => {
+            if (value !== undefined) {  // Only append if value is not undefined
+                formData.append(key, String(value));
+            }
+        });
+
+        // Append file if provided,
+        if (file) {
+            formData.append("file", file);
+        }
+
+        return fetch<ApiResponse<T>>(`${basePath}/${body.id}`, {
+            method: 'PUT',  // Ensure backend handles PUT with multipart
+            body: formData,
+        });
+    },
+
+
+
+
+    async uploadImage(file: any) {
+        const formData = new FormData();
+        formData.append("file", file);
+        return fetch(`/file${basePath}`, {
+            method: 'POST',
+            body: formData
+        })
+    },
+
+
+    //trial
 
     async addCourse(body: CourseModel): Promise<T> {
         return fetch<T>('/course', {
@@ -45,8 +98,6 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
     },
 
 
-
-    //trial
     async updateCourse(body: CourseModel): Promise<T> {
         return fetch<T>(`/course/${body.course_id}`, {
             method: 'PUT',
