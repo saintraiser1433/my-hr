@@ -2,6 +2,7 @@
 
 import { h } from "vue";
 import type { TableColumn } from "@nuxt/ui";
+
 /**
  * Generates table columns dynamically with customizable headers and cell renderers.
  */
@@ -21,6 +22,7 @@ export function useTableColumns(UButton: Component) {
       if (!sortable) {
         return h("span", {}, label);
       }
+
       return h(UButton, {
         color: "neutral",
         variant: "ghost",
@@ -40,6 +42,37 @@ export function useTableColumns(UButton: Component) {
       cellRenderer ? cellRenderer(row) : h("span", {}, row.getValue(key as string)),
   });
 
+
+
   return { createColumn };
 }
 
+
+
+export function useTableColumnCheckBox(UCheckbox: Component, table: any) {
+
+  const createColumnWithCheckBox = <T>(
+    // Ensure the correct type here
+  ): TableColumn<T> => ({
+    id: 'select',
+    header: ({ table }) =>
+      h(UCheckbox, {
+        modelValue: table.getIsSomePageRowsSelected()
+          ? 'indeterminate'
+          : table.getIsAllPageRowsSelected(),
+        'onUpdate:modelValue': (value: boolean | 'indeterminate') =>
+          table.toggleAllPageRowsSelected(!!value),
+        ariaLabel: 'Select all'
+      }),
+    cell: ({ row }) =>
+      h(UCheckbox, {
+        modelValue: row.getIsSelected(),
+        'onUpdate:modelValue': (value: boolean | 'indeterminate') =>
+          row.toggleSelected(!!value),
+        ariaLabel: 'Select row'
+      })
+  });
+
+
+  return { createColumnWithCheckBox };
+}

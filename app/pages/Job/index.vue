@@ -24,7 +24,7 @@ const initialState = {
 };
 const jobForm = reactive<JobModel>({ ...initialState });
 const jobData = ref<JobModel[]>([]);
-const viewedJob = ref<JobModel | null>({});
+const viewedJob = ref<JobModel>({});
 const isViewing = ref(false);
 const jobRepo = repository<JobModel>($api, "/job");
 const { data: department, status: statusDept, error: errorDept } = await useAPI<DepartmentModel[]>("/department", {

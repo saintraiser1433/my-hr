@@ -24,6 +24,13 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
         });
     },
 
+    async deleteTwo(id:number,id2:number): Promise<ApiResponse<T>> {
+        return fetch<ApiResponse<T>>(`${basePath}/${id}/${id2}`, {
+            method: 'DELETE',
+        });
+    },
+
+
     async getFiltered(id: number): Promise<ApiResponse<T[]>> {
         return fetch<ApiResponse<T[]>>(`${basePath}/${id}`)
     },
@@ -88,47 +95,7 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
     },
 
 
-    //trial
-
-    async addCourse(body: CourseModel): Promise<T> {
-        return fetch<T>('/course', {
-            method: 'POST',
-            body: body
-        })
-    },
-
-
-    async updateCourse(body: CourseModel): Promise<T> {
-        return fetch<T>(`/course/${body.course_id}`, {
-            method: 'PUT',
-            body: body
-        })
-    },
-
-    async removeCourse(id: number): Promise<T> {
-        return fetch<T>(`/course/${id}`, {
-            method: 'DELETE',
-        })
-    },
-
-    async getCourseFiltered(): Promise<CourseModel[]> {
-        return fetch<CourseModel[]>(`/course/filtered`)
-    },
-
-    async getAllCourses(): Promise<CourseModel[]> {
-        return fetch<CourseModel[]>(`/course`)
-    },
-
-
-
-
-
-
-
-
-
-
-    //dashboard model
+ 
 
 
 
