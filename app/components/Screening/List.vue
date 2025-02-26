@@ -5,14 +5,14 @@ const UButton = resolveComponent("UButton") as Component;
 
 const props = defineProps({
   data: {
-    type: Array as PropType<RequirementModel[]>,
+    type: Array as PropType<ScreeningModel[]>,
     required: true,
     default: () => [],
   },
 });
 
 const emits = defineEmits<{
-  (e: "update", payload: RequirementModel): void;
+  (e: "update", payload: ScreeningModel): void;
   (e: "delete", id: number): void;
 }>();
 
@@ -24,13 +24,13 @@ const handleDelete = (id: number) => {
   emits("delete", id);
 };
 
-const handleUpdate = (item: RequirementModel) => {
+const handleUpdate = (item: ScreeningModel) => {
   emits("update", item);
 };
 
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
-  createColumn("title", "Requirements", true, (row) =>
+  createColumn("title", "Screening Name", true, (row) =>
     h("span", { class: "capitalize" }, row.getValue("title"))
   ),
   createColumn("description", "Description", true),

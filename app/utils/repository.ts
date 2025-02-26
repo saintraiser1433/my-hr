@@ -12,10 +12,12 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
     },
 
     async update(body: T): Promise<ApiResponse<T>> {
+
         return fetch<ApiResponse<T>>(`${basePath}/${(body as any).id}`, {
             method: 'PUT',
             body: JSON.stringify(body),
         });
+
     },
 
     async delete(id: number): Promise<ApiResponse<T>> {
@@ -24,9 +26,10 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
         });
     },
 
-    async deleteTwo(id:number,id2:number): Promise<ApiResponse<T>> {
-        return fetch<ApiResponse<T>>(`${basePath}/${id}/${id2}`, {
-            method: 'DELETE',
+    async deleteMany(data: any): Promise<ApiResponse<T>> {
+        return fetch<ApiResponse<T>>(`${basePath}`, {
+            method: 'POST',
+            body: JSON.stringify(data)
         });
     },
 
@@ -95,7 +98,7 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
     },
 
 
- 
+
 
 
 

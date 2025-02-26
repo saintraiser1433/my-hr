@@ -15,10 +15,10 @@ const { handleApiError } = useErrorHandler();
 const { openModal, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
 
 const initialState = {
-  id: undefined,
-  title: undefined,
-  description: undefined,
-  status: undefined,
+  id: 0,
+  title: "",
+  description: "",
+  status: false,
 };
 const screeningTypeForm = reactive<ScreeningModel>({ ...initialState });
 const screeningTypeData = ref<ScreeningModel[]>([]);

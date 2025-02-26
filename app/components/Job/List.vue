@@ -102,9 +102,7 @@ watch(
 
 <template>
   <UITableSearch v-model:search="globalFilter" v-if="table" :table="table">
-    <template #actions>
-      <slot name="actions"></slot>
-    </template>
+    <template #actions> </template>
   </UITableSearch>
   <UCard
     :ui="{

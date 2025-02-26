@@ -23,3 +23,11 @@ export interface MenuItem {
   slot?: string;
   children?: MenuItem[];
 }
+
+
+export interface DirectionModel {
+  id: number,
+  direction: Directions
+}
+
+export type Directions = 'up' | 'down'
