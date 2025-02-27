@@ -8,7 +8,7 @@
   --font-sans: "Public Sans", sans-serif;
   --font-poppins: "Poppins", system-ui, sans-serif;
   --ui-border-accented: var(--border);
-  --ui-bg: var(--background);
+  --ui-bg: var(--background)
   --ui-primary: var(--primary);
   --ui-error: var(--destructive);
   --ui-border: var(--border);

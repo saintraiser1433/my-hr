@@ -15,10 +15,10 @@ const { handleApiError } = useErrorHandler();
 const { openModal, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
 
 const initialState = {
-  id: 0,
+  id: undefined,
   title: "",
   description: "",
-  status: false,
+  status: undefined,
 };
 const screeningTypeForm = reactive<ScreeningModel>({ ...initialState });
 const screeningTypeData = ref<ScreeningModel[]>([]);
@@ -35,6 +35,7 @@ if (error.value) {
 const submit = async (response: ScreeningModel) => {
   try {
     if (!isUpdate.value) {
+      
       const res = await screeningTypeRepo.add(response); //error on this code
       screeningTypeData.value = [...screeningTypeData.value, res.data as ScreeningModel];
       $toast.success(res.message);

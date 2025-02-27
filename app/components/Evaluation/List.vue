@@ -5,69 +5,47 @@ const UButton = resolveComponent("UButton") as Component;
 
 const props = defineProps({
   data: {
-    type: Array as PropType<JobModel[]>,
+    type: Array as PropType<EvaluationModel[]>,
     required: true,
     default: () => [],
   },
-});
 
+});
 const emits = defineEmits<{
-  (e: "update", payload: JobModel): void;
-  (e: "view", payload: JobModel): void;
+  (e: "update", payload: EvaluationModel): void;
   (e: "delete", id: number): void;
 }>();
 
-const { pagination, globalFilter, refreshTable } = usePagination();
 const table = useTemplateRef("table");
 
 const { createColumn } = useTableColumns(UButton);
+const { pagination, globalFilter, refreshTable } = usePagination();
 
 const handleDelete = (id: number) => {
   emits("delete", id);
 };
 
-const handleUpdate = (item: JobModel) => {
+const handleUpdate = (item: EvaluationModel) => {
   emits("update", item);
-};
 
-const handleView = (item: JobModel) => {
-  emits("view", item);
 };
-
-const titleName = useState('title',() => '');
 
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
-  createColumn("title", "Job Title", true, (row) => row.getValue("title")),
-  createColumn("departmentTitle", "Department", true, (row) =>
-    row.getValue("departmentTitle")
-  ),
-  createColumn("totalAvailable", "Available", false),
-  createColumn("status", "Status", false),
+  createColumn("school_year", "School Year", true, (row) => row.getValue("school_year")),
+  createColumn("semester", "Semester", true),
+  createColumn("status", "Status", true),
   createColumn("action", "Action", false),
 ];
 
-function getDropdownActions(user: JobModel): DropdownMenuItem[][] {
+function getDropdownActions(user: EvaluationModel): DropdownMenuItem[][] {
   return [
     [
       {
-        label: "Assign",
+        label: "Manage Question",
         icon: "i-hugeicons-assignments",
         onSelect: async () => {
-     
-          titleName.value = user.title || '';
-          localStorage.setItem('title', titleName.value)
-          await navigateTo({ name: "Job-jobId", params: { jobId: Number(user.id) } });
-        },
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "View",
-        icon: "i-lucide-eye",
-        onSelect: () => {
-          handleView({ ...user, id: Number(user.id) });
+          await navigateTo({ name: "Evaluation-evaluationID", params: { evaluationID: Number(user.id) } });
         },
       },
       {
@@ -77,7 +55,7 @@ function getDropdownActions(user: JobModel): DropdownMenuItem[][] {
         label: "Edit",
         icon: "i-lucide-edit",
         onSelect: () => {
-          handleUpdate({ ...user, id: Number(user.id) });
+          handleUpdate(user);
         },
       },
       {
@@ -95,6 +73,7 @@ function getDropdownActions(user: JobModel): DropdownMenuItem[][] {
   ];
 }
 
+
 watch(
   () => props.data,
   (newVal, oldVal) => {
@@ -109,30 +88,30 @@ watch(
   <UITableSearch v-model:search="globalFilter" v-if="table" :table="table">
     <template #actions>
       <slot name="actions"></slot>
-     </template>
+    </template>
   </UITableSearch>
-  <UCard
-    :ui="{
-      root: 'overflow-hidden ',
-      body: 'p-0 sm:p-0',
-      footer: 'p-0 sm:px-0',
-    }"
-  >
-    <UTable
-      sticky
-      class="overflow-y-auto custom-scrollbar h-100 lg:h-170 cursor-auto"
-      ref="table"
-      v-model:global-filter="globalFilter"
-      v-model:pagination="pagination"
-      :pagination-options="{
+  <UCard :ui="{
+    root: 'overflow-hidden ',
+    body: 'p-0 sm:p-0',
+    footer: 'p-0 sm:px-0',
+  }">
+    <UTable sticky class="overflow-y-auto custom-scrollbar h-auto cursor-auto" ref="table"
+      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }"
-      :data="data"
-      :columns="columns"
-    >
+      }" :data="data" :columns="columns">
       <template #status-cell="{ row }">
-        <UBadge v-if="row.original.status" color="neutral" variant="solid">Active</UBadge>
-        <UBadge v-else color="neutral" variant="outline">Inactive</UBadge>
+
+        <UBadge v-if="row.original.status === 'NOT SET'" color="error">NOT SET</UBadge>
+        <UBadge v-else-if="row.original.status === 'ONGOING'" color="neutral" variant="outline">ONGOING</UBadge>
+        <UBadge v-else color="neutral">FINISHED</UBadge>
+      </template>
+      <template #semester-cell="{ row }">
+        <div v-if="row.original.semester === 1">
+          <span>First Semester</span>
+        </div>
+        <div v-else>
+          <span>Second Semester</span>
+        </div>
       </template>
 
       <template #action-cell="{ row }">
@@ -141,7 +120,7 @@ watch(
         </UDropdownMenu>
       </template>
     </UTable>
-    <UITablePagination v-if="table" :table="table" v-model:page="pagination.pageSize">
+    <UITablePagination :table="table" v-if="table">
     </UITablePagination>
   </UCard>
 </template>

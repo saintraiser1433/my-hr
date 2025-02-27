@@ -28,7 +28,7 @@ export function useTableColumns(UButton: Component) {
         variant: "ghost",
         label,
         size: "sm",
-        icon: isSorted
+        trailingIcon: isSorted
           ? isSorted === "asc"
             ? "i-lucide-arrow-up-narrow-wide"
             : "i-lucide-arrow-down-wide-narrow"

@@ -13,15 +13,6 @@ export const MENU_ITEMS: MenuItem[] = [
     ],
   },
   {
-    label: "Evaluation",
-    icon: "i-mdi-file-graph",
-    slot: "components",
-    children: [
-      { label: "Evaluation Question", icon: "i-hugeicons-question", to: "/evaluation/question" },
-      { label: "Manage Evaluation", icon: "i-mingcute-user-question-fill", to: "/evaluation/manage" },
-    ],
-  },
-  {
     label: "Performance",
     icon: "i-mdi-graph-line",
     slot: "components",
@@ -30,6 +21,16 @@ export const MENU_ITEMS: MenuItem[] = [
       { label: "SE Performance", icon: "i-hugeicons-peer-to-peer-03", to: "/performance/superior" },
     ],
   },
+  {
+    label: "Evaluation",
+    icon: "i-mdi-file-graph",
+    to: "/evaluation"
+    // children: [
+    //   { label: "Evaluation Question", icon: "i-hugeicons-question", to: "/evaluation/question" },
+    //   { label: "Manage Evaluation", icon: "i-mingcute-user-question-fill", to: "/evaluation/manage" },
+    // ],
+  },
+  
   { label: "Job Offers", icon: "i-fluent-mdl2-recruitment-management", to: "/job" },
   { label: "Screening", icon: "i-hugeicons-task-done-01", to: "/screening" },
   { label: "Requirements", icon: "i-carbon-document-requirements", to: "/requirements" },

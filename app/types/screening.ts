@@ -1,7 +1,7 @@
 import type { JobModel } from "./job";
 
 export interface ScreeningModel {
-    id: number;
+    id?: number;
     title: string;
     description?: string;
     status?: boolean;

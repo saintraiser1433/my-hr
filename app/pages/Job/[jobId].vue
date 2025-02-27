@@ -16,6 +16,9 @@ const route = useRoute();
 const jobScreenData = ref<JobScreeningModel[]>([]);
 const screenData = ref<ScreeningModel[]>([]);
 const shouldRefetch = ref(0);
+const titleName = useState('title', () => localStorage.getItem('title') || 'Unknown module');
+
+
 //typescreening
 const { data: screeningData, error: errorScreening } = await useAPI<ScreeningModel[]>(
   `/screening/f/${route.params.jobId}`
@@ -118,22 +121,18 @@ const down = async (datas: DirectionModel) => {
     handleApiError(error);
   }
 };
+
+
+
 </script>
 
 <template>
-  {{ data }}
   <div class="flex flex-col items-center lg:items-start mb-3">
-    <h2 class="font-extrabold text-2xl">Job Screening Module</h2>
-    <span class="text-sm">Here's a list of Job screening available!</span>
+    <h2 class="font-extrabold text-2xl capitalize">{{ titleName }}</h2>
+    <span class="text-sm">Here's a list assigned screening type for {{ titleName }} !</span>
   </div>
 
-  <JobAssignList
-    :data="jobScreenData"
-    :items="screenData"
-    @up="up"
-    @down="down"
-    @assign="assignData"
-    @unAssign="unAssignJob"
-  >
+  <JobAssignList :data="jobScreenData" :items="screenData" @up="up" @down="down" @assign="assignData"
+    @unAssign="unAssignJob">
   </JobAssignList>
 </template>

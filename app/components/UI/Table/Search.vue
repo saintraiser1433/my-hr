@@ -7,6 +7,14 @@ defineProps({
     required: true,
     default: () => null,
   },
+  hasSearch:{
+    type:Boolean,
+    default:true,
+  },
+  hasColumnFilter:{
+    type:Boolean,
+    default:true,
+  }
 });
 const globalFilter = defineModel<string>('search',{ required: true });
 </script>
@@ -16,7 +24,7 @@ const globalFilter = defineModel<string>('search',{ required: true });
     class="flex justify-center lg:justify-between flex-wrap items-center py-2 gap-2 w-full"
   >
     <div class="flex items-center gap-2">
-      <UInput
+      <UInput v-if="hasSearch"
         type="search"
         color="neutral"
         class="w-full"
@@ -26,7 +34,7 @@ const globalFilter = defineModel<string>('search',{ required: true });
         placeholder="Search..."
       />
 
-      <UDropdownMenu
+      <UDropdownMenu v-if="hasColumnFilter"
         :items="table?.tableApi
                 ?.getAllColumns()
                 .filter((column:Column<any>) => column.getCanHide())
