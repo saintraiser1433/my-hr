@@ -33,29 +33,29 @@ if (error.value) {
     $toast.error(error.value.message || "Failed to fetch items");
 }
 
-const submit = async (response: EvaluationModel) => {
+const submit = async (response: any) => {
+    console.log(response);
+    // try {
+    //     if (!isUpdate.value) {
+    //         const res = await evaluationRepo.add(response); //error on this code
+    //         evaluationData.value = [res.data as EvaluationModel, ...evaluationData.value]; // Add new item at the start
+    //         $toast.success(res.message);
+    //     } else {
+    //         const res = await evaluationRepo.update(response); //error on this code
+    //         if (res.data) {
+    //             const data = res.data as EvaluationModel;
+    //             evaluationData.value = evaluationData.value.map((item) =>
+    //                 item.id === data.id ? data : item
+    //             );
+    //         }
 
-    try {
-        if (!isUpdate.value) {
-            const res = await evaluationRepo.add(response); //error on this code
-            evaluationData.value = [res.data as EvaluationModel, ...evaluationData.value]; // Add new item at the start
-            $toast.success(res.message);
-        } else {
-            const res = await evaluationRepo.update(response); //error on this code
-            if (res.data) {
-                const data = res.data as EvaluationModel;
-                evaluationData.value = evaluationData.value.map((item) =>
-                    item.id === data.id ? data : item
-                );
-            }
+    //         $toast.success(res.message);
+    //     }
+    //     resetForm()
 
-            $toast.success(res.message);
-        }
-        resetForm()
-
-    } catch (error) {
-        return handleApiError(error);
-    }
+    // } catch (error) {
+    //     return handleApiError(error);
+    // }
 };
 
 const edit = (response: EvaluationModel) => {
@@ -102,7 +102,7 @@ const resetForm = () => {
 
     <div class="grid grid-cols-12 gap-2">
         <div class="col-span-12 lg:col-span-3">
-            <EvaluationQuestionForm @data-evaluation="submit" :isUpdate="isUpdate" v-model:state="evaluationForm" />
+            <EvaluationQuestionForm @data-question="submit" :isUpdate="isUpdate" v-model:state="evaluationForm" />
         </div>
         <div class="col-span-12 lg:col-span-9">
             <EvaluationQuestionList :data="evaluationData" @update="edit" @delete="remove">

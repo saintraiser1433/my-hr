@@ -34,24 +34,13 @@ const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => {
     return h('div', { class: 'max-w-1' }, `${row.index + 1}`)
   }),
-  createColumn("question", "Question", true, (row) => {
-    return h('div', { class: 'max-w-lg text-wrap text-sm' }, row.getValue("question"))
-  }),
-  createColumn("1", "1", false, (row) => {
-    return h(UCheckbox, { class: 'max-w-1' }, )
-  }),
-  createColumn("2", "2", false, (row) => {
-    return h(UCheckbox, { class: 'max-w-1' }, 0)
-  }),
-  createColumn("3", "3", false, (row) => {
-    return h(UCheckbox, { class: 'max-w-1' }, 0)
-  }),
-  createColumn("4", "4", false, (row) => {
-    return h(UCheckbox, { class: 'max-w-1' }, 0)
-  }),
-  createColumn("5", "5", false, (row) => {
-    return h(UCheckbox, { class: 'max-w-1' }, 0)
-  }),
+  createColumn("question", "Question", true),
+  createColumn("1", "1", false),
+  createColumn("2", "2", false),
+  createColumn("3", "3", false),
+  createColumn("4", "4", false),
+  createColumn("5", "5", false),
+
 
   createColumn("action", "Action", false),
 ];
@@ -81,11 +70,11 @@ watch(
     <div class="flex items-center gap-4">
       <h4 class="font-semibold">LEGENDS:</h4>
       <div class="flex items-center gap-3">
-        <UBadge variant="subtle">1 - STRONGLY DISAGREE</UBadge>
-        <UBadge variant="subtle">2 - DISAGREE</UBadge>
-        <UBadge variant="subtle">3 - UNCERTAIN</UBadge>
-        <UBadge variant="subtle">4 - AGREE</UBadge>
-        <UBadge variant="subtle">5 - STRONGLY AGREE</UBadge>
+        <UBadge color="error" variant="subtle">1 - STRONGLY DISAGREE</UBadge>
+        <UBadge color="error" variant="subtle">2 - DISAGREE</UBadge>
+        <UBadge color="info" variant="subtle">3 - UNCERTAIN</UBadge>
+        <UBadge color="success"  variant="subtle">4 - AGREE</UBadge>
+        <UBadge color="success" variant="subtle">5 - STRONGLY AGREE</UBadge>
       </div>
     </div>
     <USeparator class="my-2"></USeparator>
@@ -98,7 +87,24 @@ watch(
         v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
           getPaginationRowModel: getPaginationRowModel(),
         }" :data="data" :columns="columns">
-
+        <template #question-cell="{row}">
+          <div class="max-w-lg text-wrap text-sm" v-html="row.original.question"></div>
+        </template>
+        <template #1-cell="{row}">
+          <UCheckbox disabled></UCheckbox>
+        </template>
+        <template #2-cell="{row}">
+          <UCheckbox disabled></UCheckbox>
+        </template>
+        <template #3-cell="{row}">
+          <UCheckbox disabled></UCheckbox>
+        </template>
+        <template #4-cell="{row}">
+          <UCheckbox disabled></UCheckbox>
+        </template>
+        <template #5-cell="{row}">
+          <UCheckbox disabled></UCheckbox>
+        </template>
         <template #action-cell="{ row }">
           <div class="flex items-center gap-2">
             <UButton size="sm" @click="handleUpdate(row.original)">
