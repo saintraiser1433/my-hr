@@ -9,7 +9,7 @@ export const useErrorHandler = () => {
             });
            
         } else {
-            $toast.error(error.data.message)
+            $toast.error(error.data.details)
         }
     };
 

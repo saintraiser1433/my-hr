@@ -297,7 +297,7 @@ onBeforeUnmount(() => {
     </div>
 
     <TiptapEditorContent
-      class="w-full text-xs cursor-default h-78 overflow-auto custom-scrollbar border-x border-b px-2 dark:border-(--border) dark:bg-(--background)"
+      class="w-full pt-1 text-xs cursor-default h-78 overflow-auto custom-scrollbar border-x border-b px-2 dark:border-(--border) dark:bg-(--background)"
       :editor="editor"
       @click="focusEditor"
     />

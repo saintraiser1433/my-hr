@@ -1,8 +1,8 @@
 import type { EvaluationModel } from "./evaluation";
 
 export interface QuestionModel {
-    id: number;
-    question: string;
+    id?: number;
+    question?: string;
     evaluationId?: number;
     Evaluation?: EvaluationModel;
 }

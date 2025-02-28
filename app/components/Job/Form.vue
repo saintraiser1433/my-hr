@@ -72,31 +72,43 @@ const submitForm = () => {
     description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit, totam architecto! Provident tempore porro ipsa! "
     :title="title" :ui="{ content: 'max-w-6xl' }">
     <template #body>
-      <UForm ref="formRef" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-        <UFormField label="Job Title" name="title">
-          <UITextInput v-model="model.title" placeholder="Enter Job Title" />
-        </UFormField>
-        <UFormField label="Description" name="description">
-          <UITiptapEditor v-model="model.description" />
-        </UFormField>
-        <div class="flex flex-wrap items-center gap-3">
-          <UFormField class="lg:flex-1" label="Availability" name="totalAvailable">
-            <UITextInput v-model="model.totalAvailable" placeholder="Enter Availability" class="w-full" type="number" />
-          </UFormField>
-          <UFormField class="lg:flex-1" label="Department" name="departmentsId">
-            <USelectMenu placeholder="Select Department" v-model="model.departmentsId" label-key="title" value-key="id"
-              :items="department" class="w-full" size="sm" />
-          </UFormField>
-          <UFormField class="lg:flex-1" label="Header Background Image">
-            <UInput type="file" @change="onFileChange" accept="images/*" class="w-full" size="sm" />
-          </UFormField>
-          <UFormField class="flex-none" v-if="isUpdate" label="Status" name="status">
-            <USwitch color="neutral" :default-value="model.status"
-              @update:modelValue="(value) => model.status = value" />
-          </UFormField>
 
+      <UForm ref="formRef" :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+        <div class="grid grid-cols-12 gap-2">
+          <div class="col-span-12 lg:col-span-9">
+            <UFormField label="Job Title" name="title">
+              <UITextInput v-model="model.title" placeholder="Enter Job Title" />
+            </UFormField>
+            <UFormField label="Description" name="description">
+              <UITiptapEditor v-model="model.description" />
+            </UFormField>
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <UFormField class="lg:flex-1" label="Availability" name="totalAvailable">
+                <UITextInput v-model="model.totalAvailable" placeholder="Enter Availability" class="w-full"
+                  type="number" />
+              </UFormField>
+              <UFormField class="lg:flex-1" label="Department" name="departmentsId">
+                <USelectMenu placeholder="Select Department" v-model="model.departmentsId" label-key="title"
+                  value-key="id" :items="department" class="w-full" size="sm" />
+              </UFormField>
+              <UFormField class="lg:flex-1" label="Header Background Image">
+                <UInput type="file" @change="onFileChange" accept="images/*" class="w-full" size="sm" />
+              </UFormField>
+              <UFormField class="flex-none" v-if="isUpdate" label="Status" name="status">
+                <USwitch color="neutral" :default-value="model.status"
+                  @update:modelValue="(value) => model.status = value" />
+              </UFormField>
+
+            </div>
+          </div>
+          <div class="col-span-12 lg:col-span-3">
+            <h1>Requirements</h1>
+          </div>
         </div>
+
+
       </UForm>
+
     </template>
 
     <template #footer>

@@ -1,37 +1,51 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui";
-
-const { $joi } = useNuxtApp();
 const emits = defineEmits<{
   (e: "dataQuestion", payload: QuestionModel): void;
+  (e: "cancel"): void;
 }>();
-
+defineProps({
+  isUpdate: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
+})
 
 const model = defineModel<QuestionModel>("state", { required: true });
+
+
+const { $joi } = useNuxtApp();
+const formRef = useTemplateRef("formRef");
+
+
+
+
 const schema = $joi.object({
   id: $joi.number().optional(),
   question: $joi.string().required().messages({
     "any.required": "The Question field is required",
     "string.empty": "The Question field is required"
   }),
+  evaluationId: $joi.number().optional(),
 });
 
 const onSubmit = async (event: FormSubmitEvent<QuestionModel>) => {
-
   emits("dataQuestion", event.data);
-  console.log('dasdsa')
 };
 
-const formRef = useTemplateRef("formRef");
+const onCancel = () => {
+  emits("cancel");
+}
+
+
+
+
 const submitForm = () => {
   if (formRef.value) {
     formRef.value.submit();
   }
 };
-
-
-
-
 
 </script>
 
@@ -53,8 +67,10 @@ const submitForm = () => {
 
     </UForm>
     <template #footer>
-      <div class="flex justify-end items-center p-2">
-        <UButton size="md" @click="submitForm">Submit</UButton>
+      <div class="flex justify-end items-center p-2 gap-2">
+        <UButton v-if="isUpdate" size="md" variant="outline" @click="onCancel">Cancel</UButton>
+        <UButton size="md" @click="submitForm" :label="isUpdate ? 'Update' : 'Submit'"></UButton>
+
       </div>
     </template>
   </UCard>
