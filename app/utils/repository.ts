@@ -51,8 +51,8 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
 
         Object.entries(body).forEach(([key, value]) => {
             if (value !== undefined) {
-                if (key === "requirementsId" && Array.isArray(value)) {
-                    value.forEach(reqId => formData.append("requirementsId[]", String(reqId))); // Append each ID separately
+                if (key === "requirements" && Array.isArray(value)) {
+                    value.forEach(reqId => formData.append("requirements[]", String(reqId))); // Append each ID separately
                 } else {
                     formData.append(key, String(value));
                 }
@@ -75,8 +75,12 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
 
         // Append object fields to FormData
         Object.entries(body).forEach(([key, value]) => {
-            if (value !== undefined) {  // Only append if value is not undefined
-                formData.append(key, String(value));
+            if (value !== undefined) {
+                if (key === "requirements" && Array.isArray(value)) {
+                    value.forEach(reqId => formData.append("requirements[]", String(reqId))); // Append each ID separately
+                } else {
+                    formData.append(key, String(value));
+                }
             }
         });
 

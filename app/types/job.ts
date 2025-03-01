@@ -10,13 +10,15 @@ export interface JobModel extends Timestamped {
     status?: boolean;
     headerImage?: string;
     file?: object;
-    requirements?: ForRequirementsId[],
+    requirements: RequirementCommandPallete[];
     JobScreening?: JobScreeningModel[];
 }
 
-
-export interface ForRequirementsId {
+interface RequirementCommandPallete {
     id: number;
-    label: string
+    label?: string;
+    title?: string;
 }
+
+
 

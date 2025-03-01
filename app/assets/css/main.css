@@ -1,12 +1,16 @@
-@import "tailwindcss";
+@import "tailwindcss" theme(static);
 @import "@nuxt/ui";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @plugin 'tailwind-scrollbar';
+
+
 :root {
   --font-sans: "Public Sans", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
   --font-poppins: "Poppins", system-ui, sans-serif;
+  
   --ui-border-accented: var(--border);
   --ui-bg: var(--background);
   --ui-primary: var(--primary);
@@ -107,7 +111,7 @@
 
 @layer components {
   .base-text {
-    @apply text-xs;
+    @apply text-sm;
   }
 
   /* .sidebar {
@@ -133,6 +137,10 @@
            cursor-pointer;
   }
 }
+@theme static {
+  --container-8xl: 96rem;
+}
+
 
 @layer base {
   h1 {
@@ -144,15 +152,15 @@
   h3 {
     @apply text-sm lg:text-lg;
   }
-  h4 {
+  h4,h5 {
     @apply text-sm;
   }
-  h5 {
+  /* h5 {
     @apply text-xs;
-  }
+  } */
 
   body {
-    font-family: var(--font-sans);
+    font-family: var(--font-roboto);
     @apply bg-(--background) text-(--foreground) text-sm;
   }
 

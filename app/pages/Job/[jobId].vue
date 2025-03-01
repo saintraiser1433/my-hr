@@ -15,7 +15,6 @@ const { handleApiError } = useErrorHandler();
 const route = useRoute();
 const jobScreenData = ref<JobScreeningModel[]>([]);
 const screenData = ref<ScreeningModel[]>([]);
-const shouldRefetch = ref(0);
 const titleName = useState('title', () => localStorage.getItem('title') || 'Unknown module');
 
 
@@ -32,10 +31,7 @@ if (errorScreening.value) {
 
 //jobscreen list
 const { data, status, error } = await useAPI<JobScreeningModel[]>(
-  `/screening/assign/${route.params.jobId}`,
-  {
-    watch: [shouldRefetch],
-  }
+  `/screening/assign/${route.params.jobId}`
 );
 if (data.value) {
   jobScreenData.value = data.value;

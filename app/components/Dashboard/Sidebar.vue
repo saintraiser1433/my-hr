@@ -28,6 +28,7 @@
         linkLabel: isToggle ? 'lg:hidden' : '',
         childItem: isToggle ? 'lg:hidden' : '',
         label: 'text-xs text-gray-600 font-medium dark:text-gray-400',
+
       }"
     >
       <template v-if="isToggle" #components-trailing>
@@ -62,7 +63,7 @@
             v-if="!isToggle"
             class="flex flex-col items-center justify-start px-2 flex-1"
           >
-            <h5>Johnrey Decosta</h5>
+            <span class="text-xs">Johnrey Decosta</span>
             <span class="text-xs">Administrator</span>
           </div>
           <div v-if="!isToggle" class="flex-none">

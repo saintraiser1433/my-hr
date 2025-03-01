@@ -43,7 +43,7 @@ const submitForm = () => {
 <template>
   <UModal
     v-model:open="open"
-    description=" "
+    description="Test"
     :title="title"
     :ui="{ content: 'max-w-sm' }"
   >

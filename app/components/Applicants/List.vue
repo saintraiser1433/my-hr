@@ -5,18 +5,19 @@ const UButton = resolveComponent("UButton") as Component;
 
 const props = defineProps({
   data: {
-    type: Array as PropType<DepartmentModel[]>,
+    type: Array as PropType<ApplicantModel[]>,
     required: true,
     default: () => [],
   },
 
 });
 const emits = defineEmits<{
-  (e: "update", payload: DepartmentModel): void;
+  (e: "update", payload: ApplicantModel): void;
   (e: "delete", id: number): void;
 }>();
 
 const table = useTemplateRef("table");
+const { data } = toRefs(props);
 
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
@@ -25,19 +26,37 @@ const handleDelete = (id: number) => {
   emits("delete", id);
 };
 
-const handleUpdate = (item: DepartmentModel) => {
+const handleUpdate = (item: ApplicantModel) => {
   emits("update", item);
 
 };
 
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
-  createColumn("title", "Department Name", true, (row) =>
-    h("span", { class: "capitalize" }, row.getValue("title"))
+  createColumn("applicant", "Applicant Name", true, (row) =>
+    h("span", { class: "capitalize" }, row.getValue("applicant"))
   ),
+  createColumn("job", "Job Applying", true, (row) =>
+    h("span", { class: "capitalize" }, row.getValue("job"))
+  ),
+
   createColumn("status", "Status", true),
+  createColumn("applied_date", "Date Apply", true, (row) =>
+    h("span", { class: "capitalize" }, row.getValue("applied_date"))
+  ),
   createColumn("action", "Action", false),
 ];
+
+
+const myData = computed(() => {
+  return data.value.map((item) => ({
+    id: item.id,
+    job: item.jobApply?.title,
+    status: item.status,
+    applicant: `${item.information?.[0]?.last_name}, ${item.information?.[0]?.last_name} ${item.information?.[0]?.middle_name[0]}`,
+    applied_date: item.createdAt
+  }))
+})
 
 
 
@@ -65,13 +84,16 @@ watch(
     <UTable sticky class="overflow-y-auto custom-scrollbar h-auto cursor-auto" ref="table"
       v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }" :data="data" :columns="columns">
+      }" :data="myData" :columns="columns">
       <template #status-cell="{ row }">
-        <div v-if="row.original.status">
-          <UBadge color="neutral">Active</UBadge>
+        <div v-if="row.original.status == 'PENDING'">
+          <UBadge icon="i-mdi-account-pending" color="neutral" variant="outline">PENDING</UBadge>
+        </div>
+        <div v-else-if="row.original.status == 'ONGOING'">
+          <UBadge icon="i-majesticons-timer-line" color="neutral" variant="outline">ONGOING</UBadge>
         </div>
         <div v-else>
-          <UBadge color="neutral" variant="outline">Inactive</UBadge>
+          <UBadge color="neutral" variant="outline">UNKNOWN</UBadge>
         </div>
 
 

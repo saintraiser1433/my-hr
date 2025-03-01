@@ -31,3 +31,10 @@ export interface DirectionModel {
 }
 
 export type Directions = 'up' | 'down'
+
+export enum ApplicationStatus {
+  PENDING = "PENDING",
+  ONGOING = "ONGOING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+}

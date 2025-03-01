@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps({
   data: {
-    type: Object as PropType<JobModel>,
+    type: Object as PropType<Omit<JobModel,"requirements">>,
     required: true,
     default: () => {},
   },

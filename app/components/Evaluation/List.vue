@@ -101,7 +101,7 @@ watch(
       }" :data="data" :columns="columns">
       <template #status-cell="{ row }">
 
-        <UBadge v-if="row.original.status === 'NOT SET'" color="error">NOT SET</UBadge>
+        <UBadge v-if="row.original.status === 'NOT_SET'" color="error">NOT SET</UBadge>
         <UBadge v-else-if="row.original.status === 'ONGOING'" color="neutral" variant="outline">ONGOING</UBadge>
         <UBadge v-else color="neutral">FINISHED</UBadge>
       </template>

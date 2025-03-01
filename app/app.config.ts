@@ -14,14 +14,16 @@ export default defineAppConfig({
     },
     table: {
       slots: {
-        th: ' p-0 px-5 py-0 text-xs text-(--foreground)',
-        td: 'p-0 px-5 py-2 text-xs text-(--foreground)',
+        th: ' p-0 px-5 py-0 text-sm text-(--foreground)',
+        td: 'p-0 px-5 py-2 text-sm text-(--foreground)',
       }
     },
     navigationMenu: {
       slots: {
-        link: 'cursor-pointer px-3 py-2 text-sm  font-light cursor-pointer px-3 py-2 text-[13px]  ',
+        link: 'cursor-pointer px-3 py-2 text-sm  font-light text-[13px]  ',
+ 
       },
+
       compoundVariants: [
         {
           orientation: 'vertical',
@@ -74,8 +76,8 @@ export default defineAppConfig({
 
     formField: {
       slots: {
-        error: 'text-xs font-bold',
-        label: 'text-xs'
+        error: 'text-sm font-bold',
+        label: 'text-sm'
       }
     },
     modal: {
@@ -85,7 +87,7 @@ export default defineAppConfig({
         body: 'sm:p-4',
         header: 'sm:px-4 py-3',
         title:'text-sm capitalize',
-        description: 'text-xs'
+        description: 'text-sm'
       }
     },
 
@@ -112,7 +114,7 @@ export default defineAppConfig({
       slots: {
         content: 'bg-(--ui-bg) dark:bg-(--ui-bg)',
         item: 'cursor-pointer',
-        itemLabel: 'text-xs',
+        itemLabel: 'text-sm',
       },
       defaultVariants: {
         color: 'neutral',

@@ -33,7 +33,7 @@ export function useTableColumns(UButton: Component) {
             ? "i-lucide-arrow-up-narrow-wide"
             : "i-lucide-arrow-down-wide-narrow"
           : "i-lucide-arrow-up-down",
-        class: "-mx-2.5 text-xs",
+        class: "-mx-2.5 text-sm",
         onClick: () => column.toggleSorting(column.getIsSorted() === "asc"),
       });
     },
