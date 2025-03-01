@@ -8,7 +8,15 @@ export interface JobModel extends Timestamped {
     departmentsId?: number;
     department?: DepartmentModel,
     status?: boolean;
-    headerImage?:string;
+    headerImage?: string;
     file?: object;
+    requirements?: ForRequirementsId[],
     JobScreening?: JobScreeningModel[];
 }
+
+
+export interface ForRequirementsId {
+    id: number;
+    label: string
+}
+

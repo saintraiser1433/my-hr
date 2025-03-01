@@ -5,6 +5,7 @@ import type { NitroFetchRequest, $Fetch } from 'nitropack'
 export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, basePath: string) => ({
 
     async add(body: T): Promise<ApiResponse<T>> {
+
         return fetch<ApiResponse<T>>(`${basePath}`, {
             method: 'POST',
             body: JSON.stringify(body),
@@ -49,8 +50,12 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
         const formData = new FormData();
 
         Object.entries(body).forEach(([key, value]) => {
-            if (value !== undefined) {  // Only append if value is not undefined
-                formData.append(key, String(value));
+            if (value !== undefined) {
+                if (key === "requirementsId" && Array.isArray(value)) {
+                    value.forEach(reqId => formData.append("requirementsId[]", String(reqId))); // Append each ID separately
+                } else {
+                    formData.append(key, String(value));
+                }
             }
         });
 
@@ -63,6 +68,7 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
             body: formData,
         });
     },
+
 
     async updateWithImage(body: JobModel, file: any): Promise<ApiResponse<T>> {
         const formData = new FormData();

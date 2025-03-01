@@ -34,7 +34,7 @@ const handleView = (item: JobModel) => {
   emits("view", item);
 };
 
-const titleName = useState('title',() => '');
+const titleName = useState("title", () => "");
 
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
@@ -54,9 +54,8 @@ function getDropdownActions(user: JobModel): DropdownMenuItem[][] {
         label: "Assign",
         icon: "i-hugeicons-assignments",
         onSelect: async () => {
-     
-          titleName.value = user.title || '';
-          localStorage.setItem('title', titleName.value)
+          titleName.value = user.title || "";
+          localStorage.setItem("title", titleName.value);
           await navigateTo({ name: "Job-jobId", params: { jobId: Number(user.id) } });
         },
       },
@@ -109,7 +108,7 @@ watch(
   <UITableSearch v-model:search="globalFilter" v-if="table" :table="table">
     <template #actions>
       <slot name="actions"></slot>
-     </template>
+    </template>
   </UITableSearch>
   <UCard
     :ui="{
