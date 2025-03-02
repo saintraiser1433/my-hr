@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { TableColumn } from "@nuxt/ui";
+import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
 import { getPaginationRowModel } from "@tanstack/vue-table";
 const UButton = resolveComponent("UButton") as Component;
-
+const UAvatar = resolveComponent("UAvatar") as Component;
 const props = defineProps({
   data: {
     type: Array as PropType<ApplicantModel[]>,
@@ -12,53 +12,52 @@ const props = defineProps({
 
 });
 const emits = defineEmits<{
-  (e: "update", payload: ApplicantModel): void;
-  (e: "delete", id: number): void;
+  (e: "review", payload: ApplicantModel): void;
 }>();
-
-const table = useTemplateRef("table");
 const { data } = toRefs(props);
-
+const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
+const { $datefns } = useNuxtApp();
 
-const handleDelete = (id: number) => {
-  emits("delete", id);
-};
-
-const handleUpdate = (item: ApplicantModel) => {
-  emits("update", item);
+const handleReview = (item: ApplicantModel) => {
+  emits("review", item);
 
 };
+
+
 
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
-  createColumn("applicant", "Applicant Name", true, (row) =>
-    h("span", { class: "capitalize" }, row.getValue("applicant"))
-  ),
+
+  createColumn("applicant", "Applicant Name", true),
   createColumn("job", "Job Applying", true, (row) =>
     h("span", { class: "capitalize" }, row.getValue("job"))
   ),
 
+
+
   createColumn("status", "Status", true),
   createColumn("applied_date", "Date Apply", true, (row) =>
-    h("span", { class: "capitalize" }, row.getValue("applied_date"))
+    h("span", { class: "capitalize" }, $datefns.format(new Date(row.getValue("applied_date")), "dd-MMM-yyyy"))
   ),
-  createColumn("action", "Action", false),
+  createColumn("action", "Review", false),
 ];
 
 
 const myData = computed(() => {
   return data.value.map((item) => ({
     id: item.id,
+    avatar: '/profile.jpg',
     job: item.jobApply?.title,
     status: item.status,
-    applicant: `${item.information?.[0]?.last_name}, ${item.information?.[0]?.last_name} ${item.information?.[0]?.middle_name[0]}`,
-    applied_date: item.createdAt
+    applicant: `${item.information?.[0]?.last_name}, ${item.information?.[0]?.first_name} ${item.information?.[0]?.middle_name[0]}`,
+    applied_date: item.createdAt,
+    resume: item.information?.[0]?.resume_path,
+    email: item.information?.[0]?.email,
+    contact_number: item.information?.[0]?.contact_number
   }))
 })
-
-
 
 watch(
   () => props.data,
@@ -86,27 +85,21 @@ watch(
         getPaginationRowModel: getPaginationRowModel(),
       }" :data="myData" :columns="columns">
       <template #status-cell="{ row }">
-        <div v-if="row.original.status == 'PENDING'">
-          <UBadge icon="i-mdi-account-pending" color="neutral" variant="outline">PENDING</UBadge>
+        <UBadge icon="i-mdi-account-pending" color="neutral" variant="outline">{{ row.original.status }}</UBadge>
+      </template>
+      <template #applicant-cell="{ row }">
+        <div class="flex items-center gap-3">
+          <UAvatar :src="row.original.avatar" size="lg" />
+          <div>
+            <p class="font-medium text-(--ui-text-highlighted)">
+              {{ row.original.applicant }}
+            </p>
+          </div>
         </div>
-        <div v-else-if="row.original.status == 'ONGOING'">
-          <UBadge icon="i-majesticons-timer-line" color="neutral" variant="outline">ONGOING</UBadge>
-        </div>
-        <div v-else>
-          <UBadge color="neutral" variant="outline">UNKNOWN</UBadge>
-        </div>
-
-
       </template>
       <template #action-cell="{ row }">
-        <div class="flex items-center gap-2">
-          <UButton size="sm" @click="handleUpdate(row.original)">
-            <Icon name="lucide:edit"></Icon>
-          </UButton>
-          <UButton color="primary" variant="outline" size="sm" @click="handleDelete(row.original.id || 0)">
-            <Icon name="lucide:x"></Icon>
-          </UButton>
-        </div>
+        <UButton icon="i-lucide-eye" title="Review" size="sm" @click="handleReview(row.original)">
+        </UButton>
       </template>
     </UTable>
     <UITablePagination :table="table" v-if="table">

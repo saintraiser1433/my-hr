@@ -1,5 +1,3 @@
-
-
 import { h } from "vue";
 import type { TableColumn } from "@nuxt/ui";
 
@@ -13,8 +11,7 @@ export function useTableColumns(UButton: Component) {
     key: keyof T,
     label: string,
     sortable: boolean = true,
-    cellRenderer?: (row: any) => any,
-
+    cellRenderer?: (row: any) => any
   ): TableColumn<T> => ({
     accessorKey: key as string,
     header: ({ column }) => {
@@ -39,40 +36,36 @@ export function useTableColumns(UButton: Component) {
     },
 
     cell: ({ row }) =>
-      cellRenderer ? cellRenderer(row) : h("span", {}, row.getValue(key as string)),
+      cellRenderer
+        ? cellRenderer(row)
+        : h("span", {}, row.getValue(key as string)),
   });
-
-
 
   return { createColumn };
 }
 
-
-
 export function useTableColumnCheckBox(UCheckbox: Component, table: any) {
-
-  const createColumnWithCheckBox = <T>(
-    // Ensure the correct type here
-  ): TableColumn<T> => ({
-    id: 'select',
+  const createColumnWithCheckBox = <T>(): // Ensure the correct type here
+  TableColumn<T> => ({
+    id: "select",
     header: ({ table }) =>
       h(UCheckbox, {
         modelValue: table.getIsSomePageRowsSelected()
-          ? 'indeterminate'
+          ? "indeterminate"
           : table.getIsAllPageRowsSelected(),
-        'onUpdate:modelValue': (value: boolean | 'indeterminate') =>
+        "onUpdate:modelValue": (value: boolean | "indeterminate") =>
           table.toggleAllPageRowsSelected(!!value),
-        ariaLabel: 'Select all'
+        ariaLabel: "Select all",
       }),
     cell: ({ row }) =>
       h(UCheckbox, {
         modelValue: row.getIsSelected(),
-        'onUpdate:modelValue': (value: boolean | 'indeterminate') =>
+        "onUpdate:modelValue": (value: boolean | "indeterminate") =>
           row.toggleSelected(!!value),
-        ariaLabel: 'Select row'
-      })
+        ariaLabel: "Select row",
+      }),
   });
-
 
   return { createColumnWithCheckBox };
 }
+

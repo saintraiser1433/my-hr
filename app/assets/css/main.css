@@ -7,6 +7,7 @@
 
 
 :root {
+  --font-teko: "Teko", sans-serif;
   --font-sans: "Public Sans", sans-serif;
   --font-roboto: "Roboto", sans-serif;
   --font-poppins: "Poppins", system-ui, sans-serif;
@@ -60,7 +61,9 @@
   --sidebar-accent-foreground: hsl(240 5.9% 10%);
   --sidebar-border: hsl(220 13% 91%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  
 }
+
 
 .dark {
   --ui-border-accented: var(--border);
@@ -137,9 +140,7 @@
            cursor-pointer;
   }
 }
-@theme static {
-  --container-8xl: 96rem;
-}
+
 
 
 @layer base {

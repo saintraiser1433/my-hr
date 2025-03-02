@@ -36,3 +36,21 @@ export const MENU_ITEMS: MenuItem[] = [
   { label: "Requirements", icon: "i-carbon-document-requirements", to: "/requirements" },
   { label: "Settings", icon: "i-mdi-cogs", to: "/settings" },
 ];
+
+export const TAB_ITEMS = [
+  {
+      label: 'Pending Applicants',
+      icon: 'i-lucide-user',
+      slot: 'pending'
+  },
+  {
+      label: 'Ongoing Applicants',
+      icon: 'i-lucide-timer',
+      slot: 'ongoing'
+  },
+  {
+      label: 'Rejected Applicants',
+      icon: 'i-lucide-x',
+      slot: 'rejected'
+  },
+]
