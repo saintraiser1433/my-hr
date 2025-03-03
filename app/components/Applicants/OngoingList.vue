@@ -83,7 +83,7 @@ watch(
         <div class="flex items-center gap-3">
           <UAvatar :src="row.original.avatar" size="lg" />
           <div>
-            <p class="font-medium text-(--ui-text-highlighted)">
+            <p class="font-medium capitalize text-(--ui-text-highlighted)">
               {{ row.original.applicant }}
             </p>
           </div>

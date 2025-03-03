@@ -14,10 +14,8 @@ useSeoMeta({
 const { $api, $toast, $datefns } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
 const pendingData = ref<ApplicantModel[]>([]);
-const approvedData = ref<ApplicantModel[]>([]);
 const rejectedData = ref<ApplicantTransformModel[]>([]);
 const ongoingData = ref<ApplicantModel[]>([]);
-const isUpdate = ref(false);
 const open = ref(false);
 const pendingForm = ref<ApplicantTransformModel>({
     id: 0
@@ -38,7 +36,7 @@ if (rejected.value) {
         const applicantInfo = item.information?.[0];
         return {
             id: item.id,
-            avatar:'/profile.jpg',
+            avatar: '/profile.jpg',
             job: item.jobApply?.title,
             status: item.status,
             applicant: applicantInfo
@@ -52,9 +50,9 @@ if (rejected.value) {
 if (pendingError.value) {
     $toast.error(pendingError.value.message || "Failed to fetch items");
 }
-if (ongoingError.value) {
-    $toast.error(ongoingError.value.message || "Failed to fetch items");
-}
+// if (ongoingError.value) {
+//     $toast.error(ongoingError.value.message || "Failed to fetch items");
+// }
 
 if (rejectedError.value) {
     $toast.error(rejectedError.value.message || "Failed to fetch items");
@@ -72,44 +70,33 @@ const formattedAppliedDate = computed((item) => {
 });
 const applicantsRepo = repository<ApplicantModel>($api, "/applicant");
 
-const proceed = (id: number) => {
-    setAlert("warning", "Are you sure you want to proceed this applicant?", "", "Confirm to proceed").then(
-        async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const response = await applicantsRepo.delete(id);
-                    pendingData.value = pendingData.value.filter(
-                        (item) => item.id !== id
-                    );
-                    rejectedData.value = [...rejectedData.value, res.data as ApplicantModel];
-                    $toast.success(response.message);
-                } catch (error) {
-                    return handleApiError(error);
-                }
-            }
-        }
-    );
+const proceed = async (id: number) => {
+    try {
+        const response = await applicantsRepo.delete(id);
+        pendingData.value = pendingData.value.filter(
+            (item) => item.id !== id
+        );
+        rejectedData.value = [...rejectedData.value, res.data as ApplicantModel];
+        $toast.success(response.message);
+    } catch (err) {
+        return handleApiError(err);
+    }
+
 };
 
 
-const reject = (data: ApplicantTransformModel) => {
-    setAlert("warning", "Are you sure you want to reject this applicant?", "", "Confirm to reject").then(
-        async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const response = await applicantsRepo.delete(data.id);
-                    pendingData.value = pendingData.value.filter(
-                        (item) => item.id !== data.id
-                    );
-                    rejectedData.value = [...rejectedData.value, { ...data, status: 'REJECTED' }];
-                    open.value = false;
-                    $toast.success(response.message);
-                } catch (error) {
-                    return handleApiError(error);
-                }
-            }
-        }
-    );
+const reject = async (data: ApplicantTransformModel) => {
+    try {
+        const response = await applicantsRepo.delete(data.id);
+        pendingData.value = pendingData.value.filter(
+            (item) => item.id !== data.id
+        );
+        rejectedData.value = [...rejectedData.value, { ...data, status: 'REJECTED' }];
+        open.value = false;
+        $toast.success(response.message);
+    } catch (error) {
+        return handleApiError(error);
+    }
 };
 
 
@@ -118,7 +105,7 @@ const reject = (data: ApplicantTransformModel) => {
 
 <template>
     <UDrawer :ui="{ header: 'flex items-center justify-between border-b-3 border-dashed border-success-900' }"
-        :overlay="false" :dismissible="false" dragg v-model:open="open" direction="right">
+        v-model:open="open" direction="right">
         <template #header>
             <h1 class="uppercase font-semibold font-(family-name:--font-poppins) ">
                 {{ pendingForm.job }}</h1>
@@ -169,6 +156,10 @@ const reject = (data: ApplicantTransformModel) => {
             </div>
         </template>
     </UDrawer>
+    <div class="flex flex-col items-center lg:items-start mb-3">
+        <h2 class="font-extrabold text-2xl">Applicants Module</h2>
+        <span class="text-sm">Here's a list of pending,ongoing and rejected applicants!</span>
+    </div>
     <UTabs :items="TAB_ITEMS" class="w-full">
         <template #pending="{ item }">
             <ApplicantsPendingList @review="review" :data="pendingData">

@@ -6,7 +6,8 @@ export interface ApplicantModel extends Timestamped {
   status: ApplicationStatus;
   // Relationships
   jobApply: JobModel;
-  information: ApplicantInformationModel[];
+  information: ApplicantInformationModel;
+  informationId: number;
 }
 export interface ApplicantInformationModel {
   id: number;
@@ -40,17 +41,17 @@ export interface ApplicantInformationModel {
   college?: string;
   college_years_attended?: string;
 
-  Applicant?: ApplicantModel;
-  applicantId?: number;
+  applicant?: ApplicantModel[]
 }
 
-export interface ApplicantTransformModel {
-  id: number;
-  job?: string;
-  status?: string;
-  applicant?: string;
-  contact_number?: string;
-  email?: string;
-  applied_date?: Date;
-  avatar?: string;
+export interface PendingApplicantModel {
+  id: number,
+  photo: string,
+  jobId: number,
+  status: string,
+  fullname: string,
+  applied_date: Date,
+  resume: string,
+  email: string,
+  contact_number: string
 }
