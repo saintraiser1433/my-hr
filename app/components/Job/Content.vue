@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps({
   data: {
-    type: Object as PropType<Omit<JobModel,"requirements">>,
+    type: Object as PropType<Omit<JobModel, "requirements">>,
     required: true,
     default: () => {},
   },
@@ -23,7 +23,7 @@ const openModal = defineModel("open", { default: false, required: true });
       <div class="flex flex-col flex-wrap gap-2">
         <h1 class="font-semibold">Job Title: {{ data.title }}</h1>
         <NuxtImg
-          :src="`${config.public.storageURL}/${data.headerImage}`"
+          :src="`${config.public.STORAGE_URL_JOB}/${data.headerImage}`"
           quality="100"
         ></NuxtImg>
         <USeparator />

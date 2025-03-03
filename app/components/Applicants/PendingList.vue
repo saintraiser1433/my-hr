@@ -1,63 +1,42 @@
 <script setup lang="ts">
+import { configs } from "#build/eslint.config.mjs";
 import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
 import { getPaginationRowModel } from "@tanstack/vue-table";
 const UButton = resolveComponent("UButton") as Component;
 const UAvatar = resolveComponent("UAvatar") as Component;
+
 const props = defineProps({
   data: {
-    type: Array as PropType<ApplicantModel[]>,
+    type: Array as PropType<PendingApplicantModel[]>,
     required: true,
     default: () => [],
   },
-
 });
 const emits = defineEmits<{
-  (e: "review", payload: ApplicantModel): void;
+  (e: "review", payload: PendingApplicantModel): void;
 }>();
-const { data } = toRefs(props);
+const config = useRuntimeConfig();
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
 const { $datefns } = useNuxtApp();
 
-const handleReview = (item: ApplicantModel) => {
+const handleReview = (item: PendingApplicantModel) => {
   emits("review", item);
-
 };
 
-
-
 const columns: TableColumn<any>[] = [
-  createColumn("increment", "#", true, (row) => `${row.index + 1}`),
+  createColumn("#", "#", true, (row) => `${row.index + 1}`),
 
-  createColumn("applicant", "Applicant Name", true),
-  createColumn("job", "Job Applying", true, (row) =>
-    h("span", { class: "capitalize" }, row.getValue("job"))
+  createColumn("applicantName", "Applicant Name", true),
+  createColumn("jobTitle", "Job Title", true, (row) =>
+    h("span", { class: "capitalize" }, row.getValue("jobTitle"))
   ),
-
-
 
   createColumn("status", "Status", true),
-  createColumn("applied_date", "Date Apply", true, (row) =>
-    h("span", { class: "capitalize" }, $datefns.format(new Date(row.getValue("applied_date")), "dd-MMM-yyyy"))
-  ),
+  createColumn("appliedDate", "Applied Date", true),
   createColumn("action", "Review", false),
 ];
-
-
-const myData = computed(() => {
-  return data.value.map((item) => ({
-    id: item.id,
-    avatar: '/profile.jpg',
-    job: item.jobApply?.title,
-    status: item.status,
-    applicant: `${item.information?.[0]?.last_name}, ${item.information?.[0]?.first_name} ${item.information?.[0]?.middle_name[0]}`,
-    applied_date: item.createdAt,
-    resume: item.information?.[0]?.resume_path,
-    email: item.information?.[0]?.email,
-    contact_number: item.information?.[0]?.contact_number
-  }))
-})
 
 watch(
   () => props.data,
@@ -75,34 +54,59 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard :ui="{
-    root: 'overflow-hidden ',
-    body: 'p-0 sm:p-0',
-    footer: 'p-0 sm:px-0',
-  }">
-    <UTable sticky class="overflow-y-auto custom-scrollbar h-auto cursor-auto" ref="table"
-      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
+  <UCard
+    :ui="{
+      root: 'overflow-hidden ',
+      body: 'p-0 sm:p-0',
+      footer: 'p-0 sm:px-0',
+    }"
+  >
+    <UTable
+      sticky
+      class="overflow-y-auto custom-scrollbar h-auto cursor-auto"
+      ref="table"
+      v-model:global-filter="globalFilter"
+      v-model:pagination="pagination"
+      :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }" :data="myData" :columns="columns">
+      }"
+      :data="data"
+      :columns="columns"
+    >
       <template #status-cell="{ row }">
-        <UBadge icon="i-mdi-account-pending" color="neutral" variant="outline">{{ row.original.status }}</UBadge>
+        <UBadge icon="i-mdi-account-pending" color="neutral" variant="outline">{{
+          row.original.status
+        }}</UBadge>
       </template>
-      <template #applicant-cell="{ row }">
+      <template #appliedDate-cell="{ row }">
+        <span class="capitalize">{{
+          $datefns.format(new Date(row.original.appliedDate), "dd-MMM-yyyy")
+        }}</span>
+      </template>
+
+      <template #applicantName-cell="{ row }">
         <div class="flex items-center gap-3">
-          <UAvatar :src="row.original.avatar" size="lg" />
+          <UAvatar
+            :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.photo}`"
+            size="lg"
+          />
           <div>
             <p class="font-medium capitalize text-(--ui-text-highlighted)">
-              {{ row.original.applicant }}
+              {{ row.original.applicantName }}
             </p>
           </div>
         </div>
       </template>
       <template #action-cell="{ row }">
-        <UButton icon="i-lucide-eye" title="Review" size="sm" @click="handleReview(row.original)">
+        <UButton
+          icon="i-lucide-eye"
+          title="Review"
+          size="sm"
+          @click="handleReview(row.original)"
+        >
         </UButton>
       </template>
     </UTable>
-    <UITablePagination :table="table" v-if="table">
-    </UITablePagination>
+    <UITablePagination :table="table" v-if="table"> </UITablePagination>
   </UCard>
 </template>

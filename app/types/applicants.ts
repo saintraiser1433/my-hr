@@ -48,10 +48,16 @@ export interface PendingApplicantModel {
   id: number,
   photo: string,
   jobId: number,
+  jobTitle: string,
   status: string,
-  fullname: string,
-  applied_date: Date,
+  applicantName: string,
+  appliedDate: Date,
   resume: string,
   email: string,
-  contact_number: string
+  contactNumber: string
+
+}
+
+export interface RejectApplicantModel extends PendingApplicantModel {
+  rejectedDate: Date
 }

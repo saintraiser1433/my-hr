@@ -32,7 +32,7 @@ const addImage = () => {
           editor.value
             .chain()
             .focus()
-            .setImage({ src: `${config.public.storageURL}/${url}` })
+            .setImage({ src: `${config.public.STORAGE_URL_UPLOADS}/${url}` })
             .run();
         }
       } catch (error) {
@@ -44,8 +44,8 @@ const addImage = () => {
   fileInput.click();
 };
 const focusEditor = () => {
-  editor.value?.commands.focus()
-}
+  editor.value?.commands.focus();
+};
 
 const lowlight = createLowlight(allLanguages);
 const editor = useEditor({

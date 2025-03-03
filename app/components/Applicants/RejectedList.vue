@@ -5,11 +5,10 @@ const UButton = resolveComponent("UButton") as Component;
 
 const props = defineProps({
   data: {
-    type: Array as PropType<ApplicantTransformModel[]>,
+    type: Array as PropType<RejectApplicantModel[]>,
     required: true,
     default: () => [],
   },
-
 });
 const emits = defineEmits<{
   (e: "update", payload: ApplicantModel): void;
@@ -20,29 +19,19 @@ const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
 const { $datefns } = useNuxtApp();
-
-
-
-
+const config = useRuntimeConfig();
 const columns: TableColumn<any>[] = [
-  createColumn("increment", "#", true, (row) => `${row.index + 1}`),
-  createColumn("applicant", "Applicant Name", true, (row) =>
-    h("span", { class: "capitalize" }, row.getValue("applicant"))
-  ),
-  createColumn("job", "Job Applying", true, (row) =>
-    h("span", { class: "capitalize" }, row.getValue("job"))
+  createColumn("#", "#", true, (row) => `${row.index + 1}`),
+
+  createColumn("applicantName", "Applicant Name", true),
+  createColumn("jobTitle", "Job Title", true, (row) =>
+    h("span", { class: "capitalize" }, row.getValue("jobTitle"))
   ),
 
   createColumn("status", "Status", true),
-  createColumn("applied_date", "Date Apply", true, (row) =>
-    h("span", { class: "capitalize" }, $datefns.format(new Date(row.getValue("applied_date")), "dd-MMM-yyyy"))
-  ),
+  createColumn("appliedDate", "Applied Date", true),
+  createColumn("rejectedDate", "Rejected Date", true),
 ];
-
-
-
-
-
 
 watch(
   () => props.data,
@@ -60,30 +49,55 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard :ui="{
-    root: 'overflow-hidden ',
-    body: 'p-0 sm:p-0',
-    footer: 'p-0 sm:px-0',
-  }">
-    <UTable sticky class="overflow-y-auto custom-scrollbar h-auto cursor-auto" ref="table"
-      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
+  <UCard
+    :ui="{
+      root: 'overflow-hidden ',
+      body: 'p-0 sm:p-0',
+      footer: 'p-0 sm:px-0',
+    }"
+  >
+    <UTable
+      sticky
+      class="overflow-y-auto custom-scrollbar h-auto cursor-auto"
+      ref="table"
+      v-model:global-filter="globalFilter"
+      v-model:pagination="pagination"
+      :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }" :data="data" :columns="columns">
+      }"
+      :data="data"
+      :columns="columns"
+    >
       <template #status-cell="{ row }">
-        <UBadge icon="i-lucide-x" color="error" variant="outline">{{ row.original.status }}</UBadge>
+        <UBadge icon="i-lucide-x" color="error" variant="outline">{{
+          row.original.status
+        }}</UBadge>
       </template>
-      <template #applicant-cell="{ row }">
+      <template #appliedDate-cell="{ row }">
+        <span class="capitalize">{{
+          $datefns.format(new Date(row.original.appliedDate), "dd-MMM-yyyy")
+        }}</span>
+      </template>
+      <template #rejectedDate-cell="{ row }">
+        <span class="capitalize">{{
+          $datefns.format(new Date(row.original.rejectedDate), "dd-MMM-yyyy")
+        }}</span>
+      </template>
+
+      <template #applicantName-cell="{ row }">
         <div class="flex items-center gap-3">
-          <UAvatar :src="row.original.avatar" size="lg" />
+          <UAvatar
+            :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.photo}`"
+            size="lg"
+          />
           <div>
             <p class="font-medium capitalize text-(--ui-text-highlighted)">
-              {{ row.original.applicant }}
+              {{ row.original.applicantName }}
             </p>
           </div>
         </div>
       </template>
     </UTable>
-    <UITablePagination :table="table" v-if="table">
-    </UITablePagination>
+    <UITablePagination :table="table" v-if="table"> </UITablePagination>
   </UCard>
 </template>

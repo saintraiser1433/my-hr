@@ -12,17 +12,28 @@ useSeoMeta({
 });
 
 const { $api, $toast, $datefns } = useNuxtApp();
+const config = useRuntimeConfig();
 const { handleApiError } = useErrorHandler();
-const pendingData = ref<ApplicantModel[]>([]);
-const rejectedData = ref<ApplicantTransformModel[]>([]);
+const pendingData = ref<PendingApplicantModel[]>([]);
+const rejectedData = ref<RejectApplicantModel[]>([]);
 const ongoingData = ref<ApplicantModel[]>([]);
 const open = ref(false);
-const pendingForm = ref<ApplicantTransformModel>({
-    id: 0
+
+const pendingForm = ref<PendingApplicantModel>({
+    id: 0,
+    photo: "",
+    jobId: 0,
+    jobTitle:"",
+    status: "",
+    applicantName: "",
+    appliedDate: new Date(),  // Default to current date
+    resume: "",
+    email: "",
+    contactNumber: ""
 });
-const { data: pending, status: pendingStatus, error: pendingError } = await useAPI<ApplicantModel[]>("/applicant/pending");
-const { data: ongoing, status: ongoingStatus, error: ongoingError } = await useAPI<ApplicantModel[]>("/applicant/pending");
-const { data: rejected, status: rejectedStatus, error: rejectedError } = await useAPI<ApplicantModel[]>("/applicant/rejected");
+const { data: pending, status: pendingStatus, error: pendingError } = await useAPI<PendingApplicantModel[]>("/applicant/pending");
+const { data: ongoing, status: ongoingStatus, error: ongoingError } = await useAPI<ApplicantModel[]>("/applicant/ongoing");
+const { data: rejected, status: rejectedStatus, error: rejectedError } = await useAPI<RejectApplicantModel[]>("/applicant/rejected");
 
 if (pending.value) {
     pendingData.value = pending.value;
@@ -32,44 +43,30 @@ if (ongoing.value) {
 }
 
 if (rejected.value) {
-    rejectedData.value = rejected.value.map((item) => {
-        const applicantInfo = item.information?.[0];
-        return {
-            id: item.id,
-            avatar: '/profile.jpg',
-            job: item.jobApply?.title,
-            status: item.status,
-            applicant: applicantInfo
-                ? `${applicantInfo.last_name}, ${applicantInfo.first_name} ${applicantInfo.middle_name?.[0] || ''}`
-                : "Unknown",
-            applied_date: item.createdAt
-        };
-    });
+    rejectedData.value = rejected.value
 }
 
 if (pendingError.value) {
     $toast.error(pendingError.value.message || "Failed to fetch items");
 }
-// if (ongoingError.value) {
-//     $toast.error(ongoingError.value.message || "Failed to fetch items");
-// }
+if (ongoingError.value) {
+    $toast.error(ongoingError.value.message || "Failed to fetch items");
+}
 
 if (rejectedError.value) {
     $toast.error(rejectedError.value.message || "Failed to fetch items");
 }
 
-const review = (res: ApplicantModel) => {
+const review = (res: PendingApplicantModel) => {
     open.value = true;
     pendingForm.value = res;
 }
 
-const formattedAppliedDate = computed((item) => {
-    return pendingForm.value.applied_date
-        ? $datefns.format(new Date(pendingForm.value.applied_date), "dd-MMM-yyyy")
-        : "N/A";
+const formattedAppliedDate = computed(() => {
+    return $datefns.format(new Date(pendingForm.value.appliedDate), "dd-MMM-yyyy")
 });
-const applicantsRepo = repository<ApplicantModel>($api, "/applicant");
 
+const applicantsRepo = repository<ApplicantModel>($api, "/applicant");
 const proceed = async (id: number) => {
     try {
         const response = await applicantsRepo.delete(id);
@@ -84,14 +81,15 @@ const proceed = async (id: number) => {
 
 };
 
-
-const reject = async (data: ApplicantTransformModel) => {
+const rejectRepo = repository<RejectApplicantModel>($api, "/applicant");
+const reject = async (data: PendingApplicantModel) => {
     try {
-        const response = await applicantsRepo.delete(data.id);
+        const date = new Date();
+        const response = await rejectRepo.update({...data,rejectedDate:date});
         pendingData.value = pendingData.value.filter(
             (item) => item.id !== data.id
         );
-        rejectedData.value = [...rejectedData.value, { ...data, status: 'REJECTED' }];
+        rejectedData.value = [...rejectedData.value, { ...data, status: 'REJECTED',rejectedDate:new Date() }];
         open.value = false;
         $toast.success(response.message);
     } catch (error) {
@@ -108,7 +106,7 @@ const reject = async (data: ApplicantTransformModel) => {
         v-model:open="open" direction="right">
         <template #header>
             <h1 class="uppercase font-semibold font-(family-name:--font-poppins) ">
-                {{ pendingForm.job }}</h1>
+                {{ pendingForm.jobTitle }}</h1>
             <UButton color="neutral" variant="subtle" icon="i-lucide-x" @click="open = false" />
         </template>
         <template #body>
@@ -121,11 +119,11 @@ const reject = async (data: ApplicantTransformModel) => {
                             <div>
                                 <div class="flex items-center gap-2 pt-1">
                                     <h4 class="font-bold">Applicant:</h4>
-                                    <h4>{{ pendingForm.applicant }}</h4>
+                                    <h4>{{ pendingForm.applicantName }}</h4>
                                 </div>
                                 <div class="flex items-center gap-2 py-1">
                                     <h4 class="font-bold">Contact:</h4>
-                                    <h4>{{ pendingForm.contact_number }}</h4>
+                                    <h4>{{ pendingForm.contactNumber }}</h4>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <h4 class="font-bold">Email:</h4>
@@ -151,7 +149,7 @@ const reject = async (data: ApplicantTransformModel) => {
                     </div>
 
                 </div>
-                <embed src="/test.pdf" class="min-w-160 min-h-160  " frameborder="0"></embed>
+                <embed :src="`${config.public.STORAGE_URL_RESUME}/${pendingForm.resume}`" class="min-w-160 min-h-160  " frameborder="0"></embed>
                 <div class="flex justify-center items-center mt-2 font-bold">Applicant Resume</div>
             </div>
         </template>
