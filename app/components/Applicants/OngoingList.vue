@@ -1,53 +1,37 @@
 <script setup lang="ts">
-import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
+import type { TableColumn } from "@nuxt/ui";
 import { getPaginationRowModel } from "@tanstack/vue-table";
 const UButton = resolveComponent("UButton") as Component;
 
 const props = defineProps({
   data: {
-    type: Array as PropType<ApplicantModel[]>,
+    type: Array as PropType<OngoingApplicant[]>,
     required: true,
     default: () => [],
   },
 
 });
 const emits = defineEmits<{
-  (e: "update", payload: ApplicantModel): void;
+  (e: "update", payload: OngoingApplicant): void;
   (e: "delete", id: number): void;
 }>();
-const { data } = toRefs(props);
+
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
 const { $datefns } = useNuxtApp();
-const progressVal = ref(2);
-
+const config = useRuntimeConfig();
 
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
-  createColumn("applicant", "Applicant Name", true),
-  createColumn("job", "Job Applying", true, (row) =>
-    h("span", { class: "capitalize" }, row.getValue("job"))
-  ),
-  createColumn("test", "Progress", true),
-  createColumn("status", "Status", true),
-  createColumn("applied_date", "Date Apply", true, (row) =>
-    h("span", { class: "capitalize" }, $datefns.format(new Date(row.getValue("applied_date")), "dd-MMM-yyyy"))
-  ),
+  createColumn("applicantName", "Applicant Name", true),
+  createColumn("jobTitle", "Job Applying", true),
+  createColumn("progressList", "Progress", true),
+  createColumn("remarks", "Remarks", true),
+  createColumn("appliedDate", "Date Apply", true),
   createColumn("action", "Action", false),
 ];
 
-
-const myData = computed(() => {
-  return data.value.map((item) => ({
-    id: item.id,
-    avatar: '/profile.jpg',
-    job: item.jobApply?.title,
-    status: item.status,
-    applicant: `${item.information?.[0]?.last_name}, ${item.information?.[0]?.first_name} ${item.information?.[0]?.middle_name[0]}`,
-    applied_date: item.createdAt
-  }))
-})
 
 
 
@@ -75,23 +59,28 @@ watch(
     <UTable sticky class="overflow-y-auto custom-scrollbar h-auto cursor-auto" ref="table"
       v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }" :data="myData" :columns="columns">
-      <template #status-cell="{ row }">
-        <UBadge icon="i-majesticons-timer-line" color="neutral" variant="outline">ONGOING</UBadge>
+      }" :data="data" :columns="columns">
+      <template #remarks-cell="{ row }">
+        <UBadge v-if="row.original.remarks === 'ONGOING'" icon="i-majesticons-timer-line" color="neutral" variant="outline">ONGOING</UBadge>
+        <UBadge v-else-if="row.original.remarks === 'PASSED'" icon="i-lucide-check" color="neutral" variant="outline">PASSED</UBadge>
+        <UBadge v-else icon="i-majesticons-timer-line" color="error" variant="outline">FAILED</UBadge>
       </template>
-      <template #applicant-cell="{ row }">
+      <template #applicantName-cell="{ row }">
         <div class="flex items-center gap-3">
-          <UAvatar :src="row.original.avatar" size="lg" />
+          <UAvatar :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.photo}`" size="lg" />
           <div>
             <p class="font-medium capitalize text-(--ui-text-highlighted)">
-              {{ row.original.applicant }}
+              {{ row.original.applicantName }}
             </p>
           </div>
         </div>
       </template>
-      <template #test-cell="{ row }">
-        <UProgress v-model="progressVal"
-          :max="['Waiting for interview', 'Final Interview', 'Demo Teaching', 'Complete']" />
+      <template #appliedDate-cell="{row}">
+        {{$datefns.format(new Date(row.getValue("appliedDate")), "dd-MMM-yyyy")}}
+      </template>
+      <template #progressList-cell="{ row }">
+        <UProgress :model-value="Math.max(0, row.original.countApplicantScreening - 1) "
+          :max="row.original.progressList" />
       </template>
 
       <template #action-cell="{ row }">

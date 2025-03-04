@@ -53,4 +53,9 @@ export const TAB_ITEMS = [
       icon: 'i-lucide-x',
       slot: 'rejected'
   },
+  {
+    label: 'Failed Applicants',
+    icon: 'i-lucide-x',
+    slot: 'failed'
+},
 ]

@@ -21,11 +21,19 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
 
     },
 
+    async updateById(id: number): Promise<ApiResponse<T>> {
+        return fetch<ApiResponse<T>>(`${basePath}/${id}`, {
+            method: 'PUT',
+        });
+    },
+
     async delete(id: number): Promise<ApiResponse<T>> {
         return fetch<ApiResponse<T>>(`${basePath}/${id}`, {
             method: 'DELETE',
         });
     },
+
+    
 
     async deleteMany(data: any): Promise<ApiResponse<T>> {
         return fetch<ApiResponse<T>>(`${basePath}`, {

@@ -16,23 +16,23 @@ const config = useRuntimeConfig();
 const { handleApiError } = useErrorHandler();
 const pendingData = ref<PendingApplicantModel[]>([]);
 const rejectedData = ref<RejectApplicantModel[]>([]);
-const ongoingData = ref<ApplicantModel[]>([]);
+const ongoingData = ref<OngoingApplicant[]>([]);
 const open = ref(false);
 
 const pendingForm = ref<PendingApplicantModel>({
     id: 0,
     photo: "",
     jobId: 0,
-    jobTitle:"",
+    jobTitle: "",
     status: "",
     applicantName: "",
-    appliedDate: new Date(),  // Default to current date
+    appliedDate: new Date(),
     resume: "",
     email: "",
     contactNumber: ""
 });
 const { data: pending, status: pendingStatus, error: pendingError } = await useAPI<PendingApplicantModel[]>("/applicant/pending");
-const { data: ongoing, status: ongoingStatus, error: ongoingError } = await useAPI<ApplicantModel[]>("/applicant/ongoing");
+const { data: ongoing, status: ongoingStatus, error: ongoingError } = await useAPI<OngoingApplicant[]>("/applicant/ongoing");
 const { data: rejected, status: rejectedStatus, error: rejectedError } = await useAPI<RejectApplicantModel[]>("/applicant/rejected");
 
 if (pending.value) {
@@ -66,30 +66,30 @@ const formattedAppliedDate = computed(() => {
     return $datefns.format(new Date(pendingForm.value.appliedDate), "dd-MMM-yyyy")
 });
 
-const applicantsRepo = repository<ApplicantModel>($api, "/applicant");
-const proceed = async (id: number) => {
+const proceedRepo = repository<OngoingApplicant>($api, "/applicant/proceed");
+const proceed = async (applicantId: number) => {
     try {
-        const response = await applicantsRepo.delete(id);
+        const response = await proceedRepo.updateById(applicantId);
         pendingData.value = pendingData.value.filter(
-            (item) => item.id !== id
+            (item) => item.id !== applicantId
         );
-        rejectedData.value = [...rejectedData.value, res.data as ApplicantModel];
+        ongoingData.value = [...ongoingData.value, response.data as OngoingApplicant];
         $toast.success(response.message);
+        open.value = false;
     } catch (err) {
         return handleApiError(err);
     }
 
 };
 
-const rejectRepo = repository<RejectApplicantModel>($api, "/applicant");
-const reject = async (data: PendingApplicantModel) => {
+const rejectRepo = repository<RejectApplicantModel>($api, "/applicant/reject");
+const reject = async (applicantId: number) => {
     try {
-        const date = new Date();
-        const response = await rejectRepo.update({...data,rejectedDate:date});
+        const response = await rejectRepo.updateById(applicantId);
         pendingData.value = pendingData.value.filter(
-            (item) => item.id !== data.id
+            (item) => item.id !== applicantId
         );
-        rejectedData.value = [...rejectedData.value, { ...data, status: 'REJECTED',rejectedDate:new Date() }];
+        rejectedData.value = [...rejectedData.value, response.data as RejectApplicantModel];
         open.value = false;
         $toast.success(response.message);
     } catch (error) {
@@ -143,13 +143,15 @@ const reject = async (data: PendingApplicantModel) => {
                             </div>
                         </div>
                     </div>
+                    <!-- proceed(pendingForm) -->
                     <div class="flex flex-row lg:flex-col items-center gap-2 mt-2">
-                        <UButton icon="i-lucide-check" @click="proceed(pendingForm)">Proceed</UButton>
-                        <UButton icon="i-lucide-x" color="error" @click="reject(pendingForm)">Reject</UButton>
+                        <UButton icon="i-lucide-check" @click="proceed(pendingForm.id)">Proceed</UButton>
+                        <UButton icon="i-lucide-x" color="error" @click="reject(pendingForm.id)">Reject</UButton>
                     </div>
 
                 </div>
-                <embed :src="`${config.public.STORAGE_URL_RESUME}/${pendingForm.resume}`" class="min-w-160 min-h-160  " frameborder="0"></embed>
+                <embed :src="`${config.public.STORAGE_URL_RESUME}/${pendingForm.resume}`" class="min-w-160 min-h-160  "
+                    frameborder="0"></embed>
                 <div class="flex justify-center items-center mt-2 font-bold">Applicant Resume</div>
             </div>
         </template>
@@ -167,11 +169,15 @@ const reject = async (data: PendingApplicantModel) => {
             <ApplicantsOngoingList :data="ongoingData">
             </ApplicantsOngoingList>
         </template>
-
+        <template #failed="{ item }">
+            <ApplicantsRejectedList :data="rejectedData">
+            </ApplicantsRejectedList>
+        </template>
         <template #rejected="{ item }">
             <ApplicantsRejectedList :data="rejectedData">
             </ApplicantsRejectedList>
         </template>
+
     </UTabs>
 
 

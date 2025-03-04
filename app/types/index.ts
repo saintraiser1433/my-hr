@@ -38,3 +38,8 @@ export enum ApplicationStatus {
   APPROVED = "APPROVED",
   REJECTED = "REJECTED",
 }
+
+export interface InterviewDate {
+  date: string,
+  id: number
+}

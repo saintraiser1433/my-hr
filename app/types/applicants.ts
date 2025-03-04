@@ -61,3 +61,38 @@ export interface PendingApplicantModel {
 export interface RejectApplicantModel extends PendingApplicantModel {
   rejectedDate: Date
 }
+
+
+
+
+export interface OngoingApplicant extends PendingApplicantModel {
+  countJobScreening: number,
+  countApplicantScreening: number,
+  progressList: Array<string>,
+  remarks: string
+}
+
+export interface OngoingApplicantDetails extends PendingApplicantModel {
+  countJobScreening?: number,
+  countApplicantScreening?: number,
+  progressList?: ScreeningProgressList[],
+  remarks?: string
+}
+
+export interface ScreeningProgressList {
+  id: number,
+  screeningId: number,
+  status: ScreeningStatus,
+  dateInterview?: string | Date,
+  screening: ScreeningModel
+}
+
+
+
+
+enum ScreeningStatus {
+  PENDING,
+  PASSED,
+  FAILED
+}
+
