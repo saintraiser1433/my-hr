@@ -9,7 +9,6 @@ const props = defineProps({
     required: true,
     default: () => [],
   },
-
 });
 const emits = defineEmits<{
   (e: "update", payload: OngoingApplicant): void;
@@ -32,9 +31,6 @@ const columns: TableColumn<any>[] = [
   createColumn("action", "Action", false),
 ];
 
-
-
-
 watch(
   () => props.data,
   (newVal, oldVal) => {
@@ -51,23 +47,48 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard :ui="{
-    root: 'overflow-hidden ',
-    body: 'p-0 sm:p-0',
-    footer: 'p-0 sm:px-0',
-  }">
-    <UTable sticky class="overflow-y-auto custom-scrollbar h-auto cursor-auto" ref="table"
-      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
+  <UCard
+    :ui="{
+      root: 'overflow-hidden ',
+      body: 'p-0 sm:p-0',
+      footer: 'p-0 sm:px-0',
+    }"
+  >
+    <UTable
+      sticky
+      class="overflow-y-auto custom-scrollbar h-auto cursor-auto"
+      ref="table"
+      v-model:global-filter="globalFilter"
+      v-model:pagination="pagination"
+      :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }" :data="data" :columns="columns">
+      }"
+      :data="data"
+      :columns="columns"
+    >
       <template #remarks-cell="{ row }">
-        <UBadge v-if="row.original.remarks === 'ONGOING'" icon="i-majesticons-timer-line" color="neutral" variant="outline">ONGOING</UBadge>
-        <UBadge v-else-if="row.original.remarks === 'PASSED'" icon="i-lucide-check" color="neutral" variant="outline">PASSED</UBadge>
-        <UBadge v-else icon="i-majesticons-timer-line" color="error" variant="outline">FAILED</UBadge>
+        <UBadge
+          v-if="row.original.remarks === 'ONGOING'"
+          icon="i-majesticons-timer-line"
+          color="neutral"
+          variant="outline"
+          >ONGOING</UBadge
+        >
+        <UBadge
+          v-else-if="row.original.remarks === 'PASSED'"
+          icon="i-lucide-check"
+          color="neutral"
+          variant="outline"
+          >PASSED</UBadge
+        >
+        <UBadge v-else icon="i-lucide-x" color="error" variant="outline">FAILED</UBadge>
       </template>
       <template #applicantName-cell="{ row }">
         <div class="flex items-center gap-3">
-          <UAvatar :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.photo}`" size="lg" />
+          <UAvatar
+            :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.photo}`"
+            size="lg"
+          />
           <div>
             <p class="font-medium capitalize text-(--ui-text-highlighted)">
               {{ row.original.applicantName }}
@@ -75,20 +96,26 @@ watch(
           </div>
         </div>
       </template>
-      <template #appliedDate-cell="{row}">
-        {{$datefns.format(new Date(row.getValue("appliedDate")), "dd-MMM-yyyy")}}
+      <template #appliedDate-cell="{ row }">
+        {{ $datefns.format(new Date(row.getValue("appliedDate")), "dd-MMM-yyyy") }}
       </template>
       <template #progressList-cell="{ row }">
-        <UProgress :model-value="Math.max(0, row.original.countApplicantScreening - 1) "
-          :max="row.original.progressList" />
+        <UProgress
+          :model-value="Math.max(0, row.original.countApplicantScreening - 1)"
+          :max="row.original.progressList"
+        />
       </template>
 
       <template #action-cell="{ row }">
-        <UButton icon="i-lucide-eye" title="Review" size="sm" :to="{ path: `/applicants/${row.original.id}` }">
+        <UButton
+          icon="i-lucide-eye"
+          title="Review"
+          size="sm"
+          :to="{ path: `/applicants/${row.original.id}` }"
+        >
         </UButton>
       </template>
     </UTable>
-    <UITablePagination :table="table" v-if="table">
-    </UITablePagination>
+    <UITablePagination :table="table" v-if="table"> </UITablePagination>
   </UCard>
 </template>

@@ -21,7 +21,7 @@ export default defineAppConfig({
     navigationMenu: {
       slots: {
         link: 'cursor-pointer px-3 py-2 text-sm  font-light text-[13px]  ',
- 
+
       },
 
       compoundVariants: [
@@ -65,7 +65,7 @@ export default defineAppConfig({
 
 
       defaultVariants: {
-        color: 'neutral',
+        color: 'primary',
         highlightColor: 'neutral',
         variant: 'pill'
       }
@@ -86,7 +86,7 @@ export default defineAppConfig({
         footer: 'sm:px-4 py-3 justify-end',
         body: 'sm:p-4',
         header: 'sm:px-4 py-3',
-        title:'text-sm capitalize',
+        title: 'text-sm capitalize',
         description: 'text-sm'
       }
     },
@@ -102,7 +102,7 @@ export default defineAppConfig({
           class: 'text-white dark:text-black bg-(--ui-bg-inverted) hover:bg-(--ui-bg-inverted)/90 disabled:bg-(--ui-bg-inverted) aria-disabled:bg-(--ui-bg-inverted) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ui-border-inverted)'
         }],
       defaultVariants: {
-        color: 'neutral',
+        color: 'primary',
         variant: 'solid',
         size: 'sm'
 
@@ -117,7 +117,7 @@ export default defineAppConfig({
         itemLabel: 'text-sm',
       },
       defaultVariants: {
-        color: 'neutral',
+        color: 'primary',
         variant: 'solid',
         size: 'sm'
 
@@ -138,7 +138,7 @@ export default defineAppConfig({
         }
       },
       defaultVariants: {
-        color: 'neutral',
+        color: 'primary',
         variant: 'solid',
         size: 'sm'
 

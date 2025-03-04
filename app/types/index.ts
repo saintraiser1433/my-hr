@@ -39,7 +39,10 @@ export enum ApplicationStatus {
   REJECTED = "REJECTED",
 }
 
-export interface InterviewDate {
-  date: string,
-  id: number
+export enum InterviewStatusEnum {
+  PENDING = "PENDING",
+  PASSED = "PASSED",
+  FAILED = "FAILED",
+  NONE = "",
 }
+

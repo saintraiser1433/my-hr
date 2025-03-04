@@ -82,7 +82,7 @@ export interface OngoingApplicantDetails extends PendingApplicantModel {
 export interface ScreeningProgressList {
   id: number,
   screeningId: number,
-  status: ScreeningStatus,
+  status: InterviewStatusEnum,
   dateInterview?: string | Date,
   screening: ScreeningModel
 }
@@ -90,9 +90,4 @@ export interface ScreeningProgressList {
 
 
 
-enum ScreeningStatus {
-  PENDING,
-  PASSED,
-  FAILED
-}
 
