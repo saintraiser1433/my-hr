@@ -17,6 +17,8 @@ const { handleApiError } = useErrorHandler();
 const pendingData = ref<PendingApplicantModel[]>([]);
 const rejectedData = ref<RejectApplicantModel[]>([]);
 const ongoingData = ref<OngoingApplicant[]>([]);
+const failedData = ref<FailedApplicant[]>([]);
+const passedData = ref<PassedApplicant[]>([]);
 const open = ref(false);
 
 const pendingForm = ref<PendingApplicantModel>({
@@ -31,15 +33,25 @@ const pendingForm = ref<PendingApplicantModel>({
     email: "",
     contactNumber: ""
 });
+
+
 const { data: pending, status: pendingStatus, error: pendingError } = await useAPI<PendingApplicantModel[]>("/applicant/pending");
 const { data: ongoing, status: ongoingStatus, error: ongoingError } = await useAPI<OngoingApplicant[]>("/applicant/ongoing");
 const { data: rejected, status: rejectedStatus, error: rejectedError } = await useAPI<RejectApplicantModel[]>("/applicant/rejected");
+const { data: failed, status: failedStatus, error: failedError } = await useAPI<FailedApplicant[]>("/applicant/failed");
+const { data: passed, status: passedStatus, error: passedError } = await useAPI<PassedApplicant[]>("/applicant/passed");
 
 if (pending.value) {
     pendingData.value = pending.value;
 }
 if (ongoing.value) {
     ongoingData.value = ongoing.value;
+}
+if (passed.value) {
+    passedData.value = passed.value;
+}
+if (failed.value) {
+    failedData.value = failed.value;
 }
 
 if (rejected.value) {
@@ -102,6 +114,7 @@ const reject = async (applicantId: number) => {
 </script>
 
 <template>
+
     <UDrawer :ui="{ header: 'flex items-center justify-between border-b-3 border-dashed border-success-900' }"
         v-model:open="open" direction="right">
         <template #header>
@@ -170,8 +183,12 @@ const reject = async (applicantId: number) => {
             </ApplicantsOngoingList>
         </template>
         <template #failed="{ item }">
-            <ApplicantsRejectedList :data="rejectedData">
-            </ApplicantsRejectedList>
+            <ApplicantsFailedList :data="failedData">
+            </ApplicantsFailedList>
+        </template>
+        <template #passed="{ item }">
+            <ApplicantsPassedList :data="passedData">
+            </ApplicantsPassedList>
         </template>
         <template #rejected="{ item }">
             <ApplicantsRejectedList :data="rejectedData">

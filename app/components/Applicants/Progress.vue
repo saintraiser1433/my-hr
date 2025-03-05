@@ -6,7 +6,6 @@ const UButton = resolveComponent("UButton") as Component;
 const props = defineProps({
   data: {
     type: Array as PropType<ScreeningProgressList[]>,
-    required: true,
     default: () => [],
   },
 });
@@ -47,17 +46,39 @@ const updateStatus = async (data: InterviewStatus) => {
   emits("dataStatus", data);
 };
 
+
+
+
+const rowSelection = ref<{ [key: number]: boolean }>({});
+
 watch(
   () => props.data,
   (newVal, oldVal) => {
     if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
       refreshTable();
     }
-  }
-);
+    if (!newVal.length) return;
+    const firstFailedIndex = newVal.findIndex((row) => row.status === "FAILED");
+
+
+    const newSelection: { [key: number]: boolean } = {};
+
+    newVal.forEach((row, index) => {
+      if (index > firstFailedIndex && firstFailedIndex !== -1) {
+        newSelection[index] = true;
+      }
+    });
+
+    rowSelection.value = { ...newSelection };
+      },
+      { deep: true, immediate: true }
+    );
+
 </script>
 
 <template>
+  
+
   <UCard
     :ui="{
       root: 'overflow-hidden ',
@@ -69,6 +90,7 @@ watch(
       sticky
       class="overflow-y-auto custom-scrollbar h-auto cursor-auto"
       ref="table"
+      v-model:row-selection="rowSelection"
       v-model:global-filter="globalFilter"
       v-model:pagination="pagination"
       :pagination-options="{
@@ -76,17 +98,21 @@ watch(
       }"
       :data="data"
       :columns="columns"
+      :ui="{
+        tr:'data-[selected=true]:pointer-events-none'
+      }"
     >
       <template #screening-cell="{ row }">
         <span>{{ row.original.screening.title }}</span>
       </template>
       <template #dateInterview-cell="{ row }">
-        <span v-if="row.original.dateInterview">
-          {{
-            $datefns.format(new Date(row.original.dateInterview), "dd-MMM-yyyy / hh:mm a")
-          }}
-        </span>
-
+       
+        <UButton v-if="row.original.status !== 'PENDING'"
+            label="Open"
+            color="neutral"
+            :variant="row.original.dateInterview ? 'solid' : 'subtle'"
+            >{{ $datefns.format(new Date(row.original.dateInterview), "dd-MMM-yyyy / hh:mm a")}}</UButton
+          >
         <UPopover
           v-else
           arrow
@@ -99,9 +125,9 @@ watch(
           <UButton
             label="Open"
             color="neutral"
-            variant="subtle"
+            :variant="row.original.dateInterview ? 'solid' : 'subtle'"
             @click="updateDate({ id: row.original.id, date: row.original.dateInterview })"
-            >Click here to assigned</UButton
+            >{{ row.original.dateInterview ? $datefns.format(new Date(row.original.dateInterview), "dd-MMM-yyyy / hh:mm a") : 'Set Date & Time' }}</UButton
           >
 
           <template #content>
@@ -148,17 +174,16 @@ watch(
             <UButton icon="i-lucide-eye" title="Review" size="sm"> </UButton>
 
             <template #content>
-              <div class="flex items-start gap-2 p-2">
+              <div  class="flex items-start gap-2 p-2">
                 <UButton
                   color="primary"
                   icon="i-lucide-check"
                   @click="
                     updateStatus({
                       id: row.original.id,
-                      status: InterviewStatusEnum.PASSED,
+                      status: ApplicationStatus.PASSED,
                     })
-                  "
-                  >Passed</UButton
+                  ">Passed</UButton
                 >
                 <UButton
                   icon="i-lucide-x"
@@ -166,7 +191,7 @@ watch(
                   @click="
                     updateStatus({
                       id: row.original.id,
-                      status: InterviewStatusEnum.FAILED,
+                      status: ApplicationStatus.FAILED,
                     })
                   "
                   >Failed</UButton

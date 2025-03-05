@@ -4,6 +4,6 @@ export interface InterviewDate {
 }
 
 export interface InterviewStatus {
-    status: InterviewStatusEnum,
+    status: ApplicationStatus,
     id: number
 }

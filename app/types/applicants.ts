@@ -79,10 +79,19 @@ export interface OngoingApplicantDetails extends PendingApplicantModel {
   remarks?: string
 }
 
+export interface PassedApplicant extends OngoingApplicant {
+  passedDate: Date
+}
+export interface FailedApplicant extends OngoingApplicant {
+  failedDate: Date
+}
+
+
+
 export interface ScreeningProgressList {
   id: number,
   screeningId: number,
-  status: InterviewStatusEnum,
+  status: ApplicationStatus,
   dateInterview?: string | Date,
   screening: ScreeningModel
 }

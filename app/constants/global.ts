@@ -30,7 +30,7 @@ export const MENU_ITEMS: MenuItem[] = [
     //   { label: "Manage Evaluation", icon: "i-mingcute-user-question-fill", to: "/evaluation/manage" },
     // ],
   },
-  
+
   { label: "Job Offers", icon: "i-fluent-mdl2-recruitment-management", to: "/job" },
   { label: "Screening", icon: "i-hugeicons-task-done-01", to: "/screening" },
   { label: "Requirements", icon: "i-carbon-document-requirements", to: "/requirements" },
@@ -39,23 +39,29 @@ export const MENU_ITEMS: MenuItem[] = [
 
 export const TAB_ITEMS = [
   {
-      label: 'Pending Applicants',
-      icon: 'i-lucide-user',
-      slot: 'pending'
+    label: 'Pending Applicants',
+    icon: 'i-lucide-user',
+    slot: 'pending'
   },
   {
-      label: 'Ongoing Applicants',
-      icon: 'i-lucide-timer',
-      slot: 'ongoing'
+    label: 'Ongoing Applicants',
+    icon: 'i-lucide-timer',
+    slot: 'ongoing'
   },
   {
-      label: 'Rejected Applicants',
-      icon: 'i-lucide-x',
-      slot: 'rejected'
+    label: 'Passed Applicants',
+    icon: 'i-lucide-check',
+    slot: 'passed'
   },
   {
     label: 'Failed Applicants',
     icon: 'i-lucide-x',
     slot: 'failed'
-},
+  },
+  {
+    label: 'Rejected Applicants',
+    icon: 'i-lucide-x',
+    slot: 'rejected'
+  },
+
 ]

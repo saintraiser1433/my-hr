@@ -35,7 +35,8 @@ export type Directions = 'up' | 'down'
 export enum ApplicationStatus {
   PENDING = "PENDING",
   ONGOING = "ONGOING",
-  APPROVED = "APPROVED",
+  PASSED = "PASSED",
+  FAILED = "FAILED",
   REJECTED = "REJECTED",
 }
 
