@@ -69,6 +69,7 @@ export interface OngoingApplicant extends PendingApplicantModel {
   countJobScreening: number,
   countApplicantScreening: number,
   progressList: Array<string>,
+
   remarks: string
 }
 
@@ -76,6 +77,9 @@ export interface OngoingApplicantDetails extends PendingApplicantModel {
   countJobScreening?: number,
   countApplicantScreening?: number,
   progressList?: ScreeningProgressList[],
+  currentStage: string | null,
+  nextStep: string | null,
+  nextSched: string | Date | null,
   remarks?: string
 }
 

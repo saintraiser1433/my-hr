@@ -11,7 +11,6 @@ const props = defineProps({
   },
 });
 
-
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
@@ -39,7 +38,6 @@ watch(
 </script>
 
 <template>
-
   <UITableSearch v-model:search="globalFilter" v-if="table" :table="table">
     <template #actions>
       <slot name="actions"></slot>
@@ -65,12 +63,9 @@ watch(
       :columns="columns"
     >
       <template #status-cell="{ row }">
-        <UBadge
-          icon="i-lucide-check"
-          color="neutral"
-          variant="outline"
-          >{{row.original.status}}</UBadge
-        >
+        <UBadge icon="i-lucide-check" color="neutral" variant="outline">{{
+          row.original.status
+        }}</UBadge>
       </template>
       <template #applicantName-cell="{ row }">
         <div class="flex items-center gap-3">
@@ -91,14 +86,13 @@ watch(
       <template #passedDate-cell="{ row }">
         {{ $datefns.format(new Date(row.getValue("passedDate")), "dd-MMM-yyyy") }}
       </template>
-    
 
       <template #action-cell="{ row }">
         <UButton
           icon="i-lucide-eye"
           title="Review"
           size="sm"
-          :to="{ path: `/applicants/${row.original.id}` }"
+          :to="{ path: `/applicants/view/${row.original.id}` }"
         >
         </UButton>
       </template>

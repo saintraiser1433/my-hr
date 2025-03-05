@@ -39,8 +39,6 @@ watch(
     }
   }
 );
-
-
 </script>
 
 <template>
@@ -60,7 +58,6 @@ watch(
       sticky
       class="overflow-y-auto custom-scrollbar h-auto cursor-auto"
       ref="table"
-
       v-model:global-filter="globalFilter"
       v-model:pagination="pagination"
       :pagination-options="{
@@ -68,12 +65,10 @@ watch(
       }"
       :data="data"
       :columns="columns"
-
     >
-    <!--  -->
+      <!--  -->
       <template #remarks-cell="{ row }">
         <UBadge
-
           v-if="row.original.remarks === 'ONGOING'"
           icon="i-majesticons-timer-line"
           color="neutral"
@@ -107,7 +102,7 @@ watch(
       </template>
       <template #progressList-cell="{ row }">
         <UProgress
-          :model-value="Math.max(0, row.original.countApplicantScreening-1)"
+          :model-value="Math.max(0, row.original.countApplicantScreening)"
           :max="row.original.progressList"
         />
       </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormSubmitEvent, TableColumn } from "@nuxt/ui";
+import type { TableColumn } from "@nuxt/ui";
 import { getPaginationRowModel } from "@tanstack/vue-table";
 const UButton = resolveComponent("UButton") as Component;
 
@@ -46,9 +46,6 @@ const updateStatus = async (data: InterviewStatus) => {
   emits("dataStatus", data);
 };
 
-
-
-
 const rowSelection = ref<{ [key: number]: boolean }>({});
 
 watch(
@@ -60,7 +57,6 @@ watch(
     if (!newVal.length) return;
     const firstFailedIndex = newVal.findIndex((row) => row.status === "FAILED");
 
-
     const newSelection: { [key: number]: boolean } = {};
 
     newVal.forEach((row, index) => {
@@ -70,15 +66,12 @@ watch(
     });
 
     rowSelection.value = { ...newSelection };
-      },
-      { deep: true, immediate: true }
-    );
-
+  },
+  { deep: true, immediate: true }
+);
 </script>
 
 <template>
-  
-
   <UCard
     :ui="{
       root: 'overflow-hidden ',
@@ -99,20 +92,22 @@ watch(
       :data="data"
       :columns="columns"
       :ui="{
-        tr:'data-[selected=true]:pointer-events-none'
+        tr: 'data-[selected=true]:pointer-events-none',
       }"
     >
       <template #screening-cell="{ row }">
         <span>{{ row.original.screening.title }}</span>
       </template>
       <template #dateInterview-cell="{ row }">
-       
-        <UButton v-if="row.original.status !== 'PENDING'"
-            label="Open"
-            color="neutral"
-            :variant="row.original.dateInterview ? 'solid' : 'subtle'"
-            >{{ $datefns.format(new Date(row.original.dateInterview), "dd-MMM-yyyy / hh:mm a")}}</UButton
-          >
+        <UButton
+          v-if="row.original.status !== 'PENDING'"
+          label="Open"
+          color="neutral"
+          :variant="row.original.dateInterview ? 'solid' : 'subtle'"
+          >{{
+            $datefns.format(new Date(row.original.dateInterview), "dd-MMM-yyyy / hh:mm a")
+          }}</UButton
+        >
         <UPopover
           v-else
           arrow
@@ -127,7 +122,14 @@ watch(
             color="neutral"
             :variant="row.original.dateInterview ? 'solid' : 'subtle'"
             @click="updateDate({ id: row.original.id, date: row.original.dateInterview })"
-            >{{ row.original.dateInterview ? $datefns.format(new Date(row.original.dateInterview), "dd-MMM-yyyy / hh:mm a") : 'Set Date & Time' }}</UButton
+            >{{
+              row.original.dateInterview
+                ? $datefns.format(
+                    new Date(row.original.dateInterview),
+                    "dd-MMM-yyyy / hh:mm a"
+                  )
+                : "Set Date & Time"
+            }}</UButton
           >
 
           <template #content>
@@ -174,7 +176,7 @@ watch(
             <UButton icon="i-lucide-eye" title="Review" size="sm"> </UButton>
 
             <template #content>
-              <div  class="flex items-start gap-2 p-2">
+              <div class="flex items-start gap-2 p-2">
                 <UButton
                   color="primary"
                   icon="i-lucide-check"
@@ -183,7 +185,8 @@ watch(
                       id: row.original.id,
                       status: ApplicationStatus.PASSED,
                     })
-                  ">Passed</UButton
+                  "
+                  >Passed</UButton
                 >
                 <UButton
                   icon="i-lucide-x"

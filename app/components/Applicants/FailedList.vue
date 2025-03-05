@@ -11,7 +11,6 @@ const props = defineProps({
   },
 });
 
-
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
@@ -64,7 +63,7 @@ watch(
       :columns="columns"
     >
       <template #remarks-cell="{ row }">
-        <UBadge  icon="i-lucide-x" color="error" variant="outline">FAILED</UBadge>
+        <UBadge icon="i-lucide-x" color="error" variant="outline">FAILED</UBadge>
       </template>
       <template #applicantName-cell="{ row }">
         <div class="flex items-center gap-3">
@@ -97,7 +96,7 @@ watch(
           icon="i-lucide-eye"
           title="Review"
           size="sm"
-          :to="{ path: `/applicants/${row.original.id}` }"
+          :to="{ path: `/applicants/view/${row.original.id}` }"
         >
         </UButton>
       </template>
