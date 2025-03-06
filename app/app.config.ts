@@ -44,7 +44,7 @@ export default defineAppConfig({
         },
 
         {
-          color: 'neutral',
+          color: 'primary',
           variant: 'pill',
           active: true,
           class: {
@@ -57,7 +57,7 @@ export default defineAppConfig({
           active: true,
           highlight: false,
           class: {
-            link: 'before:bg-(--primary)'
+            link: 'before:bg-(--primary) '
           }
         },
 

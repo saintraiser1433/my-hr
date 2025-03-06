@@ -47,7 +47,7 @@ const columns: TableColumn<any>[] = [
   createColumn("action", "Action", false),
 ];
 
-function getDropdownActions(user: JobModel): DropdownMenuItem[][] {
+const  getDropdownActions = (user: JobModel): DropdownMenuItem[][] => {
   return [
     [
       {

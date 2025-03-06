@@ -54,41 +54,27 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard
-    :ui="{
-      root: 'overflow-hidden ',
-      body: 'p-0 sm:p-0',
-      footer: 'p-0 sm:px-0',
-    }"
-  >
-    <UTable
-      sticky
-      class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto"
-      ref="table"
-      v-model:global-filter="globalFilter"
-      v-model:pagination="pagination"
-      :pagination-options="{
+  <UCard :ui="{
+    root: 'overflow-hidden ',
+    body: 'p-0 sm:p-0',
+    footer: 'p-0 sm:px-0',
+  }">
+    <UTable sticky class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto" ref="table"
+      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }"
-      :data="data"
-      :columns="columns"
-    >
+      }" :data="data" :columns="columns">
       <template #status-cell="{ row }">
         <UBadge v-if="row.original.status" color="neutral" variant="solid">Active</UBadge>
         <UBadge v-else color="neutral" variant="outline">Inactive</UBadge>
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
-          <UButton size="sm" @click="handleUpdate(row.original)">
-            <Icon name="lucide:edit"></Icon>
+          <UButton icon="lucide:edit" size="sm" @click="handleUpdate(row.original)">
+            Edit
           </UButton>
-          <UButton
-            color="primary"
-            variant="outline"
-            size="sm"
-            @click="handleDelete(row.original.id || 0)"
-          >
-            <Icon name="lucide:x"></Icon>
+          <UButton icon="lucide:x" color="primary" variant="outline" size="sm"
+            @click="handleDelete(row.original.id || 0)">
+          Remove
           </UButton>
         </div>
       </template>

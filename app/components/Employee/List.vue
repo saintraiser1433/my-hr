@@ -1,0 +1,139 @@
+<script setup lang="ts">
+import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
+import { getPaginationRowModel } from "@tanstack/vue-table";
+const UButton = resolveComponent("UButton") as Component;
+
+const props = defineProps({
+  data: {
+    type: Array as PropType<EmployeeModel[]>,
+    required: true,
+    default: () => [],
+  },
+});
+
+
+const table = useTemplateRef("table");
+const { createColumn } = useTableColumns(UButton);
+const { pagination, globalFilter, refreshTable } = usePagination();
+const { $datefns } = useNuxtApp();
+const config = useRuntimeConfig();
+
+const columns: TableColumn<any>[] = [
+  createColumn("increment", "#", true, (row) => `${row.index + 1}`),
+  createColumn("employeeName", "Employee Name", true),
+  createColumn("status", "Status", true),
+  createColumn("username", "Username", true),
+  createColumn("password", "Password", true),
+  createColumn("action", "Action", false),
+];
+const visiblePasswords = ref<Set<number>>(new Set());
+const togglePassword = (index: number) => {
+  if (visiblePasswords.value.has(index)) {
+    visiblePasswords.value.delete(index);
+  } else {
+    visiblePasswords.value.add(index);
+  }
+}
+
+const isPasswordVisible = (index: number): boolean => {
+  return visiblePasswords.value.has(index);
+}
+
+
+const getDropdownActions = (user: EmployeeModel): DropdownMenuItem[][] => {
+  return [
+    [
+      {
+        label: "Check Requirements",
+        icon: "i-hugeicons-assignments",
+        onSelect: async () => {
+          await navigateTo({ name: "Employees-require-empId", params: { empId: Number(user.id) } });
+        },
+      },
+      {
+        type: "separator",
+      },
+      {
+        label: "View Details",
+        icon: "i-lucide-eye",
+        onSelect: () => {
+          // handleView({ ...user, id: Number(user.id) });
+        },
+      },
+      {
+        type: "separator",
+      },
+      {
+        label: "Edit Status",
+        icon: "i-lucide-edit",
+        onSelect: () => {
+          // handleUpdate({ ...user, id: Number(user.id) });
+        },
+      },
+    ],
+  ];
+}
+
+
+watch(
+  () => props.data,
+  (newVal, oldVal) => {
+    if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+      refreshTable();
+    }
+  }
+);
+</script>
+
+<template>
+  <UITableSearch v-model:search="globalFilter" v-if="table" :table="table">
+    <template #actions>
+      <slot name="actions"></slot>
+    </template>
+  </UITableSearch>
+  <UCard :ui="{
+    root: 'overflow-hidden ',
+    body: 'p-0 sm:p-0',
+    footer: 'p-0 sm:px-0',
+  }">
+    <UTable sticky class="overflow-y-auto custom-scrollbar h-auto cursor-auto" ref="table"
+      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
+        getPaginationRowModel: getPaginationRowModel(),
+      }" :data="data" :columns="columns">
+      <template #employeeName-cell="{ row }">
+        <div class="flex items-center gap-3">
+          <UAvatar :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.information.photo_path}`" size="lg" />
+          <div>
+            <p class="font-medium capitalize text-(--ui-text-highlighted)">
+              {{ row.original.employeeName }}
+            </p>
+            <p class="text-gray-800">
+              {{ row.original.job.title }}
+            </p>
+          </div>
+        </div>
+      </template>
+      <template #status-cell="{ row }">
+        <UBadge v-if="row.original.status" color="neutral" variant="solid">Active</UBadge>
+        <UBadge v-else color="neutral" variant="outline">Inactive</UBadge>
+      </template>
+      <template #username-cell="{ row }">
+        <span>{{ row.original.username }}</span>
+      </template>
+      <template #password-cell="{ row }">
+        <div class="flex items-center gap-3">
+          <span v-if="!isPasswordVisible(row.index)">•••••••••</span>
+          <span v-else>{{ row.original.password }}</span>
+          <UButton :icon="isPasswordVisible(row.index) ? 'i-mdi-hide' : 'i-mdi-show'" variant="soft" color="primary"
+            size="xs" @click="togglePassword(row.index)" />
+        </div>
+      </template>
+      <template #action-cell="{ row }">
+        <UDropdownMenu :items="getDropdownActions(row.original)">
+          <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
+        </UDropdownMenu>
+      </template>
+    </UTable>
+    <UITablePagination :table="table" v-if="table"> </UITablePagination>
+  </UCard>
+</template>

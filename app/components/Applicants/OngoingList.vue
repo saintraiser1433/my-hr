@@ -114,6 +114,7 @@ watch(
           size="sm"
           :to="{ path: `/applicants/${row.original.id}` }"
         >
+          Review
         </UButton>
       </template>
     </UTable>

@@ -11,31 +11,20 @@ const props = defineProps({
   },
 
 });
-const emits = defineEmits<{
-  (e: "update", payload: DepartmentModel): void;
-  (e: "delete", id: number): void;
-}>();
+
 
 const table = useTemplateRef("table");
 
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
 
-const handleDelete = (id: number) => {
-  emits("delete", id);
-};
 
-const handleUpdate = (item: DepartmentModel) => {
-  emits("update", item);
-
-};
 
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
   createColumn("title", "Department Name", true, (row) =>
     h("span", { class: "capitalize" }, row.getValue("title"))
   ),
-  createColumn("status", "Status", true),
   createColumn("action", "Action", false),
 ];
 
@@ -66,24 +55,18 @@ watch(
       v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
       }" :data="data" :columns="columns">
-      <template #status-cell="{ row }">
-        <div v-if="row.original.status">
-          <UBadge color="neutral">Active</UBadge>
-        </div>
-        <div v-else>
-          <UBadge color="neutral" variant="outline">Inactive</UBadge>
-        </div>
 
-
-      </template>
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
-          <UButton icon="lucide:edit" size="sm" @click="handleUpdate(row.original)">
-            Edit
-          </UButton>
-          <UButton icon="lucide:x" color="primary" variant="outline" size="sm" @click="handleDelete(row.original.id || 0)">
-            Remove
-          </UButton>
+          <UButton
+          icon="i-lucide-eye"
+          title="Review"
+          size="sm"
+          :to="{ path: `/employees/${row.original.id}` }"
+        >
+          View
+        </UButton>
+
         </div>
       </template>
     </UTable>

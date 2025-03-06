@@ -73,7 +73,7 @@ watch(
         <UBadge color="error" variant="subtle">1 - STRONGLY DISAGREE</UBadge>
         <UBadge color="error" variant="subtle">2 - DISAGREE</UBadge>
         <UBadge color="info" variant="subtle">3 - UNCERTAIN</UBadge>
-        <UBadge color="success"  variant="subtle">4 - AGREE</UBadge>
+        <UBadge color="success" variant="subtle">4 - AGREE</UBadge>
         <UBadge color="success" variant="subtle">5 - STRONGLY AGREE</UBadge>
       </div>
     </div>
@@ -87,31 +87,30 @@ watch(
         v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
           getPaginationRowModel: getPaginationRowModel(),
         }" :data="data" :columns="columns">
-        <template #question-cell="{row}">
+        <template #question-cell="{ row }">
           <div class="max-w-lg text-wrap text-sm" v-html="row.original.question"></div>
         </template>
-        <template #1-cell="{row}">
+        <template #1-cell="{ row }">
           <UCheckbox disabled></UCheckbox>
         </template>
-        <template #2-cell="{row}">
+        <template #2-cell="{ row }">
           <UCheckbox disabled></UCheckbox>
         </template>
-        <template #3-cell="{row}">
+        <template #3-cell="{ row }">
           <UCheckbox disabled></UCheckbox>
         </template>
-        <template #4-cell="{row}">
+        <template #4-cell="{ row }">
           <UCheckbox disabled></UCheckbox>
         </template>
-        <template #5-cell="{row}">
+        <template #5-cell="{ row }">
           <UCheckbox disabled></UCheckbox>
         </template>
         <template #action-cell="{ row }">
           <div class="flex items-center gap-2">
-            <UButton size="sm" @click="handleUpdate(row.original)">
-              <Icon name="lucide:edit"></Icon>
+            <UButton icon="lucide:edit" size="sm" @click="handleUpdate(row.original)">
             </UButton>
-            <UButton color="primary" variant="outline" size="sm" @click="handleDelete(row.original.id || 0)">
-              <Icon name="lucide:x"></Icon>
+            <UButton icon="lucide:x" color="primary" variant="outline" size="sm"
+              @click="handleDelete(row.original.id || 0)">
             </UButton>
           </div>
         </template>

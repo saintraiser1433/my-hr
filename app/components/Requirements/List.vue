@@ -77,16 +77,17 @@ watch(
     >
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
-          <UButton size="sm" @click="handleUpdate(row.original)">
-            <Icon name="lucide:edit"></Icon>
+          <UButton icon="lucide:edit" size="sm" @click="handleUpdate(row.original)">
+            Edit
           </UButton>
           <UButton
+            icon="lucide:x"
             color="primary"
             variant="outline"
             size="sm"
             @click="handleDelete(row.original.id || 0)"
           >
-            <Icon name="lucide:x"></Icon>
+           Remove
           </UButton>
         </div>
       </template>

@@ -43,25 +43,15 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard
-    :ui="{
-      root: 'overflow-hidden ',
-      body: 'p-0 sm:p-0',
-      footer: 'p-0 sm:px-0',
-    }"
-  >
-    <UTable
-      sticky
-      class="overflow-y-auto custom-scrollbar h-auto cursor-auto"
-      ref="table"
-      v-model:global-filter="globalFilter"
-      v-model:pagination="pagination"
-      :pagination-options="{
+  <UCard :ui="{
+    root: 'overflow-hidden ',
+    body: 'p-0 sm:p-0',
+    footer: 'p-0 sm:px-0',
+  }">
+    <UTable sticky class="overflow-y-auto custom-scrollbar h-auto cursor-auto" ref="table"
+      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }"
-      :data="data"
-      :columns="columns"
-    >
+      }" :data="data" :columns="columns">
       <template #status-cell="{ row }">
         <UBadge icon="i-lucide-check" color="neutral" variant="outline">{{
           row.original.status
@@ -69,10 +59,7 @@ watch(
       </template>
       <template #applicantName-cell="{ row }">
         <div class="flex items-center gap-3">
-          <UAvatar
-            :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.photo}`"
-            size="lg"
-          />
+          <UAvatar :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.photo}`" size="lg" />
           <div>
             <p class="font-medium capitalize text-(--ui-text-highlighted)">
               {{ row.original.applicantName }}
@@ -88,12 +75,8 @@ watch(
       </template>
 
       <template #action-cell="{ row }">
-        <UButton
-          icon="i-lucide-eye"
-          title="Review"
-          size="sm"
-          :to="{ path: `/applicants/view/${row.original.id}` }"
-        >
+        <UButton icon="i-lucide-eye" title="Review" size="sm" :to="{ path: `/applicants/view/${row.original.id}` }">
+          Review
         </UButton>
       </template>
     </UTable>
