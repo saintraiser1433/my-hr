@@ -16,3 +16,13 @@ export interface EmployeeModel extends Timestamped {
     role: "ADMIN" | "EMPLOYEE" | "TEAMLEAD";
     employeeName?: string;
 }
+
+export interface EmployeeWithRequirementModel {
+    employeeRequirements: EmployeeModel[];
+    unchosenRequirements: UnchosenRequirements[]
+}
+
+export interface UnchosenRequirements {
+    id: number,
+    title: string
+}

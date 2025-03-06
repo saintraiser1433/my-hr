@@ -95,19 +95,25 @@ watch(
         class="w-70"
         multiple
       />
-      <UButton color="primary" @click="handleAssign" variant="solid" size="md">
-        <UIcon name="typcn-plus"></UIcon>
+      <UButton
+        icon="i-typcn-plus"
+        color="primary"
+        @click="handleAssign"
+        variant="solid"
+        size="md"
+      >
       </UButton>
     </div>
     <div>
       <UButton
         v-if="checkEmpty"
+        icon="i-lucide-x"
         color="primary"
         @click="unAssigned"
         variant="solid"
         size="sm"
       >
-        <UIcon name="typcn-plus"></UIcon> Remove
+        Remove
       </UButton>
     </div>
   </div>

@@ -5,12 +5,12 @@ const UButton = resolveComponent("UButton") as Component;
 const UCheckbox = resolveComponent("UCheckbox") as Component;
 const props = defineProps({
   data: {
-    type: Array as PropType<JobScreeningModel[]>,
+    type: Array as PropType<EmployeeModel[]>,
     required: true,
     default: () => [],
   },
   items: {
-    type: Array as PropType<ScreeningModel[]>,
+    type: Array as PropType<UnchosenRequirements[]>,
     required: true,
     default: () => [],
   },
@@ -20,7 +20,7 @@ const emits = defineEmits<{
   (e: "assign", payload: ScreeningModel[]): void;
   (e: "unAssign", payload: number[]): void;
 }>();
-const { $toast } = useNuxtApp();
+const { $toast, $datefns } = useNuxtApp();
 
 const { pagination, globalFilter, refreshTable } = usePagination();
 const table = useTemplateRef("table");
@@ -47,12 +47,12 @@ const handleAssign = () => {
   value.value = [];
 };
 
-
 const columns: TableColumn<any>[] = [
+  createColumnWithCheckBox(),
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
   createColumn("requirements", "Requirements", true),
   createColumn("submitted_date", "Submitted Date", true),
-  createColumn("expiry_date", "Screening Type", true),
+  createColumn("expiry_date", "Document Expiry", true),
   createColumn("status", "Status", true),
   createColumn("action", "Action", true),
 ];
@@ -80,19 +80,25 @@ watch(
         class="w-70"
         multiple
       />
-      <UButton color="primary" @click="handleAssign" variant="solid" size="md">
-        <UIcon name="typcn-plus"></UIcon>
+      <UButton
+        icon="i-typcn-plus"
+        color="primary"
+        @click="handleAssign"
+        variant="solid"
+        size="md"
+      >
       </UButton>
     </div>
     <div>
       <UButton
         v-if="checkEmpty"
         color="primary"
+        icon="i-lucide-x"
         @click="unAssigned"
         variant="solid"
         size="sm"
       >
-        <UIcon name="typcn-plus"></UIcon> Remove
+        Remove
       </UButton>
     </div>
   </div>
@@ -116,18 +122,55 @@ watch(
       :data="data"
       :columns="columns"
     >
+      <template #submitted_date-cell="{ row }">
+        <span v-if="row.original.submitted_date">{{
+          $datefns.format(new Date(row.getValue("submittedAt")), "dd-MMM-yyyy")
+        }}</span>
+        <UBadge color="error" variant="solid" v-else>NO SUBMISSION YET</UBadge>
+      </template>
+      <template #expiry_date-cell="{ row }">
+        <span v-if="row.original.expiry_date">{{
+          $datefns.format(new Date(row.getValue("expiryDate")), "dd-MMM-yyyy")
+        }}</span>
+        <UBadge color="error" variant="solid" v-else>NO SUBMISSION YET</UBadge>
+      </template>
+
+      <template #status-cell="{ row }">
+        <UBadge
+          v-if="row.original.status === 'PENDING'"
+          icon="i-mdi-account-pending"
+          color="neutral"
+          variant="outline"
+          >{{ row.original.status }}</UBadge
+        >
+        <UBadge v-else-if="row.original.status === 'SUBMITTED'" icon="i-lucide-check">{{
+          row.original.status
+        }}</UBadge>
+        <UBadge
+          v-else-if="row.original.status === 'EXPIRED'"
+          icon="i-lucide-x"
+          color="error"
+          >{{ row.original.status }}</UBadge
+        >
+      </template>
       <template #action-cell="{ row }">
-        <!-- <div class="flex gap-2 items-center">
-          <UButton
-            ><UIcon name="mingcute:up-fill" @click="up(row.original.id, 'up')"></UIcon
-          ></UButton>
-          <UButton variant="outline"
-            ><UIcon
-              name="mingcute:down-fill"
-              @click="down(row.original.id, 'down')"
-            ></UIcon
-          ></UButton>
-        </div> -->
+        <UPopover
+          arrow
+          :content="{
+            align: 'center',
+            side: 'left',
+            sideOffset: 8,
+          }"
+        >
+          <UButton icon="i-lucide-eye" title="Review" size="sm"> </UButton>
+
+          <template #content>
+            <div class="flex items-start gap-2 p-2">
+              <UButton color="primary" icon="i-lucide-check">Passed</UButton>
+              <UButton icon="i-lucide-x" color="error">Failed</UButton>
+            </div>
+          </template>
+        </UPopover>
       </template>
     </UTable>
     <UITablePagination :table="table" v-if="table"> </UITablePagination>
