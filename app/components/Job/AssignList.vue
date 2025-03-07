@@ -22,48 +22,33 @@ const emits = defineEmits<{
   (e: "up", payload: DirectionModel): void;
   (e: "down", payload: DirectionModel): void;
 }>();
-const { $toast } = useNuxtApp();
-
 const { pagination, globalFilter, refreshTable } = usePagination();
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { createColumnWithCheckBox } = useTableColumnCheckBox(UCheckbox, table);
-const value = ref([]);
-const rowSelection = ref({});
+
 const { data } = toRefs(props);
-const checkEmpty = computed(() => Object.keys(rowSelection.value).length > 0);
+const {
+    value,
+    selectedItems,
+    rowSelection,
+    unAssigned,
+    handleAssign,
+    resetAssign,
+    checkEmpty} = useMultipleSelect(data);
 
-const unAssigned = () => {
-  const selectedItems = Object.keys(rowSelection.value)
-    .map((key) => data.value[Number(key)]?.id)
-    .filter(Boolean) as number[];
-
-  emits("unAssign", selectedItems);
+const unassign = () => {
+  unAssigned();
+  emits("unAssign",selectedItems.value);
 };
 
-const handleAssign = () => {
-  if (!value.value.length) {
-    return $toast.error("No selected type found");
-  }
+const assign = () => {
+  handleAssign()
   emits("assign", value.value);
-  value.value = [];
+  resetAssign()
 };
 
-const up = (id: number, direction: Directions) => {
-  const data = {
-    id,
-    direction,
-  };
-  emits("up", data);
-};
 
-const down = (id: number, direction: Directions) => {
-  const data = {
-    id,
-    direction,
-  };
-  emits("down", data);
-};
 
 const columns: TableColumn<any>[] = [
   createColumnWithCheckBox(),
@@ -90,15 +75,18 @@ watch(
         v-model="value"
         :items="items"
         label-key="title"
-        size="sm"
+        size="md"
         placeholder="Select Screening Type"
-        class="w-70"
+        class="w-100"
+        :ui="{
+            value:'text-wrap'
+        }"
         multiple
       />
       <UButton
         icon="i-typcn-plus"
         color="primary"
-        @click="handleAssign"
+        @click="assign"
         variant="solid"
         size="md"
       >
@@ -109,7 +97,7 @@ watch(
         v-if="checkEmpty"
         icon="i-lucide-x"
         color="primary"
-        @click="unAssigned"
+        @click="unassign"
         variant="solid"
         size="sm"
       >
@@ -140,12 +128,12 @@ watch(
       <template #action-cell="{ row }">
         <div class="flex gap-2 items-center">
           <UButton
-            ><UIcon name="mingcute:up-fill" @click="up(row.original.id, 'up')"></UIcon
+            ><UIcon name="mingcute:up-fill"></UIcon
           ></UButton>
           <UButton variant="outline"
             ><UIcon
               name="mingcute:down-fill"
-              @click="down(row.original.id, 'down')"
+       
             ></UIcon
           ></UButton>
         </div>

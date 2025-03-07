@@ -56,8 +56,8 @@ const getDropdownActions = (user: EmployeeModel): DropdownMenuItem[][] => {
       {
         label: "View Details",
         icon: "i-lucide-eye",
-        onSelect: () => {
-          // handleView({ ...user, id: Number(user.id) });
+        onSelect: async() => {
+          await navigateTo({ name: "Employees-information-empId", params: { empId: Number(user.id) } });
         },
       },
       {

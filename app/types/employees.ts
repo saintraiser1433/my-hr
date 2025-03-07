@@ -18,11 +18,34 @@ export interface EmployeeModel extends Timestamped {
 }
 
 export interface EmployeeWithRequirementModel {
-    employeeRequirements: EmployeeModel[];
+    employeeRequirements: EmployeeRequirements[];
     unchosenRequirements: UnchosenRequirements[]
 }
 
 export interface UnchosenRequirements {
     id: number,
     title: string
+}
+
+export interface EmployeeRequirements {
+    requirements?: string;
+    id?: number;
+    status: EmployeeRequirementStatus;
+    employeeId: number;
+    requirementsId: number;
+    submittedAt?: Date;
+    expiryDate?: Date;
+}
+
+export interface SubmittedRequirements {
+    submittedAt?: Date | null;
+    expiryDate?: Date | null;
+    status: EmployeeRequirementStatus;
+    id?: number;
+}
+
+export enum EmployeeRequirementStatus {
+    PENDING = "PENDING",
+    SUBMITTED = "SUBMITTED",
+    EXPIRED = "EXPIRED"
 }

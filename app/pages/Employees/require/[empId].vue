@@ -12,14 +12,20 @@ useSeoMeta({
 
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
+const { updateModal, resetModal, isOpen, title } = useCustomModal();
 const route = useRoute();
-const requirementsData = ref<EmployeeModel[]>([]);
+const titleName = useState("title", () => localStorage.getItem("title") || "Unknown module");
+const requirementsData = ref<EmployeeRequirements[]>([]);
 const listRequirements = ref<UnchosenRequirements[]>([]);
-const titleName = useState(
-  "title",
-  () => localStorage.getItem("title") || "Unknown module"
-);
 
+
+const initialState = {
+  id: undefined,
+  submittedAt: undefined,
+  expiryDate: undefined,
+  status: EmployeeRequirementStatus.PENDING,
+};
+const departmentForm = reactive<SubmittedRequirements>({ ...initialState });
 //jobscreen list
 const { data, status, error } = await useAPI<EmployeeWithRequirementModel>(
   `/employees/req/${route.params.empId}`
@@ -32,72 +38,93 @@ if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
 
-// const jobScreenRepo = repository<JobScreeningModel[]>($api, "/screening/assign");
-// const assignData = async (data: ScreeningModel[]) => {
-//   try {
-//     const finalData = data.map((item, index) => ({
-//       job_id: Number(route.params.jobId),
-//       screening_id: Number(item.id),
-//       screening_title: item.title ?? "",
-//       sequence_number: Number(index + 1),
-//     }));
-//     const payload = finalData.map(({ screening_title, ...rest }) => rest);
+const assignRequireRepo = repository<EmployeeRequirements[]>($api, "/employees/assign");
+const assignData = async (data: UnchosenRequirements[]) => {
+  try {
+    const payload = data.map((item) => ({
+      employeeId: Number(route.params.empId),
+      requirementsId: Number(item.id),
+      status: EmployeeRequirementStatus.PENDING,
+    }));
+    const response = await assignRequireRepo.add(payload);
+    requirementsData.value = [...requirementsData.value, ...response.data as EmployeeRequirements[]];
+    listRequirements.value =
+      listRequirements.value?.filter((item) => !data.some((items) => items.id === item.id)) ||
+      [];
+    $toast.success(response.message);
+  } catch (err) {
+    return handleApiError(err);
+  }
+};
 
-//     const response = await jobScreenRepo.add(payload);
+const UnassignRequireRepo = repository<UnchosenRequirements[]>($api, "/employees/assign/delete");
+const unAssignJob = (data: number[]) => {
+  setAlert("warning", "Are you sure you want to remove?", "", "Confirm remove").then(
+    async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await UnassignRequireRepo.deleteMany(data);
+          listRequirements.value = [...listRequirements.value, ...response.data as UnchosenRequirements[]];
+          requirementsData.value = requirementsData.value.filter(
+            (item) => !data.includes(item.id || 0)
+          );
+          $toast.success(response.message);
+        } catch (error) {
+          return handleApiError(error);
+        }
+      }
+    }
+  );
+};
 
-//     //pushing requirementsData
-//     requirementsData.value = [...requirementsData.value, ...finalData];
-//     //pushing screendata
-//     screenData.value =
-//       screenData.value?.filter((item) => !data.some((items) => items.id === item.id)) ||
-//       [];
-//     $toast.success(response.message);
-//   } catch (err) {
-//     return handleApiError(err);
-//   }
-// };
+const submissionRepo = repository<SubmittedRequirements>($api, "/employees/status");
+const updateSubmission = async (response: SubmittedRequirements) => {
+  const res = await submissionRepo.update(response); //error on this code
+  const datas = res.data as EmployeeRequirements;
+  requirementsData.value = requirementsData.value.map((item) =>
+    item.id === response.id ? { ...item, ...datas } : item
+  );
+  resetModal();
+  $toast.success(res.message);
+}
 
-// const jobScreenRmvRepo = repository<JobScreeningModel[]>(
-//   $api,
-//   "/screening/assign/delete"
-// );
-// const unAssignJob = (data: number[]) => {
-//   setAlert("warning", "Are you sure you want to delete?", "", "Confirm delete").then(
-//     async (result) => {
-//       if (result.isConfirmed) {
-//         try {
-//           const response = await jobScreenRmvRepo.deleteMany(data);
-//           $toast.success(response.message);
 
-//           const removedItems = requirementsData.value.filter((item) =>
-//             data.includes(item.id || 0)
-//           );
+const edit = (data: EmployeeRequirements) => {
+  departmentForm.id = data.id;
+  departmentForm.expiryDate = data.expiryDate;
+  departmentForm.submittedAt = data.submittedAt;
+  updateModal(`Submit Requirements`);
+}
 
-//           screenData.value =
-//             screeningData.value?.filter((item) =>
-//               removedItems.some((removedItem) => removedItem.id === item.id)
-//             ) || [];
-
-//           requirementsData.value = requirementsData.value.filter(
-//             (item) => !data.includes(item.id || 0)
-//           );
-//         } catch (error) {
-//           return handleApiError(error);
-//         }
-//       }
-//     }
-//   );
-// };
+const pending = (response: EmployeeRequirements) => {
+  setAlert("warning", "Are you sure you want to update this into pending?", "", "Confirm to update").then(
+    async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await submissionRepo.update(response); //error on this code
+          const datas = res.data as EmployeeRequirements;
+          requirementsData.value = requirementsData.value.map((item) =>
+            item.id === response.id ? { ...item, ...datas } : item
+          );
+          $toast.success(res.message);
+        } catch (error) {
+          return handleApiError(error);
+        }
+      }
+    }
+  );
+}
 </script>
 
 <template>
+  <EmployeeFormRequire @data-requirement="updateSubmission" v-model:state="departmentForm" v-model:open="isOpen"
+    :title="title"></EmployeeFormRequire>
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl capitalize">{{ titleName }}</h2>
-    <span class="text-sm"
-      >Here's a list assigned screening type for {{ titleName }} !</span
-    >
+    <span class="text-sm">Here's a list assigned screening type for {{ titleName }} !</span>
   </div>
 
-  <EmployeeRequireList :data="requirementsData" :items="listRequirements">
+  <EmployeeRequireList @pending="pending" @update="edit" @assign="assignData" @unAssign="unAssignJob"
+    :data="requirementsData" :items="listRequirements">
   </EmployeeRequireList>
 </template>
