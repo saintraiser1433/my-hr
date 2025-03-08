@@ -65,3 +65,57 @@ export const TAB_ITEMS = [
   },
 
 ]
+
+export const RELIGIONS_ITEM = [
+  'Roman Catholicism',
+  'Islam',
+  'Iglesia ni Cristo',
+  'Evangelical Christianity',
+  'Aglipayan (Philippine Independent Church)',
+  'Protestantism',
+  'Buddhism',
+  'Jehovah\'s Witnesses',
+  'Seventh-day Adventist Church',
+  'Mormonism (Church of Jesus Christ of Latter-day Saints)',
+  'Hinduism',
+  'Taoism',
+  'Indigenous Philippine Religions']
+
+export const CIVIL_STATUS_ITEM = ['Single', 'Married', 'Complicated', 'Widowed', 'Separated', 'Divorced'];
+
+export const DESCRIPTION_ITEM = ['Primary', 'Secondary', 'Tertiary', 'Others'];
+
+export const GENDER_ITEM = ['Male', 'Female'];
+
+export const TAB_EMP = [
+  {
+    label: 'Personal Information',
+    icon: 'si:user-line',
+    slot: 'information'
+  },
+  {
+    label: 'Educational Attainment',
+    icon: 'qlementine-icons:education-16',
+    slot: 'education'
+  },
+  {
+    label: 'Work Experience',
+    icon: 'material-symbols:work-outline',
+    slot: 'work'
+  },
+  {
+    label: 'Skill & Expertise',
+    icon: 'uil:setting',
+    slot: 'skill'
+  },
+  {
+    label: 'References',
+    icon: 'material-symbols-light:quick-reference-all-outline',
+    slot: 'reference'
+  },
+  {
+    label: 'Settings',
+    icon: 'mdi:cogs',
+    slot: 'settings'
+  }
+]

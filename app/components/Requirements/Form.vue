@@ -55,7 +55,9 @@ const submitForm = () => {
         class="space-y-4"
         @submit="onSubmit"
       >
+      
         <UFormField label="Title" name="title" required>
+          
           <UITextInput v-model.trim="model.title" placeholder="Enter Title" />
         </UFormField>
         <UFormField label="Description" name="description" required>

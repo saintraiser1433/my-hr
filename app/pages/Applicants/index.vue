@@ -173,7 +173,9 @@ const reject = async (applicantId: number) => {
         <h2 class="font-extrabold text-2xl">Applicants Module</h2>
         <span class="text-sm">Here's a list of pending,ongoing and rejected applicants!</span>
     </div>
-    <UTabs :items="TAB_ITEMS" class="w-full">
+    <UTabs :items="TAB_ITEMS" class="w-full" :ui="{
+        list: 'flex-wrap'
+    }">
         <template #pending="{ item }">
             <ApplicantsPendingList @review="review" :data="pendingData">
             </ApplicantsPendingList>

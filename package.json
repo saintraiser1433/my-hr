@@ -16,7 +16,7 @@
     "@iconify-json/simple-icons": "^1.2.25",
     "@nuxt/icon": "^1.10.3",
     "@nuxt/image": "^1.9.0",
-    "@nuxt/ui": "https://pkg.pr.new/@nuxt/ui@3373",
+    "@nuxt/ui": "https://pkg.pr.new/@nuxt/ui@3480",
     "@nuxtjs/svg-sprite": "^1.0.2",
     "@tiptap/core": "^2.11.5",
     "@tiptap/extension-image": "^2.11.5",

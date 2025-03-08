@@ -11,12 +11,9 @@ useSeoMeta({
   ogDescription: "CRUD for Employee",
 });
 
-const { $api, $toast, $datefns } = useNuxtApp();
-const config = useRuntimeConfig();
+const {$toast } = useNuxtApp();
 const route = useRoute();
-const { handleApiError } = useErrorHandler();
 const employeeData = ref<EmployeeModel[]>([]);
-const open = ref(false);
 
 
 
