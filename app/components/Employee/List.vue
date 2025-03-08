@@ -11,16 +11,19 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits<{
+  (e: "assign", id: number): void;
+}>();
 
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
-const { $datefns } = useNuxtApp();
 const config = useRuntimeConfig();
 
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
   createColumn("employeeName", "Employee Name", true),
+  createColumn("role", "Role", true),
   createColumn("status", "Status", true),
   createColumn("username", "Username", true),
   createColumn("password", "Password", true),
@@ -33,21 +36,37 @@ const togglePassword = (index: number) => {
   } else {
     visiblePasswords.value.add(index);
   }
-}
+};
 
 const isPasswordVisible = (index: number): boolean => {
   return visiblePasswords.value.has(index);
-}
+};
 
+const handleAssign = (id: number) => {
+  emits("assign", id);
+};
 
 const getDropdownActions = (user: EmployeeModel): DropdownMenuItem[][] => {
   return [
     [
       {
+        label: "Assign as Teamlead",
+        icon: "material-symbols:social-leaderboard",
+        onSelect: async () => {
+          handleAssign(Number(user.id));
+        },
+      },
+      {
+        type: "separator",
+      },
+      {
         label: "Check Requirements",
         icon: "i-hugeicons-assignments",
         onSelect: async () => {
-          await navigateTo({ name: "Employees-require-empId", params: { empId: Number(user.id) } });
+          await navigateTo({
+            name: "Employees-require-empId",
+            params: { empId: Number(user.id) },
+          });
         },
       },
       {
@@ -56,24 +75,16 @@ const getDropdownActions = (user: EmployeeModel): DropdownMenuItem[][] => {
       {
         label: "View Details",
         icon: "i-lucide-eye",
-        onSelect: async() => {
-          await navigateTo({ name: "Employees-information-empId", params: { empId: Number(user.id) } });
-        },
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Edit Status",
-        icon: "i-lucide-edit",
-        onSelect: () => {
-          // handleUpdate({ ...user, id: Number(user.id) });
+        onSelect: async () => {
+          await navigateTo({
+            name: "Employees-information-empId",
+            params: { empId: Number(user.id) },
+          });
         },
       },
     ],
   ];
-}
-
+};
 
 watch(
   () => props.data,
@@ -91,18 +102,31 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard :ui="{
-    root: 'overflow-hidden ',
-    body: 'p-0 sm:p-0',
-    footer: 'p-0 sm:px-0',
-  }">
-    <UTable sticky class="overflow-y-auto custom-scrollbar h-auto cursor-auto" ref="table"
-      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
+  <UCard
+    :ui="{
+      root: 'overflow-hidden ',
+      body: 'p-0 sm:p-0',
+      footer: 'p-0 sm:px-0',
+    }"
+  >
+    <UTable
+      sticky
+      class="overflow-y-auto custom-scrollbar h-auto cursor-auto"
+      ref="table"
+      v-model:global-filter="globalFilter"
+      v-model:pagination="pagination"
+      :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }" :data="data" :columns="columns">
+      }"
+      :data="data"
+      :columns="columns"
+    >
       <template #employeeName-cell="{ row }">
         <div class="flex items-center gap-3">
-          <UAvatar :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.information.photo_path}`" size="lg" />
+          <UAvatar
+            :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.information.photo_path}`"
+            size="lg"
+          />
           <div>
             <p class="font-medium capitalize text-(--ui-text-highlighted)">
               {{ row.original.employeeName }}
@@ -117,6 +141,12 @@ watch(
         <UBadge v-if="row.original.status" color="neutral" variant="solid">Active</UBadge>
         <UBadge v-else color="neutral" variant="outline">Inactive</UBadge>
       </template>
+      <template #role-cell="{ row }">
+        <UBadge v-if="row.original.role === 'Employee'" variant="outline">MEMBER</UBadge>
+        <UBadge v-if="row.original.role === 'TeamLead'" color="success" variant="solid"
+          >TEAM LEAD</UBadge
+        >
+      </template>
       <template #username-cell="{ row }">
         <span>{{ row.original.username }}</span>
       </template>
@@ -124,8 +154,13 @@ watch(
         <div class="flex items-center gap-3">
           <span v-if="!isPasswordVisible(row.index)">•••••••••</span>
           <span v-else>{{ row.original.password }}</span>
-          <UButton :icon="isPasswordVisible(row.index) ? 'i-mdi-hide' : 'i-mdi-show'" variant="soft" color="primary"
-            size="xs" @click="togglePassword(row.index)" />
+          <UButton
+            :icon="isPasswordVisible(row.index) ? 'i-mdi-hide' : 'i-mdi-show'"
+            variant="soft"
+            color="primary"
+            size="xs"
+            @click="togglePassword(row.index)"
+          />
         </div>
       </template>
       <template #action-cell="{ row }">

@@ -108,6 +108,11 @@ export default defineAppConfig({
 
       }
     },
+    input: {
+      slots: {
+        base: 'capitalize'
+      }
+    },
 
 
     dropdownMenu: {

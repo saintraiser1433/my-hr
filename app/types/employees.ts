@@ -51,6 +51,9 @@ export enum EmployeeRequirementStatus {
 }
 
 export interface PersonalInformation {
+    jobTitle: string;
+    hiredDate: string;
+    department: string;
     first_name: string;
     middle_name: string;
     last_name: string;
@@ -72,6 +75,7 @@ export interface PersonalInformation {
     mothers_occupation?: string;
     parents_address?: string;
     person_to_be_contact?: string;
+    photo_path?: string
 }
 
 export interface Education {
@@ -100,7 +104,8 @@ export interface References {
 }
 
 export interface CombinedInformation {
-    id:number,
+    id: number,
+    status: boolean,
     applicantInfo: PersonalInformation,
     educData: Education[],
     workData: WorkExperience[],

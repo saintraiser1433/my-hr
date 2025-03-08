@@ -3,15 +3,7 @@ export const MENU_ITEMS: MenuItem[] = [
   { label: "Dashboard", icon: "i-tabler-device-analytics", to: "/" },
   { label: "Applicants", icon: "i-tdesign-user-filled", to: "/applicants" },
   { label: "Employees", icon: "i-clarity-employee-group-solid", to: "/employees" },
-  {
-    label: "Organization",
-    icon: "i-fluent-organization-12-filled",
-    slot: "components",
-    children: [
-      { label: "Departments", icon: "i-game-icons-organigram", to: "/organization/department" },
-      { label: "Team Lead", icon: "i-ri-team-fill", to: "/organization/teamlead" },
-    ],
-  },
+  { label: "Departments", icon: "i-game-icons-organigram", to: "/department" },
   {
     label: "Performance",
     icon: "i-mdi-graph-line",

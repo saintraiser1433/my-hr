@@ -14,10 +14,12 @@ const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
 const { updateModal, resetModal, isOpen, title } = useCustomModal();
 const route = useRoute();
-const titleName = useState("title", () => localStorage.getItem("title") || "Unknown module");
+const titleName = useState(
+  "title",
+  () => localStorage.getItem("title") || "Unknown module"
+);
 const requirementsData = ref<EmployeeRequirements[]>([]);
 const listRequirements = ref<UnchosenRequirements[]>([]);
-
 
 const initialState = {
   id: undefined,
@@ -47,24 +49,34 @@ const assignData = async (data: UnchosenRequirements[]) => {
       status: EmployeeRequirementStatus.PENDING,
     }));
     const response = await assignRequireRepo.add(payload);
-    requirementsData.value = [...requirementsData.value, ...response.data as EmployeeRequirements[]];
+    requirementsData.value = [
+      ...requirementsData.value,
+      ...(response.data as EmployeeRequirements[]),
+    ];
     listRequirements.value =
-      listRequirements.value?.filter((item) => !data.some((items) => items.id === item.id)) ||
-      [];
+      listRequirements.value?.filter(
+        (item) => !data.some((items) => items.id === item.id)
+      ) || [];
     $toast.success(response.message);
   } catch (err) {
     return handleApiError(err);
   }
 };
 
-const UnassignRequireRepo = repository<UnchosenRequirements[]>($api, "/employees/assign/delete");
+const UnassignRequireRepo = repository<UnchosenRequirements[]>(
+  $api,
+  "/employees/assign/delete"
+);
 const unAssignJob = (data: number[]) => {
   setAlert("warning", "Are you sure you want to remove?", "", "Confirm remove").then(
     async (result) => {
       if (result.isConfirmed) {
         try {
           const response = await UnassignRequireRepo.deleteMany(data);
-          listRequirements.value = [...listRequirements.value, ...response.data as UnchosenRequirements[]];
+          listRequirements.value = [
+            ...listRequirements.value,
+            ...(response.data as UnchosenRequirements[]),
+          ];
           requirementsData.value = requirementsData.value.filter(
             (item) => !data.includes(item.id || 0)
           );
@@ -86,45 +98,59 @@ const updateSubmission = async (response: SubmittedRequirements) => {
   );
   resetModal();
   $toast.success(res.message);
-}
-
+};
 
 const edit = (data: EmployeeRequirements) => {
   departmentForm.id = data.id;
   departmentForm.expiryDate = data.expiryDate;
   departmentForm.submittedAt = data.submittedAt;
   updateModal(`Submit Requirements`);
-}
+};
 
-const pending = (response: EmployeeRequirements) => {
-  setAlert("warning", "Are you sure you want to update this into pending?", "", "Confirm to update").then(
-    async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await submissionRepo.update(response); //error on this code
-          const datas = res.data as EmployeeRequirements;
-          requirementsData.value = requirementsData.value.map((item) =>
-            item.id === response.id ? { ...item, ...datas } : item
-          );
-          $toast.success(res.message);
-        } catch (error) {
-          return handleApiError(error);
-        }
+const pending = (response: SubmittedRequirements) => {
+  setAlert(
+    "warning",
+    "Are you sure you want to update this into pending?",
+    "",
+    "Confirm to update"
+  ).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const res = await submissionRepo.update(response); //error on this code
+        const datas = res.data as EmployeeRequirements;
+        requirementsData.value = requirementsData.value.map((item) =>
+          item.id === response.id ? { ...item, ...datas } : item
+        );
+        $toast.success(res.message);
+      } catch (error) {
+        return handleApiError(error);
       }
     }
-  );
-}
+  });
+};
 </script>
 
 <template>
-  <EmployeeFormRequire @data-requirement="updateSubmission" v-model:state="departmentForm" v-model:open="isOpen"
-    :title="title"></EmployeeFormRequire>
+  <EmployeeFormRequire
+    @data-requirement="updateSubmission"
+    v-model:state="departmentForm"
+    v-model:open="isOpen"
+    :title="title"
+  ></EmployeeFormRequire>
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl capitalize">{{ titleName }}</h2>
-    <span class="text-sm">Here's a list assigned screening type for {{ titleName }} !</span>
+    <span class="text-sm"
+      >Here's a list assigned screening type for {{ titleName }} !</span
+    >
   </div>
 
-  <EmployeeRequireList @pending="pending" @update="edit" @assign="assignData" @unAssign="unAssignJob"
-    :data="requirementsData" :items="listRequirements">
+  <EmployeeRequireList
+    @pending="pending"
+    @update="edit"
+    @assign="assignData"
+    @unAssign="unAssignJob"
+    :data="requirementsData"
+    :items="listRequirements"
+  >
   </EmployeeRequireList>
 </template>
