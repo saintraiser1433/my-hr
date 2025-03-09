@@ -12,7 +12,8 @@ const props = defineProps({
 });
 
 const emits = defineEmits<{
-  (e: "assign", id: number): void;
+  (e: "assign", data: EmployeeModel): void;
+  (e: "unassign", data: EmployeeModel): void;
 }>();
 
 const table = useTemplateRef("table");
@@ -23,10 +24,10 @@ const config = useRuntimeConfig();
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
   createColumn("employeeName", "Employee Name", true),
-  createColumn("role", "Role", true),
   createColumn("status", "Status", true),
   createColumn("username", "Username", true),
   createColumn("password", "Password", true),
+  createColumn("role", "Role", true),
   createColumn("action", "Action", false),
 ];
 const visiblePasswords = ref<Set<number>>(new Set());
@@ -42,48 +43,72 @@ const isPasswordVisible = (index: number): boolean => {
   return visiblePasswords.value.has(index);
 };
 
-const handleAssign = (id: number) => {
-  emits("assign", id);
+const handleAssign = (data: EmployeeModel) => {
+  emits("assign", data);
+};
+const handleunAssign = (data: EmployeeModel) => {
+  emits("unassign", data);
 };
 
 const getDropdownActions = (user: EmployeeModel): DropdownMenuItem[][] => {
-  return [
-    [
+  const actions: DropdownMenuItem[] = [];
+
+  // Check if the user is a TeamLead
+  if (user.role === "TeamLead") {
+    actions.push(
+      {
+        label: "Un-assigned as Teamlead",
+        icon: "material-symbols:social-leaderboard",
+        onSelect: async () => {
+          handleunAssign(user);
+        },
+      },
+      {
+        type: "separator",
+      }
+    );
+  } else {
+    actions.push(
       {
         label: "Assign as Teamlead",
         icon: "material-symbols:social-leaderboard",
         onSelect: async () => {
-          handleAssign(Number(user.id));
+          handleAssign(user);
         },
       },
       {
         type: "separator",
+      }
+    );
+  }
+
+  actions.push(
+    {
+      label: "Check Requirements",
+      icon: "i-hugeicons-assignments",
+      onSelect: async () => {
+        await navigateTo({
+          name: "Employees-require-empId",
+          params: { empId: Number(user.id) },
+        });
       },
-      {
-        label: "Check Requirements",
-        icon: "i-hugeicons-assignments",
-        onSelect: async () => {
-          await navigateTo({
-            name: "Employees-require-empId",
-            params: { empId: Number(user.id) },
-          });
-        },
+    },
+    {
+      type: "separator",
+    },
+    {
+      label: "View Details",
+      icon: "i-lucide-eye",
+      onSelect: async () => {
+        await navigateTo({
+          name: "Employees-information-empId",
+          params: { empId: Number(user.id) },
+        });
       },
-      {
-        type: "separator",
-      },
-      {
-        label: "View Details",
-        icon: "i-lucide-eye",
-        onSelect: async () => {
-          await navigateTo({
-            name: "Employees-information-empId",
-            params: { empId: Number(user.id) },
-          });
-        },
-      },
-    ],
-  ];
+    }
+  );
+
+  return [actions];
 };
 
 watch(

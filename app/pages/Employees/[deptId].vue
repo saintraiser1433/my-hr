@@ -27,8 +27,8 @@ if (employeeError.value) {
   $toast.error(employeeError.value.message || "Failed to fetch items");
 }
 
-const employeeRepo = repository<EvaluationModel>($api, "/employees");
-const assign = (id: number) => {
+const assignTeamleadRepo = repository<EmployeeModel>($api, "/employees/assign");
+const assign = (data: EmployeeModel) => {
   setAlert(
     "warning",
     "Are you sure you want to set this user as Team Lead?",
@@ -37,8 +37,36 @@ const assign = (id: number) => {
   ).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        const response = await employeeRepo.update(id);
-        // evaluationData.value = evaluationData.value.filter((item) => item.id !== id);
+        const response = await assignTeamleadRepo.update(data);
+        employeeData.value = employeeData.value.map((emp) =>
+          emp.id === data.id
+            ? { ...emp, role: response.data?.role as EmployeeModel["role"] }
+            : emp
+        );
+        $toast.success(response.message);
+      } catch (error) {
+        return handleApiError(error);
+      }
+    }
+  });
+};
+
+const unassignTeamleadRepo = repository<EmployeeModel>($api, "/employees/unassign");
+const unAssign = (data: EmployeeModel) => {
+  setAlert(
+    "warning",
+    "Are you sure you want to set this user as Team Lead?",
+    "",
+    "Confirm update"
+  ).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const response = await unassignTeamleadRepo.update(data);
+        employeeData.value = employeeData.value.map((emp) =>
+          emp.id === data.id
+            ? { ...emp, role: response.data?.role as EmployeeModel["role"] }
+            : emp
+        );
         $toast.success(response.message);
       } catch (error) {
         return handleApiError(error);
@@ -53,5 +81,6 @@ const assign = (id: number) => {
     <h2 class="font-extrabold text-2xl">Employee Module</h2>
     <span class="text-sm">Here's a list of employees!</span>
   </div>
-  <EmployeeList @assign="assign" :data="employeeData"> </EmployeeList>
+  <EmployeeList @assign="assign" @unassign="unAssign" :data="employeeData">
+  </EmployeeList>
 </template>

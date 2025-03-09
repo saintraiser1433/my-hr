@@ -16,11 +16,10 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     label: "Evaluation",
     icon: "i-mdi-file-graph",
-    to: "/evaluation"
-    // children: [
-    //   { label: "Evaluation Question", icon: "i-hugeicons-question", to: "/evaluation/question" },
-    //   { label: "Manage Evaluation", icon: "i-mingcute-user-question-fill", to: "/evaluation/manage" },
-    // ],
+    children: [
+      { label: "Manage Evaluation", icon: "i-hugeicons-question", to: "/evaluation" },
+      { label: "Template", icon: "i-mingcute-user-question-fill", to: "/evaluation/template" },
+    ],
   },
 
   { label: "Job Offers", icon: "i-fluent-mdl2-recruitment-management", to: "/job" },

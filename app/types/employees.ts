@@ -13,7 +13,7 @@ export interface EmployeeModel extends Timestamped {
     password: string;
     accessToken?: string | null;
     refreshToken?: string | null;
-    role: "ADMIN" | "EMPLOYEE" | "TEAMLEAD";
+    role: "Admin" | "Employee" | "TeamLead";
     employeeName?: string;
 }
 

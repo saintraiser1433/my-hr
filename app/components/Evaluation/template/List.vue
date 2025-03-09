@@ -5,61 +5,50 @@ const UButton = resolveComponent("UButton") as Component;
 
 const props = defineProps({
   data: {
-    type: Array as PropType<EvaluationModel[]>,
+    type: Array as PropType<TemplateModel[]>,
     required: true,
     default: () => [],
   },
 });
+
 const emits = defineEmits<{
-  (e: "update", payload: EvaluationModel): void;
+  (e: "update", payload: TemplateModel): void;
   (e: "delete", id: number): void;
 }>();
 
-const table = useTemplateRef("table");
-
-const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
+const table = useTemplateRef("table");
+const { createColumn } = useTableColumns(UButton);
 
 const handleDelete = (id: number) => {
   emits("delete", id);
 };
 
-const handleUpdate = (item: EvaluationModel) => {
+const handleUpdate = (item: TemplateModel) => {
   emits("update", item);
 };
 
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
-  createColumn("school_year", "School Year", true, (row) => row.getValue("school_year")),
-  createColumn("semester", "Semester", true),
-  createColumn("status", "Status", true),
+  createColumn("template_name", "Template Name", true, (row) =>
+    h("span", { class: "capitalize" }, row.getValue("template_name"))
+  ),
+  createColumn("description", "Description", true, (row) =>
+    h("div", { class: "capitalize text-wrap" }, row.getValue("description"))
+  ),
   createColumn("action", "Action", false),
 ];
 
-function getDropdownActions(data: EvaluationModel): DropdownMenuItem[][] {
+const getDropdownActions = (template: TemplateModel): DropdownMenuItem[][] => {
   return [
     [
       {
-        label: "Manage Peer Questions",
+        label: "Assign",
         icon: "i-hugeicons-assignments",
         onSelect: async () => {
-          await navigateTo({
-            name: "Evaluation-peer-evalId",
-            params: { evalId: data.id },
-          });
-        },
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Manage Teamlead Questions",
-        icon: "i-hugeicons-assignments",
-        onSelect: async () => {
-          await navigateTo({
-            name: "Evaluation-evaluationID",
-            params: { evaluationID: data.id },
-          });
+          // titleName.value = user.title || "";
+          // localStorage.setItem("title", titleName.value);
+          // await navigateTo({ name: "Job-jobId", params: { jobId: Number(user.id) } });
         },
       },
       {
@@ -69,7 +58,7 @@ function getDropdownActions(data: EvaluationModel): DropdownMenuItem[][] {
         label: "Edit",
         icon: "i-lucide-edit",
         onSelect: () => {
-          handleUpdate(data);
+          handleUpdate(template);
         },
       },
       {
@@ -80,12 +69,12 @@ function getDropdownActions(data: EvaluationModel): DropdownMenuItem[][] {
         icon: "i-lucide-trash",
         color: "error",
         onSelect: () => {
-          handleDelete(Number(data.id));
+          handleDelete(Number(template.id));
         },
       },
     ],
   ];
-}
+};
 
 watch(
   () => props.data,
@@ -112,7 +101,7 @@ watch(
   >
     <UTable
       sticky
-      class="overflow-y-auto custom-scrollbar h-auto cursor-auto"
+      class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto"
       ref="table"
       v-model:global-filter="globalFilter"
       v-model:pagination="pagination"
@@ -122,29 +111,12 @@ watch(
       :data="data"
       :columns="columns"
     >
-      <template #status-cell="{ row }">
-        <UBadge v-if="row.original.status === 'NOT_SET'" color="error">NOT SET</UBadge>
-        <UBadge
-          v-else-if="row.original.status === 'ONGOING'"
-          color="neutral"
-          variant="outline"
-          >ONGOING</UBadge
-        >
-        <UBadge v-else color="neutral">FINISHED</UBadge>
-      </template>
-      <template #semester-cell="{ row }">
-        <div v-if="row.original.semester === 1">
-          <span>First Semester</span>
-        </div>
-        <div v-else>
-          <span>Second Semester</span>
-        </div>
-      </template>
-
       <template #action-cell="{ row }">
-        <UDropdownMenu :items="getDropdownActions(row.original)">
-          <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
-        </UDropdownMenu>
+        <div class="flex items-center gap-2">
+          <UDropdownMenu :items="getDropdownActions(row.original)">
+            <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
+          </UDropdownMenu>
+        </div>
       </template>
     </UTable>
     <UITablePagination :table="table" v-if="table"> </UITablePagination>

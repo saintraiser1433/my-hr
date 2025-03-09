@@ -1,78 +1,80 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui";
 const emits = defineEmits<{
-  (e: "dataQuestion", payload: QuestionModel): void;
+  (e: "dataQuestion", payload: PeerQuestionModel): void;
   (e: "cancel"): void;
 }>();
 defineProps({
   isUpdate: {
     type: Boolean,
     required: true,
-    default: false
-  }
-})
+    default: false,
+  },
+});
 
-const model = defineModel<QuestionModel>("state", { required: true });
-
+const model = defineModel<PeerQuestionModel>("state", { required: true });
 
 const { $joi } = useNuxtApp();
 const formRef = useTemplateRef("formRef");
-
-
-
 
 const schema = $joi.object({
   id: $joi.number().optional(),
   question: $joi.string().required().messages({
     "any.required": "The Question field is required",
-    "string.empty": "The Question field is required"
+    "string.empty": "The Question field is required",
   }),
-  evaluationId: $joi.number().optional(),
+  peerId: $joi.number().optional(),
 });
 
-const onSubmit = async (event: FormSubmitEvent<QuestionModel>) => {
+const onSubmit = async (event: FormSubmitEvent<PeerQuestionModel>) => {
   emits("dataQuestion", event.data);
 };
 
 const onCancel = () => {
   emits("cancel");
-}
-
-
-
+};
 
 const submitForm = () => {
   if (formRef.value) {
     formRef.value.submit();
   }
 };
-
 </script>
 
 <template>
-
-  <UCard :ui="{
-    root: 'overflow-hidden ',
-    header: 'p-0 sm:px-3 py-2',
-    body: 'p-4 sm:px-3 sm:py-2',
-    footer: 'p-0 sm:px-0',
-  }">
+  <UCard
+    :ui="{
+      root: 'overflow-hidden ',
+      header: 'p-0 sm:px-3 py-2',
+      body: 'p-4 sm:px-3 sm:py-2',
+      footer: 'p-0 sm:px-0',
+    }"
+  >
     <template #header>
       <h3 class="font-bold text-(--foreground)">MANAGE QUESTIONS</h3>
     </template>
-    <UForm ref="formRef" :schema="schema" :state="model" class="space-y-4" @submit="onSubmit">
+    <UForm
+      ref="formRef"
+      :schema="schema"
+      :state="model"
+      class="space-y-4"
+      @submit="onSubmit"
+    >
       <UFormField class="my-2" label="Description" name="question" required>
         <UITiptapEditor v-model="model.question" class="pt-1" />
       </UFormField>
-
     </UForm>
     <template #footer>
       <div class="flex justify-end items-center p-2 gap-2">
-        <UButton v-if="isUpdate" size="md" variant="outline" @click="onCancel">Cancel</UButton>
-        <UButton size="sm" @click="submitForm" :label="isUpdate ? 'Update' : 'Submit'"></UButton>
-
+        <UButton v-if="isUpdate" size="md" variant="outline" @click="onCancel"
+          >Cancel</UButton
+        >
+        <UButton
+          size="sm"
+          @click="submitForm"
+          :label="isUpdate ? 'Update' : 'Submit'"
+        ></UButton>
       </div>
     </template>
   </UCard>
-
 </template>
