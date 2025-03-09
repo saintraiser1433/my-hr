@@ -39,15 +39,13 @@ const titleName = useState("title", () => "");
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
   createColumn("title", "Job Title", true, (row) => row.getValue("title")),
-  createColumn("departmentTitle", "Department", true, (row) =>
-    row.getValue("departmentTitle")
-  ),
+  createColumn("department", "Department", true),
   createColumn("totalAvailable", "Available", false),
   createColumn("status", "Status", false),
   createColumn("action", "Action", false),
 ];
 
-const  getDropdownActions = (user: JobModel): DropdownMenuItem[][] => {
+const getDropdownActions = (user: JobModel): DropdownMenuItem[][] => {
   return [
     [
       {
@@ -110,25 +108,18 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard
-    :ui="{
-      root: 'overflow-hidden ',
-      body: 'p-0 sm:p-0',
-      footer: 'p-0 sm:px-0',
-    }"
-  >
-    <UTable
-      sticky
-      class="overflow-y-auto custom-scrollbar h-100 lg:h-170 cursor-auto"
-      ref="table"
-      v-model:global-filter="globalFilter"
-      v-model:pagination="pagination"
-      :pagination-options="{
+  <UCard :ui="{
+    root: 'overflow-hidden ',
+    body: 'p-0 sm:p-0',
+    footer: 'p-0 sm:px-0',
+  }">
+    <UTable sticky class="overflow-y-auto custom-scrollbar h-100 lg:h-170 cursor-auto" ref="table"
+      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }"
-      :data="data"
-      :columns="columns"
-    >
+      }" :data="data" :columns="columns">
+      <template #department-cell="{ row }">
+        <span class="capitalize">{{ row.original.department.title }}</span>
+      </template>
       <template #status-cell="{ row }">
         <UBadge v-if="row.original.status" color="neutral" variant="solid">Active</UBadge>
         <UBadge v-else color="neutral" variant="outline">Inactive</UBadge>

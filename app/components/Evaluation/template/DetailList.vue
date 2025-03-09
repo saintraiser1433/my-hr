@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
+import type { TableColumn } from "@nuxt/ui";
 import { getPaginationRowModel } from "@tanstack/vue-table";
 const UButton = resolveComponent("UButton") as Component;
 
 const props = defineProps({
   data: {
-    type: Array as PropType<TemplateModel[]>,
+    type: Array as PropType<TemplateDetail[]>,
     required: true,
     default: () => [],
   },
 });
 
 const emits = defineEmits<{
-  (e: "update", payload: TemplateModel): void;
+  (e: "update", payload: TemplateDetail): void;
   (e: "delete", id: number): void;
 }>();
 
@@ -24,59 +24,19 @@ const handleDelete = (id: number) => {
   emits("delete", id);
 };
 
-const handleUpdate = (item: TemplateModel) => {
+const handleUpdate = (item: TemplateDetail) => {
   emits("update", item);
 };
 
 const columns: TableColumn<any>[] = [
-  createColumn("increment", "#", true, (row) => `${row.index + 1}`),
-  createColumn("template_name", "Template Name", true, (row) =>
-    h("span", { class: "capitalize" }, row.getValue("template_name"))
-  ),
-  createColumn("description", "Description", true, (row) =>
-    h("div", { class: "capitalize text-wrap" }, row.getValue("description"))
-  ),
+  createColumn("increment", "#", true),
+  createColumn("legend", "Legend"),
+  createColumn("description", "Description", true),
+  createColumn("score", "Score", true),
   createColumn("action", "Action", false),
 ];
 
-const getDropdownActions = (template: TemplateModel): DropdownMenuItem[][] => {
-  return [
-    [
-      {
-        label: "Assign",
-        icon: "i-hugeicons-assignments",
-        onSelect: async () => {
-         await navigateTo({name:'Evaluation-template-tempId',
-         params:{
-          tempId:Number(template.id)
-        }
-      })
-        },
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Edit",
-        icon: "i-lucide-edit",
-        onSelect: () => {
-          handleUpdate(template);
-        },
-      },
-      {
-        type: "separator",
-      },
-      {
-        label: "Delete",
-        icon: "i-lucide-trash",
-        color: "error",
-        onSelect: () => {
-          handleDelete(Number(template.id));
-        },
-      },
-    ],
-  ];
-};
+
 
 watch(
   () => props.data,
@@ -113,11 +73,27 @@ watch(
       :data="data"
       :columns="columns"
     >
+      <template #increment-cell="{row}">
+          <span>{{row.index +1}}</span>
+      </template>
+      <template #legend-cell="{row}">
+          <span class="capitalize">{{row.original.title}}</span>
+      </template>
+      <template #description-cell="{row}">
+          <span class="capitalize">{{row.original.description}}</span>
+      </template>
+      <template #score-cell="{row}">
+          <span class="capitalize">{{row.original.score}}</span>
+      </template>
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
-          <UDropdownMenu :items="getDropdownActions(row.original)">
-            <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
-          </UDropdownMenu>
+          <UButton icon="lucide:edit" size="sm" @click="handleUpdate(row.original)">
+            Edit
+          </UButton>
+          <UButton icon="lucide:x" color="primary" variant="outline" size="sm"
+            @click="handleDelete(row.original.id || 0)">
+          Remove
+          </UButton>
         </div>
       </template>
     </UTable>

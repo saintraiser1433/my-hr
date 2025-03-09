@@ -116,7 +116,7 @@ const removeRequirements = (id: number) => {
               </UFormField>
               <UFormField class="lg:flex-1" label="Department" name="departmentsId">
                 <USelectMenu placeholder="Select Department" v-model="model.departmentsId" label-key="title"
-                  value-key="id" :items="department" class="w-full" size="sm" />
+                  value-key="id" :items="department" class="w-full" :ui="{ base: 'capitalize' }" size="sm" />
               </UFormField>
               <UFormField class="lg:flex-1" label="Header Background Image">
                 <UInput type="file" @change="onFileChange" accept="images/*" class="w-full" size="sm" />
@@ -135,7 +135,7 @@ const removeRequirements = (id: number) => {
                 <UButton label="Select requirements" color="neutral" variant="subtle" icon="i-lucide-search" />
 
                 <template #content>
-           
+
                   <UCommandPalette multiple v-model="model.requirements" v-model:search-term="searchTerm"
                     :loading="status === 'pending'" :groups="groups" class="flex-1 h-80" />
                 </template>

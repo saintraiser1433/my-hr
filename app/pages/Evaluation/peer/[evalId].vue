@@ -106,9 +106,10 @@ const toggleModal = () => {
 
     <EvaluationPeerList :data="peerData" @update="edit" @delete="remove">
       <template #actions>
+        <UButton icon="i-lucide-plus" size="sm" variant="outline" @click="toggleModal"
+        >Select Template</UButton>
         <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
-          >Add Peer Category</UButton
-        >
+          >Add Peer Category</UButton>
       </template>
     </EvaluationPeerList>
   </div>

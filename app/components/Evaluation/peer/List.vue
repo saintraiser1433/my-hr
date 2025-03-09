@@ -34,6 +34,7 @@ const columns: TableColumn<any>[] = [
   createColumn("title", "Category", true, (row) =>
     h("span", { class: "capitalize" }, row.getValue("title"))
   ),
+  createColumn("template", "Template", false),
   createColumn("action", "Action", false),
 ];
 
