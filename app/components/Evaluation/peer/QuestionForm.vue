@@ -66,11 +66,10 @@ const submitForm = () => {
     </UForm>
     <template #footer>
       <div class="flex justify-end items-center p-2 gap-2">
-        <UButton v-if="isUpdate" size="md" variant="outline" @click="onCancel"
+        <UButton v-if="isUpdate" variant="outline" @click="onCancel"
           >Cancel</UButton
         >
         <UButton
-          size="sm"
           @click="submitForm"
           :label="isUpdate ? 'Update' : 'Submit'"
         ></UButton>

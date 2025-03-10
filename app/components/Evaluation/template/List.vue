@@ -41,39 +41,34 @@ const columns: TableColumn<any>[] = [
 
 const getDropdownActions = (template: TemplateModel): DropdownMenuItem[][] => {
   return [
-    [
-      {
-        label: "Assign",
-        icon: "i-hugeicons-assignments",
-        onSelect: async () => {
-         await navigateTo({name:'Evaluation-template-tempId',
-         params:{
-          tempId:Number(template.id)
-        }
-      })
-        },
+    [{
+      label: "Add Details",
+      icon: "i-hugeicons-assignments",
+      onSelect: async () => {
+        await navigateTo({ name: 'Evaluation-template-tempId', params: { tempId: Number(template.id) } })
       },
-      {
-        type: "separator",
+    },
+    {
+      type: "separator",
+    },
+    {
+      label: "Edit",
+      icon: "i-lucide-edit",
+      onSelect: () => {
+        handleUpdate(template);
       },
-      {
-        label: "Edit",
-        icon: "i-lucide-edit",
-        onSelect: () => {
-          handleUpdate(template);
-        },
+    },
+    {
+      type: "separator",
+    },
+    {
+      label: "Delete",
+      icon: "i-lucide-trash",
+      color: "error",
+      onSelect: () => {
+        handleDelete(Number(template.id));
       },
-      {
-        type: "separator",
-      },
-      {
-        label: "Delete",
-        icon: "i-lucide-trash",
-        color: "error",
-        onSelect: () => {
-          handleDelete(Number(template.id));
-        },
-      },
+    },
     ],
   ];
 };
@@ -90,34 +85,30 @@ watch(
 
 <template>
   <UITableSearch v-model:search="globalFilter" v-if="table" :table="table">
+
     <template #actions>
+
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard
-    :ui="{
-      root: 'overflow-hidden ',
-      body: 'p-0 sm:p-0',
-      footer: 'p-0 sm:px-0',
-    }"
-  >
-    <UTable
-      sticky
-      class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto"
-      ref="table"
-      v-model:global-filter="globalFilter"
-      v-model:pagination="pagination"
-      :pagination-options="{
+  <UCard :ui="{
+    root: 'overflow-hidden ',
+    body: 'p-0 sm:p-0',
+    footer: 'p-0 sm:px-0',
+  }">
+    <UTable sticky class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto" ref="table"
+      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }"
-      :data="data"
-      :columns="columns"
-    >
+      }" :data="data" :columns="columns">
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
+
           <UDropdownMenu :items="getDropdownActions(row.original)">
+
             <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
+
           </UDropdownMenu>
+
         </div>
       </template>
     </UTable>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { CommandPaletteItem, FormSubmitEvent } from "@nuxt/ui";
-import { transform } from "typescript";
 
 const { $joi } = useNuxtApp();
 const { file, onFileChange, previewUrl } = useFileDialog("job");
@@ -23,6 +22,11 @@ const props = defineProps({
     type: Boolean,
     required: true,
     default: false,
+  },
+  description: {
+    type: String,
+    required: true,
+    default: "",
   },
 });
 
@@ -95,8 +99,8 @@ const removeRequirements = (id: number) => {
 <template>
 
   <UModal v-model:open="openModal"
-    description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit, totam architecto! Provident tempore porro ipsa! "
-    :title="title" :ui="{ content: 'max-w-6xl' }">
+    :description="description"
+    :title="title"  :ui="{ content: 'max-w-6xl' }">
     <template #body>
 
       <UForm ref="formRef" :schema="schema" :state="state" @submit="onSubmit">

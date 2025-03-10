@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
+import type { TableColumn } from "@nuxt/ui";
 import { getPaginationRowModel } from "@tanstack/vue-table";
 const UButton = resolveComponent("UButton") as Component;
 const UCheckbox = resolveComponent("UCheckbox") as Component;
 const props = defineProps({
   data: {
     type: Array as PropType<PeerQuestionModel[]>,
-    required: true,
     default: () => [],
   },
+  legend: {
+    type: Array as PropType<TemplateDetail[]>,
+    default: () => [],
+  }
 });
 const emits = defineEmits<{
   (e: "update", payload: PeerQuestionModel): void;
@@ -16,7 +19,7 @@ const emits = defineEmits<{
 }>();
 
 const table = useTemplateRef("table");
-
+const {legend} = toRefs(props);
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
 
@@ -28,19 +31,27 @@ const handleUpdate = (item: PeerQuestionModel) => {
   emits("update", item);
 };
 
-const columns: TableColumn<any>[] = [
+
+
+const columns = computed(() => [
   createColumn("increment", "#", true, (row) => {
     return h("div", { class: "max-w-1" }, `${row.index + 1}`);
   }),
   createColumn("question", "Question", true),
-  createColumn("1", "1", false),
-  createColumn("2", "2", false),
-  createColumn("3", "3", false),
-  createColumn("4", "4", false),
-  createColumn("5", "5", false),
-
+  ...legend.value.map((item) =>
+    createColumn(item.title.toUpperCase(), item.title.toUpperCase(), false, (row) => {
+      return h(UCheckbox,{ disabled:"true"})
+    })
+    
+  ),
   createColumn("action", "Action", false),
-];
+] as TableColumn<any>[]);
+
+
+
+  
+
+
 
 watch(
   () => props.data,
@@ -67,11 +78,7 @@ watch(
     <div class="flex items-center gap-4">
       <h4 class="font-semibold">LEGENDS:</h4>
       <div class="flex items-center gap-3">
-        <UBadge color="error" variant="subtle">1 - STRONGLY DISAGREE</UBadge>
-        <UBadge color="error" variant="subtle">2 - DISAGREE</UBadge>
-        <UBadge color="info" variant="subtle">3 - UNCERTAIN</UBadge>
-        <UBadge color="success" variant="subtle">4 - AGREE</UBadge>
-        <UBadge color="success" variant="subtle">5 - STRONGLY AGREE</UBadge>
+        <UBadge variant="soft" class="uppercase" v-for="(data,index) in legend" :key="index">{{data.score}} - {{data.title}}</UBadge>
       </div>
     </div>
     <USeparator class="my-2"></USeparator>
@@ -97,30 +104,15 @@ watch(
         <template #question-cell="{ row }">
           <div class="max-w-lg text-wrap text-sm" v-html="row.original.question"></div>
         </template>
-        <template #1-cell="{ row }">
-          <UCheckbox disabled></UCheckbox>
-        </template>
-        <template #2-cell="{ row }">
-          <UCheckbox disabled></UCheckbox>
-        </template>
-        <template #3-cell="{ row }">
-          <UCheckbox disabled></UCheckbox>
-        </template>
-        <template #4-cell="{ row }">
-          <UCheckbox disabled></UCheckbox>
-        </template>
-        <template #5-cell="{ row }">
-          <UCheckbox disabled></UCheckbox>
-        </template>
         <template #action-cell="{ row }">
           <div class="flex items-center gap-2">
-            <UButton icon="lucide:edit" size="sm" @click="handleUpdate(row.original)">
+            <UButton icon="lucide:edit" size="xs" @click="handleUpdate(row.original)">
             </UButton>
             <UButton
               icon="lucide:x"
               color="primary"
               variant="outline"
-              size="sm"
+              size="xs"
               @click="handleDelete(row.original.id || 0)"
             >
             </UButton>

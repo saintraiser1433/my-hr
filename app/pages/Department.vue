@@ -12,7 +12,7 @@ useSeoMeta({
 
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
-const { openModal, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
+const { openModal,description, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
 
 const initialState = {
     id: undefined,
@@ -60,7 +60,7 @@ const edit = (response: DepartmentModel) => {
     departmentForm.status = response.status;
     departmentForm.title = response.title;
     departmentForm.status = response.status;
-    updateModal(`${response.title}`);
+    updateModal(`Update Department`);
 };
 
 const remove = (id: number) => {
@@ -94,7 +94,7 @@ const toggleModal = () => {
 <template>
     <Suspense>
         <div>
-            <DepartmentForm @data-department="submit" :isUpdate="isUpdate" v-model:state="departmentForm" :title="title"
+            <DepartmentForm @data-department="submit" :description="description" :isUpdate="isUpdate" v-model:state="departmentForm" :title="title"
                 v-model:open="isOpen" />
             <div class="flex flex-col items-center lg:items-start mb-3">
                 <h2 class="font-extrabold text-2xl">Departments Module</h2>

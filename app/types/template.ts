@@ -9,6 +9,6 @@ export interface TemplateDetail {
   id?: number;
   title: string;
   description: string;
-  score?: number;
+  score: number;
   templateId?: number;
 }

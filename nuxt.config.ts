@@ -1,8 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import 'dotenv/config';
 export default defineNuxtConfig({
+
   devtools: { enabled: true },
   compatibilityDate: '2024-11-27',
+  routeRules: {
+    // '/': { redirect: '/auth' },
+    // '/admin/': { redirect: '/admin/home' },
+    // '/admin/home': { ssr: true },
+  },
   modules: [
     '@nuxt/ui',
     '@nuxt/eslint',

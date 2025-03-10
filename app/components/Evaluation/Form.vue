@@ -16,7 +16,12 @@ defineProps({
     type: Boolean,
     required: true,
     default: false
-  }
+  },
+  description: {
+    type: String,
+    required: true,
+    default: "",
+  },
 });
 
 const open = defineModel("open", { default: false, required: true });
@@ -76,7 +81,7 @@ for (let i = 0; i < 50; i++) {
 </script>
 
 <template>
-  <UModal v-model:open="open" description=" " :title="title" :ui="{ content: 'max-w-sm' }">
+  <UModal v-model:open="open" :description="description" :title="title" :ui="{ content: 'max-w-sm' }">
     <template #body>
 
       <UForm ref="formRef" :schema="schema" :state="model" class="space-y-4" @submit="onSubmit">

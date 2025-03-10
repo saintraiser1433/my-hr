@@ -1,3 +1,4 @@
+import type { TemplateHead } from "typescript";
 
 
 export interface EvaluationModel extends Timestamped {
@@ -7,6 +8,10 @@ export interface EvaluationModel extends Timestamped {
     status?: statusesEvaluation;
     peer?: PeerModel[];
     action?: string;
+}
+export interface CombinedPeerQuestionWithLegend {
+    questions: PeerQuestionModel[],
+    legends: TemplateDetail[]
 }
 
 export interface PeerQuestionModel {
@@ -24,8 +29,10 @@ export interface CommentsModel {
 
 export interface PeerModel {
     id?: number;
-    title: string;
-    evaluationId: number;
+    title?: string;
+    evaluationId?: number;
+    template?: string;
+    templateHeaderId?: number;
     question?: PeerQuestionModel[],
 
 }

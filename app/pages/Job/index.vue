@@ -12,7 +12,7 @@ useSeoMeta({
 
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
-const { openModal, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
+const { openModal,description, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
 
 const initialState = {
   id: undefined,
@@ -132,7 +132,7 @@ const toggleModal = () => {
 <template>
   <JobContent v-model:open="isViewing" :data="viewedJob"></JobContent>
 
-  <JobForm @data-job="submit" :department="department" v-model:state="jobForm" :is-update="isUpdate" :title="title"
+  <JobForm @data-job="submit" :description="description" :department="department" v-model:state="jobForm" :is-update="isUpdate" :title="title"
     v-model:open="isOpen" />
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl">Job Offers Module</h2>

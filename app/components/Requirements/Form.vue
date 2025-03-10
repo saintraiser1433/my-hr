@@ -12,6 +12,11 @@ defineProps({
     required: true,
     default: "",
   },
+  description: {
+    type: String,
+    required: true,
+    default: "",
+  },
 });
 
 const open = defineModel("open", { default: false, required: true });
@@ -43,9 +48,9 @@ const submitForm = () => {
 <template>
   <UModal
     v-model:open="open"
-    description="Test"
+    :description="description"
     :title="title"
-    :ui="{ content: 'max-w-sm' }"
+    :ui="{ content: 'max-w-lg' }"
   >
     <template #body>
       <UForm
