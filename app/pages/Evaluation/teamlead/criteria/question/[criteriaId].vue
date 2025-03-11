@@ -23,13 +23,13 @@ const initialState = {
 
 const questionForm = reactive<QuestionModel>({ ...initialState });
 const questionData = ref<QuestionModel[]>([]);
-const legendData = ref<TemplateDetail[]>([])
+const legendData = ref<TemplateDetail[]>([]);
 const { data, status, error } = await useAPI<CombinedPeerQuestionWithLegend>(
   `/teamlead/q/${route.params.criteriaId}`
 );
 if (data.value) {
   questionData.value = data.value.questions;
-  legendData.value = data.value.legends
+  legendData.value = data.value.legends;
 }
 if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
@@ -90,7 +90,6 @@ const resetForm = () => {
 </script>
 
 <template>
-
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl">Question Module</h2>
     <span class="text-sm">Here's a list of Question available!</span>
@@ -106,7 +105,12 @@ const resetForm = () => {
       />
     </div>
     <div class="col-span-12 md:col-span-12 lg:col-span-9">
-      <QuestionList :data="questionData" :legend="legendData" @update="edit" @delete="remove">
+      <QuestionList
+        :data="questionData"
+        :legend="legendData"
+        @update="edit"
+        @delete="remove"
+      >
       </QuestionList>
     </div>
   </div>

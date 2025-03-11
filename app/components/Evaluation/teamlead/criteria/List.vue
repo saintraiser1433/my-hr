@@ -97,24 +97,43 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard :ui="{
-    root: 'overflow-hidden ',
-    body: 'p-0 sm:p-0',
-    footer: 'p-0 sm:px-0',
-  }">
-    <UTable sticky class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto" ref="table"
-      v-model:expanded="expanded" :ui="{
+  <UCard
+    :ui="{
+      root: 'overflow-hidden ',
+      body: 'p-0 sm:p-0',
+      footer: 'p-0 sm:px-0',
+    }"
+  >
+    <UTable
+      sticky
+      class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto"
+      ref="table"
+      v-model:expanded="expanded"
+      :ui="{
         tr: 'data-[expanded=true]:bg-(--ui-bg-elevated)/50',
-      }" v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
+      }"
+      v-model:global-filter="globalFilter"
+      v-model:pagination="pagination"
+      :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }" :data="data" :columns="columns">
+      }"
+      :data="data"
+      :columns="columns"
+    >
       <template #expand-cell="{ row }">
-        <UButton variant="ghost" icon="i-lucide-chevron-down" :square="true" :ui="{
-          leadingIcon: [
-            'transition-transform',
-            row.getIsExpanded() ? 'duration-200 rotate-180' : '',
-          ],
-        }" @click="row.toggleExpanded()">{{ row.index + 1 }}</UButton>
+        <UButton
+          variant="ghost"
+          icon="i-lucide-chevron-down"
+          :square="true"
+          :ui="{
+            leadingIcon: [
+              'transition-transform',
+              row.getIsExpanded() ? 'duration-200 rotate-180' : '',
+            ],
+          }"
+          @click="row.toggleExpanded()"
+          >{{ row.index + 1 }}</UButton
+        >
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
@@ -124,7 +143,7 @@ watch(
         </div>
       </template>
       <template #criteria-cell="{ row }">
-        <span class="capitalize">{{row.original.name}}</span>
+        <span class="capitalize">{{ row.original.name }}</span>
       </template>
       <template #expanded="{ row }">
         dasdas

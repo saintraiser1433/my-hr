@@ -6,20 +6,17 @@ export const usePeerQuestion = (
   const { openModal, description, isOpen, title } = useCustomModal();
   const { $api, $toast } = useNuxtApp();
   const { handleApiError } = useErrorHandler();
-  const questionData = computed(() => question.value || []);
+  const isUpdating = ref(false);
+
   const legendData = computed(() => legend.value || []);
-  const peers = computed(() => peerId.value || 0);
+  const questionData = computed(() => question.value || [])
+  const peer = ref(peerId.value)
   const initialState = {
     id: undefined,
     question: undefined,
-    peerId: peers.value,
+    peerId: peer.value,
   };
-
   const questionForm = reactive<QuestionModel>({ ...initialState });
-  const isUpdating = ref(false);
-
-  // Use computed for derived state
-  
   const questionEvalRepo = repository<QuestionModel>($api, "/peer/q");
 
   const submit = async (response: any) => {
@@ -39,6 +36,7 @@ export const usePeerQuestion = (
         $toast.success(res.message);
       }
       resetForm();
+      questionForm.peerId = peerId.value
     } catch (error) {
       return handleApiError(error);
     }
@@ -71,6 +69,11 @@ export const usePeerQuestion = (
     Object.assign(questionForm, initialState);
     isUpdating.value = false;
   };
+
+  watch(peerId, (newVal) => {
+    peer.value = newVal;
+    questionForm.peerId = newVal;
+  });
 
   return {
     questionisOpen: isOpen,

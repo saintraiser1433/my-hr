@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 definePageMeta({
   requiredRole: "admin",
 });
@@ -14,7 +13,15 @@ useSeoMeta({
 const { $api, $toast } = useNuxtApp();
 const route = useRoute();
 const { handleApiError } = useErrorHandler();
-const { openModal,description, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
+const {
+  openModal,
+  description,
+  updateModal,
+  resetModal,
+  isOpen,
+  isUpdate,
+  title,
+} = useCustomModal();
 
 const initialState = {
   id: undefined,
@@ -33,8 +40,6 @@ if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
 
-
-
 const teamleadRepo = repository<TeamLeadCriteria>($api, "/teamlead/criteria");
 const submit = async (response: TeamLeadCriteria) => {
   try {
@@ -43,11 +48,11 @@ const submit = async (response: TeamLeadCriteria) => {
       teamleadData.value = [...teamleadData.value, res.data as TeamLeadCriteria];
       $toast.success(res.message);
     } else {
-      const res = await teamleadRepo.update(response); 
+      const res = await teamleadRepo.update(response);
       if (res.data) {
         const data = res.data as TeamLeadCriteria;
         teamleadData.value = teamleadData.value.map((item) =>
-          item.id === data.id ? {...item,...data} : item
+          item.id === data.id ? { ...item, ...data } : item
         );
       }
 
@@ -58,7 +63,6 @@ const submit = async (response: TeamLeadCriteria) => {
     return handleApiError(error);
   }
 };
-
 
 const edit = (response: TeamLeadCriteria) => {
   teamleadForm.id = response.id;
@@ -96,17 +100,38 @@ const toggleModal = () => {
 </script>
 
 <template>
+  <EvaluationTeamleadCriteriaForm
+    @data-criteria="submit"
+    :description="description"
+    v-model:state="teamleadForm"
+    :title="title"
+    v-model:open="isOpen"
+  />
+  <!-- <Question
+    :title="questionTitle"
+    :is-updating="isUpdating"
+    :legend-data="legendData"
+    :description="questionDesc"
+    :question-data="questionData"
+    @submit="submitQuestion"
+    @edit="editQuestion"
+    @delete="removeQuestion"
+    @reset="resetForm"
+    v-model:open="questionisOpen"
+    v-model:state="questionForm"
+  >
+  </Question> -->
   <div>
-    <EvaluationTeamleadCriteriaForm @data-criteria="submit" :description="description" v-model:state="teamleadForm" :title="title" v-model:open="isOpen" />
     <div class="flex flex-col items-center lg:items-start mb-3">
       <h2 class="font-extrabold text-2xl">Criteria Module</h2>
       <span class="text-sm">Here's a list of Criteria module!</span>
     </div>
 
-    <EvaluationTeamleadCriteriaList :data="teamleadData" @update="edit"
-      @delete="remove">
+    <EvaluationTeamleadCriteriaList :data="teamleadData" @update="edit" @delete="remove">
       <template #actions>
-        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add Criteria</UButton>
+        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
+          >Add Criteria</UButton
+        >
       </template>
     </EvaluationTeamleadCriteriaList>
   </div>

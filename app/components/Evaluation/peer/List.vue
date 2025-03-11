@@ -12,7 +12,7 @@ const props = defineProps({
   itemTemplate: {
     type: Array as PropType<any[]>,
     default: () => [],
-  }
+  },
 });
 
 const emits = defineEmits<{
@@ -38,30 +38,25 @@ const handleUpdate = (item: PeerModel) => {
   emits("update", item);
 };
 
-const handleQuestion = (item:PeerModel) => {
+const handleQuestion = (item: PeerModel) => {
   emits("modalQuest", item);
-} 
+};
 
-const onSubmit = (peerId: number,headerId:number) => {
+const onSubmit = (peerId: number, headerId: number) => {
   const data = itemTemplate.value.find((item) => Number(item.id) == Number(headerId));
   if (value.value === 0) {
     $toast.error("Please select template before submit");
   }
-  emits("singleApply", { id: peerId, template:data.label,templateHeaderId:data.id });
-}
+  emits("singleApply", { id: peerId, template: data.label, templateHeaderId: data.id });
+};
 const columns: TableColumn<any>[] = [
-  { id: "expand" },
+  createColumn("#", "#", true, (row) => `${row.index + 1}`),
   createColumn("name", "Category", true, (row) =>
     h("span", { class: "capitalize" }, row.getValue("name"))
   ),
   createColumn("template", "Template", true),
   createColumn("percentage", "Percentage", true),
   createColumn("action", "Action", false),
-];
-
-const subMenucolumns: TableColumn<any>[] = [
-  createColumn("id", "#", false),
-  createColumn("question", "Questions", false),
 ];
 
 const getDropdownActions = (peer: PeerModel): DropdownMenuItem[][] => {
@@ -71,13 +66,7 @@ const getDropdownActions = (peer: PeerModel): DropdownMenuItem[][] => {
         label: "Manage Questions",
         icon: "i-lucide-view",
         onSelect: async () => {
-          handleQuestion(peer)
-          // titleName.value = user.title || "";
-          // localStorage.setItem("title", titleName.value);
-          // await navigateTo({
-          //   name: "Evaluation-peer-question-peerId",
-          //   params: { peerId: Number(peer.id) },
-          // });
+          handleQuestion(peer);
         },
       },
       {
@@ -121,70 +110,107 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard :ui="{
-    root: 'overflow-hidden ',
-    body: 'p-0 sm:p-0',
-    footer: 'p-0 sm:px-0',
-  }">
-    <UTable sticky class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto" ref="table"
-      v-model:expanded="expanded" :ui="{
+  <UCard
+    :ui="{
+      root: 'overflow-hidden ',
+      body: 'p-0 sm:p-0',
+      footer: 'p-0 sm:px-0',
+    }"
+  >
+    <UTable
+      sticky
+      class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto"
+      ref="table"
+      v-model:expanded="expanded"
+      :ui="{
         tr: 'data-[expanded=true]:bg-(--ui-bg-elevated)/50',
-      }" v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
+      }"
+      v-model:global-filter="globalFilter"
+      v-model:pagination="pagination"
+      :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }" :data="data" :columns="columns">
-      <template #expand-cell="{ row }">
-        <UButton variant="ghost" icon="i-lucide-chevron-down" :square="true" :ui="{
-          leadingIcon: [
-            'transition-transform',
-            row.getIsExpanded() ? 'duration-200 rotate-180' : '',
-          ],
-        }" @click="row.toggleExpanded()">{{ row.index + 1 }}</UButton>
-      </template>
-      <template #percentage-cell="{row}">
+      }"
+      :data="data"
+      :columns="columns"
+    >
+      <template #percentage-cell="{ row }">
         <span>{{ row.original.percentage * 100 }}%</span>
       </template>
       <template #template-cell="{ row }">
-        <div class="flex items-center uppercase gap-1 " v-if="row.original.template">
+        <div class="flex items-center uppercase gap-1" v-if="row.original.template">
           <UBadge variant="soft">{{ row.original.template }}</UBadge>
-          <UPopover arrow :content="{
-            align: 'center',
-            side: 'right',
-            sideOffset: 8,
-          }">
-            <UButton variant="ghost" size="sm" color="success" icon="material-symbols:change-circle-outline"></UButton>
+          <UPopover
+            arrow
+            :content="{
+              align: 'center',
+              side: 'right',
+              sideOffset: 8,
+            }"
+          >
+            <UButton
+              variant="ghost"
+              size="sm"
+              color="success"
+              icon="material-symbols:change-circle-outline"
+            ></UButton>
 
             <template #content>
               <div class="flex flex-col items-start gap-2 p-2">
                 <h5 class="font-semibold">Template</h5>
-                <USelectMenu v-model="value" size="sm" value-key="id" :items="itemTemplate" class="w-48" :ui="{
-                  item: 'capitalize'
-                }" placeholder="Select Template" />
-                <UButton @click="onSubmit(row.original.id,value)" variant="solid">Save</UButton>
+                <USelectMenu
+                  v-model="value"
+                  size="sm"
+                  value-key="id"
+                  :items="itemTemplate"
+                  class="w-48"
+                  :ui="{
+                    item: 'capitalize',
+                  }"
+                  placeholder="Select Template"
+                />
+                <UButton @click="onSubmit(row.original.id, value)" variant="solid"
+                  >Save</UButton
+                >
               </div>
             </template>
           </UPopover>
         </div>
-        <div class="flex items-center uppercase gap-1 " v-else>
+        <div class="flex items-center uppercase gap-1" v-else>
           <UBadge color="error" variant="soft">Template Not Set</UBadge>
-          <UPopover arrow :content="{
-            align: 'center',
-            side: 'right',
-            sideOffset: 8,
-          }">
-             <UButton variant="ghost" color="success" icon="material-symbols:change-circle-outline"></UButton>
+          <UPopover
+            arrow
+            :content="{
+              align: 'center',
+              side: 'right',
+              sideOffset: 8,
+            }"
+          >
+            <UButton
+              variant="ghost"
+              color="success"
+              icon="material-symbols:change-circle-outline"
+            ></UButton>
             <template #content>
               <div class="flex flex-col items-start gap-2 p-2">
                 <h5 class="font-semibold">Template</h5>
-                <USelectMenu v-model="value" size="sm" value-key="id" :items="itemTemplate" class="w-48" :ui="{
-                  item: 'capitalize'
-                }" placeholder="Select Template" />
-                <UButton @click="onSubmit(row.original.id,value)" variant="solid">Save</UButton>
+                <USelectMenu
+                  v-model="value"
+                  size="sm"
+                  value-key="id"
+                  :items="itemTemplate"
+                  class="w-48"
+                  :ui="{
+                    item: 'capitalize',
+                  }"
+                  placeholder="Select Template"
+                />
+                <UButton @click="onSubmit(row.original.id, value)" variant="solid"
+                  >Save</UButton
+                >
               </div>
             </template>
           </UPopover>
-        
         </div>
-
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
@@ -192,20 +218,6 @@ watch(
             <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
           </UDropdownMenu>
         </div>
-      </template>
-      <template #expanded="{ row }">
-        <UTable sticky
-          class="overflow-y-auto custom-scrollbar cursor-auto border-1 border-(--border) dark:border-(--border)"
-          ref="table" :ui="{
-            th: 'py-2 bg-(--ui-bg-elevated)/50',
-          }" v-model:expanded="expanded" :data="(row.original as PeerModel).question" :columns="subMenucolumns">
-          <template #id-cell="{ row }">
-            {{ row.index + 1 }}
-          </template>
-          <template #question-cell="{ row }">
-            <div v-html="(row.original as PeerModel).question"></div>
-          </template>
-        </UTable>
       </template>
     </UTable>
     <UITablePagination :table="table" v-if="table"> </UITablePagination>
