@@ -40,7 +40,7 @@ function getDropdownActions(data: EvaluationModel): DropdownMenuItem[][] {
   return [
     [
       {
-        label: "Manage Peer Questions",
+        label: "Manage Peer Categories",
         icon: "i-hugeicons-assignments",
         onSelect: async () => {
           await navigateTo({
@@ -53,12 +53,12 @@ function getDropdownActions(data: EvaluationModel): DropdownMenuItem[][] {
         type: "separator",
       },
       {
-        label: "Manage Teamlead Questions",
-        icon: "i-hugeicons-assignments",
+        label: "Manage Team-Lead Categories",
+        icon: "i-mdi:lead-pencil",
         onSelect: async () => {
           await navigateTo({
-            name: "Evaluation-evaluationID",
-            params: { evaluationID: data.id },
+            name: "Evaluation-teamlead-evalId",
+            params: { evalId: data.id },
           });
         },
       },

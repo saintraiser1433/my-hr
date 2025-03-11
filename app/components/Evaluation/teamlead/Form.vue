@@ -3,7 +3,7 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 
 const { $joi } = useNuxtApp();
 const emits = defineEmits<{
-  (e: "dataPeer", payload: PeerModel): void;
+  (e: "dataTeamlead", payload: PeerModel): void;
 }>();
 
 defineProps({
@@ -36,7 +36,7 @@ const schema = $joi.object({
 });
 
 const onSubmit = async (event: FormSubmitEvent<PeerModel>) => {
-  emits("dataPeer", event.data);
+  emits("dataTeamlead", event.data);
 };
 
 const formRef = useTemplateRef("formRef");

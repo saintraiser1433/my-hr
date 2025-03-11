@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui";
 const emits = defineEmits<{
-  (e: "dataQuestion", payload: PeerQuestionModel): void;
+  (e: "dataQuestion", payload: QuestionModel): void;
   (e: "cancel"): void;
 }>();
 defineProps({
@@ -12,7 +12,7 @@ defineProps({
   },
 });
 
-const model = defineModel<PeerQuestionModel>("state", { required: true });
+const model = defineModel<QuestionModel>("state", { required: true });
 
 const { $joi } = useNuxtApp();
 const formRef = useTemplateRef("formRef");
@@ -24,9 +24,10 @@ const schema = $joi.object({
     "string.empty": "The Question field is required",
   }),
   peerId: $joi.number().optional(),
+  teamLeadCriteriaId: $joi.number().optional(),
 });
 
-const onSubmit = async (event: FormSubmitEvent<PeerQuestionModel>) => {
+const onSubmit = async (event: FormSubmitEvent<QuestionModel>) => {
   emits("dataQuestion", event.data);
 };
 

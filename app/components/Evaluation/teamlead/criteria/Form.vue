@@ -3,7 +3,7 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 
 const { $joi } = useNuxtApp();
 const emits = defineEmits<{
-  (e: "dataPeer", payload: PeerModel): void;
+  (e: "dataCriteria", payload: TeamLeadCriteria): void;
 }>();
 
 defineProps({
@@ -20,23 +20,19 @@ defineProps({
 });
 
 const open = defineModel("open", { default: false, required: true });
-const model = defineModel<PeerModel>("state", { required: true });
+const model = defineModel<TeamLeadCriteria>("state", { required: true });
 
 const schema = $joi.object({
   name: $joi.string().required().messages({
-    "any.required": `Category is Required`,
-    "string.empty": `Category is Required`,
+    "any.required": `Name is Required`,
+    "string.empty": `Name is Required`,
   }),
-  percentage: $joi.number().required().messages({
-    "any.required": `Percentage is Required`,
-    "number.empty": `Percentage is Required`,
-  }),
-  evaluationId: $joi.number().optional(),
+  teamLeadEvaluationId: $joi.number().optional(),
   id: $joi.number().optional(),
 });
 
-const onSubmit = async (event: FormSubmitEvent<PeerModel>) => {
-  emits("dataPeer", event.data);
+const onSubmit = async (event: FormSubmitEvent<TeamLeadCriteria>) => {
+  emits("dataCriteria", event.data);
 };
 
 const formRef = useTemplateRef("formRef");
@@ -45,13 +41,7 @@ const submitForm = () => {
     formRef.value.submit();
   }
 };
-const percentage = ref<{id:number,label:string}[]>([]);
-for (let i = 1; i <= 100; i++) {
-  percentage.value.push({
-    id: i / 100,  // Convert to decimal
-    label: `${i}%`, 
-  });
-}
+
 
 </script>
 
@@ -71,17 +61,8 @@ for (let i = 1; i <= 100; i++) {
         class="space-y-4"
         @submit="onSubmit"
       >
-        <UFormField label="Category Name" name="name" required>
-          <UITextInput v-model.trim="model.name" placeholder="Enter Category Name" />
-        </UFormField>
-        <UFormField label="Percentage" name="percentage" required>
-          <USelectMenu
-            v-model="model.percentage"
-            value-key="id"
-            :items="percentage"
-            class="w-full"
-            placeholder="Select Percentage"
-          />
+        <UFormField label="Critieria" name="name" required>
+          <UITextInput v-model.trim="model.name" placeholder="Enter Criteria Name" />
         </UFormField>
       </UForm>
     </template>

@@ -1,4 +1,3 @@
-import type { TemplateHead } from "typescript";
 
 
 export interface EvaluationModel extends Timestamped {
@@ -10,15 +9,17 @@ export interface EvaluationModel extends Timestamped {
     action?: string;
 }
 export interface CombinedPeerQuestionWithLegend {
-    questions: PeerQuestionModel[],
+    questions: QuestionModel[],
     legends: TemplateDetail[]
 }
 
-export interface PeerQuestionModel {
+export interface QuestionModel {
     id?: number;
     question?: string;
     peerId?: number;
     peer?: PeerModel;
+    teamLeadCriteriaId?:number;
+    criteria?:TeamLeadCriteria;
 }
 
 
@@ -29,11 +30,22 @@ export interface CommentsModel {
 
 export interface PeerModel {
     id?: number;
-    title?: string;
+    name?: string;
     evaluationId?: number;
     template?: string;
     templateHeaderId?: number;
-    question?: PeerQuestionModel[],
+    question?: QuestionModel[],
+    percentage?:number;
 
+}
+
+export interface TeamLeadModel extends PeerModel {
+}
+
+export interface TeamLeadCriteria{
+    id?:number;
+    name:string;
+    teamLeadEvaluationId?:number;
+    question?: QuestionModel[]
 }
 export type statusesEvaluation = "NOT SET" | "ONGOING" | "FINISHED";

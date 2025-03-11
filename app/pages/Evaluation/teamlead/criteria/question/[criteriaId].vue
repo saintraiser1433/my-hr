@@ -18,14 +18,14 @@ const isUpdate = ref(false);
 const initialState = {
   id: undefined,
   question: undefined,
-  peerId: Number(route.params.peerId),
+  teamLeadCriteriaId: Number(route.params.criteriaId),
 };
 
 const questionForm = reactive<QuestionModel>({ ...initialState });
 const questionData = ref<QuestionModel[]>([]);
 const legendData = ref<TemplateDetail[]>([])
 const { data, status, error } = await useAPI<CombinedPeerQuestionWithLegend>(
-  `/peer/q/${route.params.peerId}`
+  `/teamlead/q/${route.params.criteriaId}`
 );
 if (data.value) {
   questionData.value = data.value.questions;
@@ -35,7 +35,7 @@ if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
 
-const questionEvalRepo = repository<QuestionModel>($api, "/peer/q");
+const questionEvalRepo = repository<QuestionModel>($api, "/teamlead/q");
 const submit = async (response: any) => {
   try {
     if (!isUpdate.value) {
@@ -63,7 +63,7 @@ const submit = async (response: any) => {
 const edit = (response: QuestionModel) => {
   questionForm.id = response.id;
   questionForm.question = response.question;
-  questionForm.peerId = response.peerId;
+  questionForm.teamLeadCriteriaId = response.teamLeadCriteriaId;
   isUpdate.value = true;
 };
 

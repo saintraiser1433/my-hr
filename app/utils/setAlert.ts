@@ -14,6 +14,9 @@ export const setAlert = (
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
     confirmButtonText: confirmButtonText,
+    customClass: {
+      container: 'swal2-z-index' // Add a custom class for styling
+    },
   });
 
 }

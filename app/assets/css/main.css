@@ -116,6 +116,7 @@
   .base-text {
     @apply text-sm;
   }
+ 
 
   /* .sidebar {
     @apply fixed z-50 top-0 left-0 h-screen transition-transform lg:relative lg:translate-x-0 w-(--msidebar) lg:w-(--sidebar) border-r-[1px] bg-(--sidebar-background) rounded-r-lg ;
