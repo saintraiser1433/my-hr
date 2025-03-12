@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  requiredRole: "Admin",
+  requiredRole: "TeamLead",
 });
 
 useSeoMeta({
@@ -11,6 +11,7 @@ useSeoMeta({
 });
 
 const { $api, $toast } = useNuxtApp();
+const { id } = useAuthentication();
 const { handleApiError } = useErrorHandler();
 const { updateModal, resetModal, isOpen, title } = useCustomModal();
 const route = useRoute();
@@ -131,6 +132,7 @@ const pending = (response: SubmittedRequirements) => {
 </script>
 
 <template>
+  {{ id }}
   <EmployeeFormRequire
     @data-requirement="updateSubmission"
     v-model:state="departmentForm"

@@ -29,26 +29,25 @@ const { createColumnWithCheckBox } = useTableColumnCheckBox(UCheckbox, table);
 
 const { data } = toRefs(props);
 const {
-    value,
-    selectedItems,
-    rowSelection,
-    unAssigned,
-    handleAssign,
-    resetAssign,
-    checkEmpty} = useMultipleSelect(data);
+  value,
+  selectedItems,
+  rowSelection,
+  unAssigned,
+  handleAssign,
+  resetAssign,
+  checkEmpty,
+} = useMultipleSelect(data);
 
 const unassign = () => {
   unAssigned();
-  emits("unAssign",selectedItems.value);
+  emits("unAssign", selectedItems.value);
 };
 
 const assign = () => {
-  handleAssign()
+  handleAssign();
   emits("assign", value.value);
-  resetAssign()
+  resetAssign();
 };
-
-
 
 const columns: TableColumn<any>[] = [
   createColumnWithCheckBox(),
@@ -79,7 +78,8 @@ watch(
         placeholder="Select Screening Type"
         class="w-100"
         :ui="{
-            value:'text-wrap'
+          value: 'text-wrap',
+          item: 'capitalize',
         }"
         multiple
       />
@@ -125,17 +125,13 @@ watch(
       :data="data"
       :columns="columns"
     >
+      <template #screening_title-cell="{ row }">
+        <span class="capitalize">{{ row.original.screening_title }}</span>
+      </template>
       <template #action-cell="{ row }">
         <div class="flex gap-2 items-center">
-          <UButton
-            ><UIcon name="mingcute:up-fill"></UIcon
-          ></UButton>
-          <UButton variant="outline"
-            ><UIcon
-              name="mingcute:down-fill"
-       
-            ></UIcon
-          ></UButton>
+          <UButton><UIcon name="mingcute:up-fill"></UIcon></UButton>
+          <UButton variant="outline"><UIcon name="mingcute:down-fill"></UIcon></UButton>
         </div>
       </template>
     </UTable>

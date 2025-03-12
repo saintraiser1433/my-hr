@@ -56,7 +56,6 @@ const schema = $joi.object({
 });
 
 const onSubmit = async (event: FormSubmitEvent<any>) => {
-
   emits("dataJob", {
     ...event.data,
     file: file.value,
@@ -72,37 +71,37 @@ const submitForm = () => {
 };
 const searchTerm = ref("");
 
-const { data: users, status } = await useAPI<RequirementModel[]>('/requirements', {
-  lazy: true
-})
+const { data: users, status } = await useAPI<RequirementModel[]>("/requirements", {
+  lazy: true,
+});
 
-const groups = computed(() => [{
-  id: 'users',
-  label: searchTerm.value ? `Users matching “${searchTerm.value}”...` : 'Users',
+const groups = computed(() => [
+  {
+    id: "users",
+    label: searchTerm.value ? `Users matching “${searchTerm.value}”...` : "Users",
 
-  items: users.value?.map((item) => ({
-    id: item.id,
-    label: item.title
-  })) || []
-}])
+    items:
+      users.value?.map((item) => ({
+        id: item.id,
+        label: item.title,
+      })) || [],
+  },
+]);
 
 const removeRequirements = (id: number) => {
   const index = model.value.requirements.findIndex((item) => item.id === id);
   model.value.requirements.splice(index, 1);
-}
-
-
-
-
+};
 </script>
 
 <template>
-
-  <UModal v-model:open="openModal"
+  <UModal
+    v-model:open="openModal"
     :description="description"
-    :title="title"  :ui="{ content: 'max-w-6xl' }">
+    :title="title"
+    :ui="{ content: 'max-w-6xl' }"
+  >
     <template #body>
-
       <UForm ref="formRef" :schema="schema" :state="state" @submit="onSubmit">
         <div class="grid grid-cols-12 gap-5">
           <div class="col-span-12 lg:col-span-9 space-y-4">
@@ -115,19 +114,40 @@ const removeRequirements = (id: number) => {
 
             <div class="flex flex-wrap items-center gap-3">
               <UFormField class="lg:flex-1" label="Availability" name="totalAvailable">
-                <UITextInput v-model="model.totalAvailable" placeholder="Enter Availability" class="w-full"
-                  type="number" />
+                <UITextInput
+                  v-model="model.totalAvailable"
+                  placeholder="Enter Availability"
+                  class="w-full"
+                  type="number"
+                />
               </UFormField>
               <UFormField class="lg:flex-1" label="Department" name="departmentsId">
-                <USelectMenu placeholder="Select Department" v-model="model.departmentsId" label-key="title"
-                  value-key="id" :items="department" class="w-full" :ui="{ base: 'capitalize' }" size="sm" />
+                <USelectMenu
+                  placeholder="Select Department"
+                  v-model="model.departmentsId"
+                  label-key="title"
+                  value-key="id"
+                  :items="department"
+                  class="w-full"
+                  :ui="{ item: 'capitalize' }"
+                  size="sm"
+                />
               </UFormField>
               <UFormField class="lg:flex-1" label="Header Background Image">
-                <UInput type="file" @change="onFileChange" accept="images/*" class="w-full" size="sm" />
+                <UInput
+                  type="file"
+                  @change="onFileChange"
+                  accept="images/*"
+                  class="w-full"
+                  size="sm"
+                />
               </UFormField>
               <UFormField class="flex-none" v-if="isUpdate" label="Status" name="status">
-                <USwitch color="neutral" :default-value="model.status"
-                  @update:modelValue="(value) => (model.status = value)" />
+                <USwitch
+                  color="neutral"
+                  :default-value="model.status"
+                  @update:modelValue="(value) => (model.status = value)"
+                />
               </UFormField>
             </div>
           </div>
@@ -136,21 +156,34 @@ const removeRequirements = (id: number) => {
             <div class="flex justify-between items-center pb-2">
               <h5>Requirements</h5>
               <UModal>
-                <UButton label="Select requirements" color="neutral" variant="subtle" icon="i-lucide-search" />
+                <UButton
+                  label="Select requirements"
+                  color="neutral"
+                  variant="subtle"
+                  icon="i-lucide-search"
+                />
 
                 <template #content>
-
-                  <UCommandPalette multiple v-model="model.requirements" v-model:search-term="searchTerm"
-                    :loading="status === 'pending'" :groups="groups" class="flex-1 h-80" />
+                  <UCommandPalette
+                    multiple
+                    v-model="model.requirements"
+                    v-model:search-term="searchTerm"
+                    :loading="status === 'pending'"
+                    :groups="groups"
+                    class="flex-1 h-80"
+                  />
                 </template>
               </UModal>
             </div>
             <USeparator class="pb-1"></USeparator>
-            <ul class="flex items-center flex-wrap gap-2  mt-1" v-for="(data, index) in model.requirements"
-              :key="data.id">
+            <ul
+              class="flex items-center flex-wrap gap-2 mt-1"
+              v-for="(data, index) in model.requirements"
+              :key="data.id"
+            >
               <li>
-
-                <UButton type="button" @click="removeRequirements(data.id)">{{ index + 1 }} - {{ data.label }}
+                <UButton type="button" @click="removeRequirements(data.id)"
+                  >{{ index + 1 }} - {{ data.label }}
                 </UButton>
               </li>
             </ul>
@@ -160,7 +193,12 @@ const removeRequirements = (id: number) => {
     </template>
 
     <template #footer>
-      <UButton label="Cancel" color="neutral" variant="outline" @click="openModal = false" />
+      <UButton
+        label="Cancel"
+        color="neutral"
+        variant="outline"
+        @click="openModal = false"
+      />
       <UButton label="Submit" type="submit" color="neutral" @click="submitForm" />
     </template>
   </UModal>

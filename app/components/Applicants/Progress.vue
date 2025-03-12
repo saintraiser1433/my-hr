@@ -96,7 +96,7 @@ watch(
       }"
     >
       <template #screening-cell="{ row }">
-        <span>{{ row.original.screening.title }}</span>
+        <span class="capitalize">{{ row.original.screening.title }}</span>
       </template>
       <template #dateInterview-cell="{ row }">
         <UButton

@@ -20,7 +20,7 @@
     </div>
     <USeparator></USeparator>
     <UNavigationMenu
-      :items="MENU_ITEMS"
+      :items="sideBar"
       orientation="vertical"
       :class="isToggle ? 'lg:w-(--sidebar-compact)' : 'lg:w-(--sidebar)'"
       class="overflow-y-auto custom-scrollbar px-2 flex-2"
@@ -28,7 +28,6 @@
         linkLabel: isToggle ? 'lg:hidden' : '',
         childItem: isToggle ? 'lg:hidden' : '',
         label: 'text-xs text-gray-600 font-medium dark:text-gray-400',
-
       }"
     >
       <template v-if="isToggle" #components-trailing>
@@ -63,8 +62,8 @@
             v-if="!isToggle"
             class="flex flex-col items-center justify-start px-2 flex-1"
           >
-            <span class="text-xs">Johnrey Decosta</span>
-            <span class="text-xs">Administrator</span>
+            <span class="text-xs capitalize">{{ fullname }}</span>
+            <span class="text-xs capitalize">{{ role }}</span>
           </div>
           <div v-if="!isToggle" class="flex-none">
             <Icon name="lucide:chevrons-up-down" class="h-7 w-7" />
@@ -75,14 +74,33 @@
   </aside>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const isToggle = useState("toggle");
 const itemss = ref([
   {
     label: "Log out",
     icon: "i-lucide-cog",
+    onSelect: () => handleSignOut(),
   },
 ]);
+
+const { signOut, info } = useAuthentication();
+const parse = JSON.parse(info.value);
+const role = parse.role;
+const fullname = computed(() => {
+  if (role === "Admin") return "Administrator";
+  return `${parse.first_name} ,${parse.last_name}`;
+});
+const sideBar = computed(() => {
+  if (role === "Admin") return MENU_ITEMS;
+  if (role === "Employee") return MENU_ITEMS_EMP;
+  if (role === "TeamLead") return MENU_ITEMS_TEAM;
+  return []; // Default case if no role matches
+});
+const handleSignOut = async () => {
+  await signOut(parse.id);
+  return navigateTo({ name: "auth" });
+};
 </script>
 
 <style lang="scss" scoped></style>

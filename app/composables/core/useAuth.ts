@@ -6,6 +6,7 @@ export const useAuthentication = () => {
   const token = useStorage<string>('token', null);
   const rToken = useStorage<string>('refreshToken', null);
   const info = useStorage<any>('info', null);
+  const id = ref<number | null>(null);
   const signIn = async (data: Login) => {
     const result = await $api<Token>(`${config.public.baseURL}/auth/signin`, {
       method: "POST",
@@ -16,6 +17,8 @@ export const useAuthentication = () => {
     });
 
     info.value = JSON.stringify(result.users);
+    id.value = result.users.id;
+
     token.value = result.token.accessToken
     rToken.value = result.token.refreshToken
     return;
@@ -58,5 +61,5 @@ export const useAuthentication = () => {
 
 
 
-  return { info, token, refreshToken, signIn, signOut, clearAuthTokens }
+  return { info, token, id, refreshToken, signIn, signOut, clearAuthTokens }
 }

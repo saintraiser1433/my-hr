@@ -1,12 +1,12 @@
 <script setup lang="ts">
 definePageMeta({
-    requiredRole: "Admin",
+  requiredRole: "Admin",
 });
 useSeoMeta({
-    title: "SUPERHURE Applicants Progress",
-    description: "CRUD for Applicants Progress",
-    ogTitle: "SUPERHURE Applicants Progress",
-    ogDescription: "CRUD for Applicants Progress",
+  title: "SUPERHURE Applicants Progress",
+  description: "CRUD for Applicants Progress",
+  ogTitle: "SUPERHURE Applicants Progress",
+  ogDescription: "CRUD for Applicants Progress",
 });
 
 defineProps({
@@ -26,8 +26,6 @@ const { data: ongoing, status: ongoingStatus, error: ongoingError } = await useA
 if (ongoing.value) {
   ongoingData.value = ongoing.value;
 }
-
-
 
 const IDRepo = repository<InterviewDate>($api, "/interview/date");
 const updateTime = async (data: InterviewDate) => {
@@ -149,10 +147,7 @@ const finalizeApplicant = () => {
 </script>
 
 <template>
-
-  <ApplicantsProgressHeader :ongoingData="ongoingData">
-
-  </ApplicantsProgressHeader>
+  <ApplicantsProgressHeader :ongoingData="ongoingData"> </ApplicantsProgressHeader>
   <USeparator class="pb-2"></USeparator>
 
   <ApplicantsProgress

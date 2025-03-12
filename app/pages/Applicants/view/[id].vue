@@ -4,13 +4,11 @@ definePageMeta({
 });
 
 useSeoMeta({
-    title: "SUPERHURE Applicants Progress",
-    description: "CRUD for Applicants Progress",
-    ogTitle: "SUPERHURE Applicants Progress",
-    ogDescription: "CRUD for Applicants Progress",
+  title: "SUPERHURE Applicants Progress",
+  description: "CRUD for Applicants Progress",
+  ogTitle: "SUPERHURE Applicants Progress",
+  ogDescription: "CRUD for Applicants Progress",
 });
-
-
 
 const ongoingData = ref<OngoingApplicantDetails[]>([]);
 const route = useRoute();
@@ -20,12 +18,10 @@ const { data: ongoing, status: ongoingStatus, error: ongoingError } = await useA
 if (ongoing.value) {
   ongoingData.value = ongoing.value;
 }
-
-
 </script>
 
 <template>
-   <ApplicantsProgressHeader :ongoingData="ongoingData"/>
+  <ApplicantsProgressHeader :ongoingData="ongoingData" />
   <USeparator class="pb-2"></USeparator>
 
   <ApplicantsViewProgress :data="ongoingData[0]?.progressList"> </ApplicantsViewProgress>
