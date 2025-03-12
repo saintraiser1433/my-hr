@@ -7,8 +7,11 @@ export const usePeerCategories = (
   const { handleApiError } = useErrorHandler();
   const { openModal, description, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
   const selectValue = ref(0);
-  const peerData = ref<PeerModel[]>([]);
-  peerData.value = peer.value || [];
+  const peerData = computed(() => peer.value || []);
+
+  
+
+  
   const itemTemplate = computed(() => template.value?.map((item) => ({
     id: item.id,
     label: item.template_name,
@@ -29,13 +32,13 @@ export const usePeerCategories = (
     try {
       if (!isUpdate.value) {
         const res = await peerRepo.add(response); //error on this code
-        peerData.value = [...peerData.value, res.data as PeerModel];
+        peer.value = [...(peer.value || []), res.data as PeerModel];
         $toast.success(res.message);
       } else {
         const res = await peerRepo.update(response); //error on this code
         if (res.data) {
           const data = res.data as PeerModel;
-          peerData.value = peerData.value.map((item) =>
+          peer.value = peer.value?.map((item) =>
             item.id === data.id ? { ...item, ...data } : item
           );
         }
@@ -67,7 +70,7 @@ export const usePeerCategories = (
           const response = await assignTemplateRepo.update(data);
           $toast.success(response.message);
 
-          peerData.value = peerData.value.map((item) => ({
+          peer.value = peer.value?.map((item) => ({
             ...item,
             template: template?.label,
           }))
@@ -89,7 +92,7 @@ export const usePeerCategories = (
         templateHeaderId: res.templateHeaderId,
       }
       const response = await assignTemplateSingleRepo.update(data);
-      peerData.value = peerData.value.map((item) => item.id === data.id ? { ...item, ...data } : item);
+      peer.value = peer.value?.map((item) => item.id === data.id ? { ...item, ...data } : item);
       $toast.success(response.message);
     } catch (error) {
       return handleApiError(error);
@@ -113,7 +116,7 @@ export const usePeerCategories = (
       if (result.isConfirmed) {
         try {
           const response = await peerRepo.delete(id);
-          peerData.value = peerData.value.filter((item) => item.id !== id);
+          peer.value = peer.value?.filter((item) => item.id !== id);
           $toast.success(response.message);
         } catch (error) {
           return handleApiError(error);

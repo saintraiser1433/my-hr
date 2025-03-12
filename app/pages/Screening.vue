@@ -1,7 +1,8 @@
 <script setup lang="ts">
 definePageMeta({
-  requiredRole: "admin",
+  requiredRole: "Admin",
 });
+
 
 useSeoMeta({
   title: "SUPERHURE Screening Type Module",

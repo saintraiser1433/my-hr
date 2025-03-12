@@ -78,7 +78,6 @@
 <script setup>
 const isToggle = useState("toggle");
 const itemss = ref([
-  { type: "separator" },
   {
     label: "Log out",
     icon: "i-lucide-cog",

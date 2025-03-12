@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  requiredRole: "admin",
+    requiredRole: "Admin",
 });
 
 useSeoMeta({
@@ -62,7 +62,7 @@ const fetchPeerQuestion = async (item: PeerModel) => {
     question.value = response.questions || [];
     legend.value = response.legends || [];
     peerId.value = item.id || 0;
-    questionOpenModal("Add Questions Module");
+    questionOpenModal(`${item.name}`);
   } catch (err) {
     handleApiError(err);
   }
@@ -70,6 +70,7 @@ const fetchPeerQuestion = async (item: PeerModel) => {
 </script>
 
 <template>
+
   <EvaluationPeerForm
     @data-peer="submit"
     :description="description"

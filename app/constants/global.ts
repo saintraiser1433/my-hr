@@ -1,6 +1,6 @@
 export const MENU_ITEMS: MenuItem[] = [
   { label: "Navigation", type: 'label' },
-  { label: "Dashboard", icon: "i-tabler-device-analytics", to: "/" },
+  { label: "Dashboard", icon: "i-tabler-device-analytics", to: "/Dashboard" },
   { label: "Applicants", icon: "i-tdesign-user-filled", to: "/applicants" },
   { label: "Employees", icon: "i-clarity-employee-group-solid", to: "/employees" },
   { label: "Departments", icon: "i-game-icons-organigram", to: "/department" },

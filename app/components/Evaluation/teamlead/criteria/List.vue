@@ -15,6 +15,7 @@ const emits = defineEmits<{
   (e: "update", payload: TeamLeadCriteria): void;
   (e: "delete", id: number): void;
   (e: "singleApply", payload: TeamLeadCriteria): void;
+  (e: "modalQuest", payload: TeamLeadCriteria): void;
 }>();
 
 const { pagination, globalFilter, refreshTable } = usePagination();
@@ -30,30 +31,27 @@ const handleUpdate = (item: TeamLeadCriteria) => {
   emits("update", item);
 };
 
+const handleQuestion = (item: TeamLeadCriteria) => {
+  emits("modalQuest", item);
+};
+
 const columns: TableColumn<any>[] = [
-  { id: "expand" },
+  createColumn("#", "#", true, (row) => `${row.index + 1}`),
   createColumn("criteria", "Criteria", true),
   createColumn("action", "Action", false),
 ];
 
-const subMenucolumns: TableColumn<any>[] = [
-  createColumn("id", "#", false),
-  createColumn("question", "Questions", false),
-];
 
-const getDropdownActions = (peer: TeamLeadCriteria): DropdownMenuItem[][] => {
+
+
+const getDropdownActions = (teamlead: TeamLeadCriteria): DropdownMenuItem[][] => {
   return [
     [
       {
         label: "Manage Questions",
         icon: "i-lucide-view",
         onSelect: async () => {
-          // titleName.value = user.title || "";
-          // localStorage.setItem("title", titleName.value);
-          await navigateTo({
-            name: "Evaluation-teamlead-criteria-question-criteriaId",
-            params: { criteriaId: Number(peer.id) },
-          });
+          handleQuestion(teamlead)
         },
       },
       {
@@ -63,7 +61,7 @@ const getDropdownActions = (peer: TeamLeadCriteria): DropdownMenuItem[][] => {
         label: "Edit",
         icon: "i-lucide-eye",
         onSelect: () => {
-          handleUpdate(peer);
+          handleUpdate(teamlead);
         },
       },
       {
@@ -74,7 +72,7 @@ const getDropdownActions = (peer: TeamLeadCriteria): DropdownMenuItem[][] => {
         icon: "i-lucide-trash",
         color: "error",
         onSelect: () => {
-          handleDelete(Number(peer.id));
+          handleDelete(Number(teamlead.id));
         },
       },
     ],
@@ -97,44 +95,17 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard
-    :ui="{
-      root: 'overflow-hidden ',
-      body: 'p-0 sm:p-0',
-      footer: 'p-0 sm:px-0',
-    }"
-  >
-    <UTable
-      sticky
-      class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto"
-      ref="table"
-      v-model:expanded="expanded"
-      :ui="{
+  <UCard :ui="{
+    root: 'overflow-hidden ',
+    body: 'p-0 sm:p-0',
+    footer: 'p-0 sm:px-0',
+  }">
+    <UTable sticky class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto" ref="table"
+      v-model:expanded="expanded" :ui="{
         tr: 'data-[expanded=true]:bg-(--ui-bg-elevated)/50',
-      }"
-      v-model:global-filter="globalFilter"
-      v-model:pagination="pagination"
-      :pagination-options="{
+      }" v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }"
-      :data="data"
-      :columns="columns"
-    >
-      <template #expand-cell="{ row }">
-        <UButton
-          variant="ghost"
-          icon="i-lucide-chevron-down"
-          :square="true"
-          :ui="{
-            leadingIcon: [
-              'transition-transform',
-              row.getIsExpanded() ? 'duration-200 rotate-180' : '',
-            ],
-          }"
-          @click="row.toggleExpanded()"
-          >{{ row.index + 1 }}</UButton
-        >
-      </template>
+      }" :data="data" :columns="columns">
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
           <UDropdownMenu :items="getDropdownActions(row.original)">
@@ -144,21 +115,6 @@ watch(
       </template>
       <template #criteria-cell="{ row }">
         <span class="capitalize">{{ row.original.name }}</span>
-      </template>
-      <template #expanded="{ row }">
-        dasdas
-        <!-- <UTable sticky
-          class="overflow-y-auto custom-scrollbar cursor-auto border-1 border-(--border) dark:border-(--border)"
-          ref="table" :ui="{
-            th: 'py-2 bg-(--ui-bg-elevated)/50',
-          }" v-model:expanded="expanded" :data="(row.original as TeamLeadCriteria).question" :columns="subMenucolumns">
-          <template #id-cell="{ row }">
-            {{ row.index + 1 }}
-          </template>
-          <template #question-cell="{ row }">
-            <div v-html="(row.original as TeamLeadCriteria).question"></div>
-          </template>
-        </UTable> -->
       </template>
     </UTable>
     <UITablePagination :table="table" v-if="table"> </UITablePagination>

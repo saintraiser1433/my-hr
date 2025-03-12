@@ -77,10 +77,10 @@ watch(
           <span>{{row.index +1}}</span>
       </template>
       <template #legend-cell="{row}">
-          <span class="capitalize">{{row.original.title}}</span>
+          <span class="capitalize text-wrap">{{row.original.title}}</span>
       </template>
       <template #description-cell="{row}">
-          <span class="capitalize">{{row.original.description}}</span>
+          <span class="capitalize text-wrap">{{row.original.description}}</span>
       </template>
       <template #score-cell="{row}">
           <span class="capitalize">{{row.original.score}}</span>

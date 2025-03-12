@@ -1,4 +1,14 @@
 <script setup lang="ts">
+definePageMeta({
+    requiredRole: "Admin",
+});
+useSeoMeta({
+    title: "SUPERHURE Applicants Progress",
+    description: "CRUD for Applicants Progress",
+    ogTitle: "SUPERHURE Applicants Progress",
+    ogDescription: "CRUD for Applicants Progress",
+});
+
 defineProps({
   mode: {
     type: String,

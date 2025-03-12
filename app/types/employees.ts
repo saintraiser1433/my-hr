@@ -13,9 +13,11 @@ export interface EmployeeModel extends Timestamped {
     password: string;
     accessToken?: string | null;
     refreshToken?: string | null;
-    role: "Admin" | "Employee" | "TeamLead";
+    role: Role;
     employeeName?: string;
 }
+
+export type Role = "Admin" | "Employee" | "TeamLead";
 
 export interface EmployeeWithRequirementModel {
     employeeRequirements: EmployeeRequirements[];

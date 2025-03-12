@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  requiredRole: "admin",
+    requiredRole: "Admin",
 });
 
 useSeoMeta({
@@ -18,7 +18,7 @@ const initialState = {
   id: undefined,
   title: "",
   description: "",
-  score:undefined,
+  score:0,
   templateId:Number(route.params.tempId)
 };
 const templateForm = reactive<TemplateDetail>({ ...initialState });

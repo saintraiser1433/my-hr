@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 definePageMeta({
-    requiredRole: "admin",
+    requiredRole: "Admin",
 });
 
 useSeoMeta({
