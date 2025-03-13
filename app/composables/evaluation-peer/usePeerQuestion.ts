@@ -1,7 +1,8 @@
 export const usePeerQuestion = (
   question: Ref<QuestionModel[] | undefined>,
   legend: Ref<TemplateDetail[] | undefined>,
-  peerId: Ref<number>
+  peerId: Ref<number>,
+
 ) => {
   const { openModal, description, isOpen, title } = useCustomModal();
   const { $api, $toast } = useNuxtApp();

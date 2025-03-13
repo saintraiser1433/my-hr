@@ -17,6 +17,7 @@ export const useAcademicYearStore = defineStore("academicYearStore", {
             return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
           }
         });
+        console.log(data);
         this.activeYear = data.value?.school_year || null;
         this.semester = data.value?.semester || null;
         this.acadId = data.value?.id || null;

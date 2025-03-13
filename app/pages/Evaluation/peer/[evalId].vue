@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-    requiredRole: "Admin",
+  requiredRole: "Admin",
 });
 
 useSeoMeta({
@@ -13,7 +13,7 @@ useSeoMeta({
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
 const route = useRoute();
-const peerId = ref<number>(0);
+const criteriaId = ref<number>(0);
 const question = ref<QuestionModel[]>([]);
 const legend = ref<TemplateDetail[]>([]);
 const { data: template, status: statusTemp, error: errorTemp } = await useAPI<
@@ -54,14 +54,16 @@ const {
   editQuestion,
   removeQuestion,
   resetForm,
-} = usePeerQuestion(question, legend, peerId);
+} = useQuestions(question, legend, criteriaId, "Peer");
 
 const fetchPeerQuestion = async (item: PeerModel) => {
   try {
-    const response = await $api<CombinedPeerQuestionWithLegend>(`/peer/q/${item.id}`);
+    const response = await $api<CombinedPeerQuestionWithLegend>(
+      `/question/peer/${item.id}`
+    );
     question.value = response.questions || [];
     legend.value = response.legends || [];
-    peerId.value = item.id || 0;
+    criteriaId.value = item.id || 0;
     questionOpenModal(`${item.name}`);
   } catch (err) {
     handleApiError(err);
@@ -70,7 +72,6 @@ const fetchPeerQuestion = async (item: PeerModel) => {
 </script>
 
 <template>
-
   <EvaluationPeerForm
     @data-peer="submit"
     :description="description"

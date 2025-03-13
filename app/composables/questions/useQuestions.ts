@@ -1,7 +1,8 @@
-export const useTeamLeadQuestion = (
+export const useQuestions = (
   question: Ref<QuestionModel[] | undefined>,
   legend: Ref<TemplateDetail[] | undefined>,
-  criteriaId: Ref<number>
+  criteriaId: Ref<number>,
+  type: "TeamLead" | "Peer" | "Custom"
 ) => {
   const { openModal, description, isOpen, title } = useCustomModal();
   const { $api, $toast } = useNuxtApp();
@@ -11,13 +12,25 @@ export const useTeamLeadQuestion = (
   const legendData = computed(() => legend.value || []);
   const questionData = computed(() => question.value || [])
   const criteria = ref(criteriaId.value)
+
+  const idKey = computed(() => {
+    if (type === "TeamLead") return "teamLeadCriteriaId";
+    if (type === "Peer") return "peerId";
+    return "assignTaskCriteriaId";
+  });
+
   const initialState = {
     id: undefined,
     question: undefined,
-    teamLeadCriteriaId: criteria.value,
+    type: type,
+    [idKey.value]: criteria.value,
   };
-  const questionForm = reactive<QuestionModel>({ ...initialState });
-  const questionEvalRepo = repository<QuestionModel>($api, "/teamlead/q");
+
+
+
+
+  const questionForm = reactive<{ [key: string]: any }>({ ...initialState });
+  const questionEvalRepo = repository<QuestionModel>($api, "/question");
 
   const submit = async (response: any) => {
     try {
@@ -36,6 +49,7 @@ export const useTeamLeadQuestion = (
         $toast.success(res.message);
       }
       resetForm();
+      questionForm[idKey.value] = criteria.value;
       questionForm.teamLeadCriteriaId = criteria.value
     } catch (error) {
       return handleApiError(error);
@@ -72,7 +86,7 @@ export const useTeamLeadQuestion = (
 
   watch(criteriaId, (newVal) => {
     criteria.value = newVal;
-    questionForm.teamLeadCriteriaId  = newVal;
+    questionForm[idKey.value] = criteria.value;
   });
 
   return {

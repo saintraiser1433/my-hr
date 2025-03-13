@@ -25,6 +25,8 @@ const schema = $joi.object({
   }),
   peerId: $joi.number().optional(),
   teamLeadCriteriaId: $joi.number().optional(),
+  assignTaskCriteriaId: $joi.number().optional(),
+  type: $joi.string().optional(),
 });
 
 const onSubmit = async (event: FormSubmitEvent<QuestionModel>) => {
@@ -67,13 +69,8 @@ const submitForm = () => {
     </UForm>
     <template #footer>
       <div class="flex justify-end items-center p-2 gap-2">
-        <UButton v-if="isUpdate" variant="outline" @click="onCancel"
-          >Cancel</UButton
-        >
-        <UButton
-          @click="submitForm"
-          :label="isUpdate ? 'Update' : 'Submit'"
-        ></UButton>
+        <UButton v-if="isUpdate" variant="outline" @click="onCancel">Cancel</UButton>
+        <UButton @click="submitForm" :label="isUpdate ? 'Update' : 'Submit'"></UButton>
       </div>
     </template>
   </UCard>

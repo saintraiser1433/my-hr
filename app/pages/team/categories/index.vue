@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 definePageMeta({
   requiredRole: "TeamLead",
 });
@@ -21,7 +20,6 @@ const initialState = {
   evaluationId: Number(route.params.evalId),
   percentage: undefined,
   forTeamLead: false,
-
 };
 const teamleadData = ref<TeamLeadModel[]>([]);
 const { data, status, error } = await useAPI<TeamLeadModel[]>(
@@ -33,18 +31,15 @@ if (data.value) {
 if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
-
 </script>
 
 <template>
-  {{ auth.getDeptId }}
   <div>
     <div class="flex flex-col items-center lg:items-start mb-3">
       <h2 class="font-extrabold text-2xl">Employee Performance Appraisal Module</h2>
       <span class="text-sm">Here's a list of employee performance appraisal module!</span>
     </div>
 
-    <EvaluationTeamleadList :data="teamleadData">
-    </EvaluationTeamleadList>
+    <EvaluationTeamleadList :data="teamleadData"> </EvaluationTeamleadList>
   </div>
 </template>

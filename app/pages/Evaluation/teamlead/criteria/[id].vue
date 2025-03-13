@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-    requiredRole: "Admin",
+  requiredRole: "Admin",
 });
 
 useSeoMeta({
@@ -21,7 +21,6 @@ const criteriaId = ref<number>(0);
 const question = ref<QuestionModel[]>([]);
 const legend = ref<TemplateDetail[]>([]);
 
-
 if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
@@ -35,9 +34,8 @@ const {
   dataTeamlead,
   description,
   title,
-  isOpen
+  isOpen,
 } = useTeamLeadCategories(data, Number(route.params.id));
-
 
 const {
   isUpdating,
@@ -52,11 +50,11 @@ const {
   editQuestion,
   removeQuestion,
   resetForm,
-} = useTeamLeadQuestion(question, legend, criteriaId)
+} = useQuestions(question, legend, criteriaId, "TeamLead");
 
 const fetchPeerQuestion = async (item: TeamLeadCriteria) => {
   try {
-    const response = await $api<CombinedPeerQuestionWithLegend>(`/teamlead/q/${item.id}`);
+    const response = await $api<CombinedPeerQuestionWithLegend>(`/question/${item.id}`);
     question.value = response.questions || [];
     legend.value = response.legends || [];
     criteriaId.value = item.id || 0;
@@ -68,11 +66,26 @@ const fetchPeerQuestion = async (item: TeamLeadCriteria) => {
 </script>
 
 <template>
-  <EvaluationTeamleadCriteriaForm @data-criteria="submit" :description="description" v-model:state="teamleadForm"
-    :title="title" v-model:open="isOpen" />
-  <Question :title="questionTitle" :is-updating="isUpdating" :legend-data="legendData" :description="questionDesc"
-    :question-data="questionData" @submit="submitQuestion" @edit="editQuestion" @delete="removeQuestion"
-    @reset="resetForm" v-model:open="questionisOpen" v-model:state="questionForm">
+  <EvaluationTeamleadCriteriaForm
+    @data-criteria="submit"
+    :description="description"
+    v-model:state="teamleadForm"
+    :title="title"
+    v-model:open="isOpen"
+  />
+  <Question
+    :title="questionTitle"
+    :is-updating="isUpdating"
+    :legend-data="legendData"
+    :description="questionDesc"
+    :question-data="questionData"
+    @submit="submitQuestion"
+    @edit="editQuestion"
+    @delete="removeQuestion"
+    @reset="resetForm"
+    v-model:open="questionisOpen"
+    v-model:state="questionForm"
+  >
   </Question>
   <div>
     <div class="flex flex-col items-center lg:items-start mb-3">
@@ -80,10 +93,16 @@ const fetchPeerQuestion = async (item: TeamLeadCriteria) => {
       <span class="text-sm">Here's a list of Criteria module!</span>
     </div>
 
-    <EvaluationTeamleadCriteriaList :data="dataTeamlead" @modal-quest="fetchPeerQuestion" @update="edit"
-      @delete="remove">
+    <EvaluationTeamleadCriteriaList
+      :data="dataTeamlead"
+      @modal-quest="fetchPeerQuestion"
+      @update="edit"
+      @delete="remove"
+    >
       <template #actions>
-        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add Criteria</UButton>
+        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
+          >Add Criteria</UButton
+        >
       </template>
     </EvaluationTeamleadCriteriaList>
   </div>
