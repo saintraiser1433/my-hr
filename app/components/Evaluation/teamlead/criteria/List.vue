@@ -5,17 +5,17 @@ const UButton = resolveComponent("UButton") as Component;
 
 const props = defineProps({
   data: {
-    type: Array as PropType<TeamLeadCriteria[]>,
+    type: Array as PropType<CriteriaColleague[]>,
     required: true,
     default: () => [],
   },
 });
 
 const emits = defineEmits<{
-  (e: "update", payload: TeamLeadCriteria): void;
+  (e: "update", payload: CriteriaColleague): void;
   (e: "delete", id: number): void;
-  (e: "singleApply", payload: TeamLeadCriteria): void;
-  (e: "modalQuest", payload: TeamLeadCriteria): void;
+  (e: "singleApply", payload: CriteriaColleague): void;
+  (e: "modalQuest", payload: CriteriaColleague): void;
 }>();
 
 const { pagination, globalFilter, refreshTable } = usePagination();
@@ -27,11 +27,11 @@ const handleDelete = (id: number) => {
   emits("delete", id);
 };
 
-const handleUpdate = (item: TeamLeadCriteria) => {
+const handleUpdate = (item: CriteriaColleague) => {
   emits("update", item);
 };
 
-const handleQuestion = (item: TeamLeadCriteria) => {
+const handleQuestion = (item: CriteriaColleague) => {
   emits("modalQuest", item);
 };
 
@@ -44,7 +44,7 @@ const columns: TableColumn<any>[] = [
 
 
 
-const getDropdownActions = (teamlead: TeamLeadCriteria): DropdownMenuItem[][] => {
+const getDropdownActions = (teamlead: CriteriaColleague): DropdownMenuItem[][] => {
   return [
     [
       {
@@ -106,6 +106,12 @@ watch(
       }" v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
       }" :data="data" :columns="columns">
+      <!-- <template #empty>
+        <div class="flex flex-col items-center justify-center py-6 gap-3">
+          <svg-icon name="icons/emptybox" width="64" height="64" />
+          <span class="italic text-sm">Oops, nothing here!</span>
+        </div>
+      </template> -->
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
           <UDropdownMenu :items="getDropdownActions(row.original)">

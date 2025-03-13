@@ -3,7 +3,7 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 
 const { $joi } = useNuxtApp();
 const emits = defineEmits<{
-  (e: "dataCriteria", payload: TeamLeadCriteria): void;
+  (e: "dataCriteria", payload: CriteriaColleague): void;
 }>();
 
 defineProps({
@@ -20,18 +20,19 @@ defineProps({
 });
 
 const open = defineModel("open", { default: false, required: true });
-const model = defineModel<TeamLeadCriteria>("state", { required: true });
+const model = defineModel<CriteriaColleague>("state", { required: true });
 
 const schema = $joi.object({
   name: $joi.string().required().messages({
     "any.required": `Name is Required`,
     "string.empty": `Name is Required`,
   }),
+  employeesId: $joi.number().optional(),
   teamLeadEvaluationId: $joi.number().optional(),
   id: $joi.number().optional(),
 });
 
-const onSubmit = async (event: FormSubmitEvent<TeamLeadCriteria>) => {
+const onSubmit = async (event: FormSubmitEvent<CriteriaColleague>) => {
   emits("dataCriteria", event.data);
 };
 

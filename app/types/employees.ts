@@ -114,3 +114,10 @@ export interface CombinedInformation {
     skillsData: Skill[],
     referencesData: References[]
 }
+
+export interface ListEmployee {
+    id?:number;
+    label?:string;
+    suffix?:string;
+    photo?:string;
+}

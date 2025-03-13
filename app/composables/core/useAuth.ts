@@ -6,7 +6,7 @@ export const useAuthentication = () => {
   const token = useStorage<string>('token', null);
   const rToken = useStorage<string>('refreshToken', null);
   const info = useStorage<any>('info', null);
-  const id = ref<number | null>(null);
+  const id = ref<any>(null);
   const signIn = async (data: Login) => {
     const result = await $api<Token>(`${config.public.baseURL}/auth/signin`, {
       method: "POST",
@@ -15,9 +15,9 @@ export const useAuthentication = () => {
         password: data.password,
       },
     });
-
-    info.value = JSON.stringify(result.users);
-    id.value = result.users.id;
+    const infodata = JSON.stringify(result.users);
+    const parseData = JSON.parse(infodata);
+    info.value = infodata;
 
     token.value = result.token.accessToken
     rToken.value = result.token.refreshToken

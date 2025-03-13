@@ -49,7 +49,7 @@ export const MENU_ITEMS_TEAM: MenuItem[] = [
   { label: "Dashboard", icon: "i-tabler-device-analytics", to: "/Dashboard" },
   { label: "My Requirements", icon: "i-carbon-document-requirements", to: "/team/requirements" },
   { label: "Evaluate Colleague", icon: "i-hugeicons-peer-to-peer-02", to: "/applicants" },
-  { label: "Evaluate Forms", icon: "i-hugeicons-question", to: "/applicants" },
+  { label: "Evaluate Forms", icon: "i-hugeicons-question", to: "/team/categories" },
 
 ];
 

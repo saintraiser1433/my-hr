@@ -21,6 +21,8 @@ const initialState = {
   name: "",
   evaluationId: Number(route.params.evalId),
   percentage:undefined,
+  forTeamLead:false,
+
 };
 const value = ref(0)
 const teamleadForm = reactive<TeamLeadModel>({ ...initialState });
@@ -80,6 +82,7 @@ const applyAll = async () => {
         const data = {
           id: Number(route.params.evalId),
           templateHeaderId: value.value,
+          
         }
 
         const response = await assignTemplateRepo.update(data);
@@ -114,9 +117,11 @@ const applySingle = async (res: TeamLeadModel) => {
 }
 
 const edit = (response: TeamLeadModel) => {
+
   teamleadForm.id = response.id;
   teamleadForm.name = response.name;
-  teamleadForm.percentage = response.percentage;
+  teamleadForm.percentage = Number(response.percentage);
+  teamleadForm.forTeamLead = response.forTeamLead;
   updateModal(`Update Category`);
 };
 

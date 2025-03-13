@@ -7,7 +7,8 @@ const props = defineProps({
 });
 
 const { $datefns } = useNuxtApp();
-const statusModel = defineModel("status", { default: false });
+const config = useRuntimeConfig();
+const store = useAuthStore();
 const { information } = toRefs(props);
 const fullname = computed(
   () =>
@@ -16,8 +17,8 @@ const fullname = computed(
     information.value.last_name +
     (" " + (information.value.middle_name ? information.value.middle_name[0] : " "))
 );
-const config = useRuntimeConfig();
 
+const statusModel = defineModel("status", { default: false });
 const emit = defineEmits(["submit"]);
 </script>
 
@@ -55,7 +56,7 @@ const emit = defineEmits(["submit"]);
       </div>
       <USeparator class="py-2"></USeparator>
       <div class="flex items-center justify-between gap-5">
-        <USwitch v-model="statusModel" size="lg" label="Active Status" />
+        <USwitch v-if="store.getRole === 'Admin'" v-model="statusModel" size="lg" label="Active Status" />
         <UButton
           icon="i-lucide-edit"
           variant="subtle"

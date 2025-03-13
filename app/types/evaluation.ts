@@ -18,8 +18,8 @@ export interface QuestionModel {
     question?: string;
     peerId?: number;
     peer?: PeerModel;
-    teamLeadCriteriaId?:number;
-    criteria?:TeamLeadCriteria;
+    teamLeadCriteriaId?: number;
+    criteria?: TeamLeadCriteria;
 }
 
 
@@ -35,17 +35,23 @@ export interface PeerModel {
     template?: string;
     templateHeaderId?: number;
     question?: QuestionModel[],
-    percentage?:number;
+    percentage?: number;
 
 }
 
 export interface TeamLeadModel extends PeerModel {
+    forTeamLead?: boolean;
 }
 
-export interface TeamLeadCriteria{
-    id?:number;
-    name:string;
-    teamLeadEvaluationId?:number;
+export interface TeamLeadCriteria {
+    id?: number;
+    name: string;
+    teamLeadEvaluationId?: number;
     question?: QuestionModel[]
 }
+
+export interface CriteriaColleague extends TeamLeadCriteria {
+    employeesId?: number
+}
+
 export type statusesEvaluation = "NOT SET" | "ONGOING" | "FINISHED";

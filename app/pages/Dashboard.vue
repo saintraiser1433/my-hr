@@ -1,12 +1,14 @@
-<template>
-    <div>
-     dasdsads
-    </div>
-</template>
-
 <script setup lang="ts">
-   definePageMeta({
+const store = useAcademicYearStore();
+const s = useAuthStore();
+definePageMeta({
   requiredRole: "Admin",
 });
 
 </script>
+<template>
+  <div>
+    {{store.acadId}}
+    {{ s.getDeptId }}
+  </div>
+</template>

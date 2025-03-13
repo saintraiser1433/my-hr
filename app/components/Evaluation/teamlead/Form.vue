@@ -3,7 +3,7 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 
 const { $joi } = useNuxtApp();
 const emits = defineEmits<{
-  (e: "dataTeamlead", payload: PeerModel): void;
+  (e: "dataTeamlead", payload: TeamLeadModel): void;
 }>();
 
 defineProps({
@@ -20,7 +20,7 @@ defineProps({
 });
 
 const open = defineModel("open", { default: false, required: true });
-const model = defineModel<PeerModel>("state", { required: true });
+const model = defineModel<TeamLeadModel>("state", { required: true });
 
 const schema = $joi.object({
   name: $joi.string().required().messages({
@@ -31,11 +31,12 @@ const schema = $joi.object({
     "any.required": `Percentage is Required`,
     "number.empty": `Percentage is Required`,
   }),
+  forTeamLead: $joi.boolean().optional(),
   evaluationId: $joi.number().optional(),
   id: $joi.number().optional(),
 });
 
-const onSubmit = async (event: FormSubmitEvent<PeerModel>) => {
+const onSubmit = async (event: FormSubmitEvent<TeamLeadModel>) => {
   emits("dataTeamlead", event.data);
 };
 
@@ -64,6 +65,7 @@ for (let i = 1; i <= 100; i++) {
     :ui="{ content: 'max-w-md' }"
   >
     <template #body>
+
       <UForm
         ref="formRef"
         :schema="schema"
@@ -82,6 +84,9 @@ for (let i = 1; i <= 100; i++) {
             class="w-full"
             placeholder="Select Percentage"
           />
+        </UFormField>
+        <UFormField name="forTeamLead">
+          <USwitch  v-model="model.forTeamLead" size="md" label="For Team Lead" />
         </UFormField>
       </UForm>
     </template>

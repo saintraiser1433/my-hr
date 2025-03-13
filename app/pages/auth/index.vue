@@ -9,7 +9,7 @@ useHead({
 });
 
 const { $toast } = useNuxtApp();
-
+const store = useAuthStore()
 const { signIn, info } = useAuthentication();
 const { handleApiError } = useErrorHandler();
 
@@ -38,6 +38,5 @@ const onSubmit = async (data: Login) => {
 
 
 <template>
-
   <Auth @submit="onSubmit"></Auth>
 </template>

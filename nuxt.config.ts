@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-tiptap-editor',
     'nuxt-echarts',
+    "@pinia/nuxt"
   ],
   app: {
     head: {

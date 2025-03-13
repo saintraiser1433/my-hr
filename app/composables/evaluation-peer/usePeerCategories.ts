@@ -102,7 +102,7 @@ export const usePeerCategories = (
   const edit = (response: PeerModel) => {
     peerForm.id = response.id;
     peerForm.name = response.name;
-    peerForm.percentage = response.percentage;
+    peerForm.percentage = Number(response.percentage);
     updateModal(`Update Category`);
   };
 

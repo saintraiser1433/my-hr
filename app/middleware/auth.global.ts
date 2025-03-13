@@ -1,4 +1,10 @@
+import { useAuthStore } from "~/store/auth";
+
 export default defineNuxtRouteMiddleware(async (to, from) => {
+
+    const { token, clearAuthTokens, info } = useAuthentication();
+    const { $toast,$pinia } = useNuxtApp();
+    const store =  useAuthStore($pinia);
     const ROLE_REDIRECTS: Record<Role, string> = {
         Admin: 'Dashboard',
         Employee: 'emp',
@@ -7,9 +13,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     const GUEST_ROUTES = ['auth']
 
-    const { token, clearAuthTokens, info } = useAuthentication();
-    const { $toast } = useNuxtApp();
+
     const inf = JSON.parse(info.value);
+    
+    store.setUser(inf ?? []);
 
     if (!token.value) {
         if (to.name !== 'auth') {
