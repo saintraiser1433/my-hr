@@ -1,7 +1,6 @@
 <script setup lang="ts">
-
 definePageMeta({
-    requiredRole: "Admin",
+  requiredRole: "Admin",
 });
 
 useSeoMeta({
@@ -14,24 +13,35 @@ useSeoMeta({
 const { $api, $toast } = useNuxtApp();
 const route = useRoute();
 const { handleApiError } = useErrorHandler();
-const { openModal,description, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
+const {
+  openModal,
+  description,
+  updateModal,
+  resetModal,
+  isOpen,
+  isUpdate,
+  title,
+} = useCustomModal();
 
 const initialState = {
   id: undefined,
   name: "",
   evaluationId: Number(route.params.evalId),
-  percentage:undefined,
-  forTeamLead:false,
-
+  percentage: undefined,
+  forTeamLead: false,
 };
-const value = ref(0)
+const value = ref(0);
 const teamleadForm = reactive<TeamLeadModel>({ ...initialState });
 const teamleadData = ref<TeamLeadModel[]>([]);
-const itemTemplate = computed(() => template.value?.map((item) => ({
-  id: item.id,
-  label: item.template_name,
-})))
-const { data: template, status: statusTemp, error: errorTemp } = await useAPI<TemplateModel[]>("/template");
+const itemTemplate = computed(() =>
+  template.value?.map((item) => ({
+    id: item.id,
+    label: item.template_name,
+  }))
+);
+const { data: template, status: statusTemp, error: errorTemp } = await useAPI<
+  TemplateModel[]
+>("/template");
 const { data, status, error } = await useAPI<TeamLeadModel[]>(
   `/teamlead/${route.params.evalId}`
 );
@@ -41,8 +51,6 @@ if (data.value) {
 if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
-
-
 
 const teamleadRepo = repository<TeamLeadModel>($api, "/teamlead");
 const submit = async (response: TeamLeadModel) => {
@@ -56,7 +64,7 @@ const submit = async (response: TeamLeadModel) => {
       if (res.data) {
         const data = res.data as TeamLeadModel;
         teamleadData.value = teamleadData.value.map((item) =>
-          item.id === data.id ? {...item,...data} : item
+          item.id === data.id ? { ...item, ...data } : item
         );
       }
 
@@ -82,8 +90,7 @@ const applyAll = async () => {
         const data = {
           id: Number(route.params.evalId),
           templateHeaderId: value.value,
-          
-        }
+        };
 
         const response = await assignTemplateRepo.update(data);
         $toast.success(response.message);
@@ -91,33 +98,33 @@ const applyAll = async () => {
         teamleadData.value = teamleadData.value.map((item) => ({
           ...item,
           template: template?.label,
-        }))
-        value.value = 0
+        }));
+        value.value = 0;
       } catch (error) {
         return handleApiError(error);
       }
     }
   });
-}
+};
 const assignTemplateSingleRepo = repository<TeamLeadModel>($api, "/teamlead/temp/s");
 const applySingle = async (res: TeamLeadModel) => {
   try {
-
     const data = {
       id: res.id,
       template: res.template,
       templateHeaderId: res.templateHeaderId,
-    }
+    };
     const response = await assignTemplateSingleRepo.update(data);
-    teamleadData.value = teamleadData.value.map((item) => item.id === data.id ? { ...item, ...data } : item);
+    teamleadData.value = teamleadData.value.map((item) =>
+      item.id === data.id ? { ...item, ...data } : item
+    );
     $toast.success(response.message);
   } catch (error) {
     return handleApiError(error);
   }
-}
+};
 
 const edit = (response: TeamLeadModel) => {
-
   teamleadForm.id = response.id;
   teamleadForm.name = response.name;
   teamleadForm.percentage = Number(response.percentage);
@@ -144,9 +151,6 @@ const remove = (id: number) => {
   });
 };
 
-
-
-
 const resetForm = () => {
   Object.assign(teamleadForm, initialState);
 };
@@ -159,23 +163,56 @@ const toggleModal = () => {
 
 <template>
   <div>
-    <EvaluationTeamleadForm @data-teamlead="submit" :description="description" v-model:state="teamleadForm" :title="title" v-model:open="isOpen" />
+    <EvaluationTeamleadForm
+      @data-teamlead="submit"
+      :description="description"
+      v-model:state="teamleadForm"
+      :title="title"
+      v-model:open="isOpen"
+    />
     <div class="flex flex-col items-center lg:items-start mb-3">
       <h2 class="font-extrabold text-2xl">Employee Performance Appraisal Module</h2>
       <span class="text-sm">Here's a list of employee performance appraisal module!</span>
     </div>
+    <UCard
+      :ui="{
+        body: 'p-2 sm:p-2',
+        footer: 'p-0 sm:px-0',
+      }"
+    >
+      <EvaluationTeamleadList
+        :data="teamleadData"
+        @single-apply="applySingle"
+        :item-template="itemTemplate"
+        @update="edit"
+        @delete="remove"
+      >
+        <template #actions>
+          <USelectMenu
+            v-model="value"
+            value-key="id"
+            :items="itemTemplate"
+            class="w-48"
+            :ui="{
+              item: 'capitalize',
+            }"
+            placeholder="Select Template"
+          />
+          <UButton
+            v-if="value"
+            icon="i-lucide-check"
+            size="sm"
+            color="success"
+            variant="solid"
+            @click="applyAll"
+            >Apply to all</UButton
+          >
 
-    <EvaluationTeamleadList :data="teamleadData" @single-apply="applySingle" :item-template="itemTemplate" @update="edit"
-      @delete="remove">
-      <template #actions>
-        <USelectMenu v-model="value" value-key="id" :items="itemTemplate" class="w-48" :ui="{
-          item: 'capitalize'
-        }" placeholder="Select Template" />
-        <UButton v-if="value" icon="i-lucide-check" size="sm" color="success" variant="solid" @click="applyAll">Apply
-          to all</UButton>
-
-        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add Category</UButton>
-      </template>
-    </EvaluationTeamleadList>
+          <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
+            >Add Category</UButton
+          >
+        </template>
+      </EvaluationTeamleadList>
+    </UCard>
   </div>
 </template>

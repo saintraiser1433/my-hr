@@ -8,7 +8,7 @@ export interface TeamLeadQuestionnaires {
 interface TeamLeadEvaluation {
     id: number;
     percentage: number;
-    name:string
+    name: string
 }
 interface TemplateHeader {
     name: string;
@@ -26,8 +26,8 @@ export interface Criteria {
     questions: Question[];
 }
 
-interface Question {
-    criteriaId:number;
+export interface Question {
+    criteriaId: number;
     name: string;
     id: number;
     question: string;
