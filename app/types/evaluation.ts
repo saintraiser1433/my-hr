@@ -54,4 +54,8 @@ export interface CriteriaColleague extends TeamLeadCriteria {
     employeesId?: number
 }
 
+
+
+
+
 export type statusesEvaluation = "NOT SET" | "ONGOING" | "FINISHED";

@@ -35,7 +35,7 @@ const {
   description,
   title,
   isOpen,
-} = useTeamLeadCategories(data, Number(route.params.id));
+} = useTeamLeadCategories(data, Number(route.params.id),'/teamlead/criteria');
 
 const {
   isUpdating,

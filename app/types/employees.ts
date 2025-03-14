@@ -116,8 +116,15 @@ export interface CombinedInformation {
 }
 
 export interface ListEmployee {
-    id?:number;
-    label?:string;
-    suffix?:string;
-    photo?:string;
+    id?: number;
+    label?: string;
+    suffix?: string;
+    photo?: string;
+}
+
+export interface EmployeesEvaluate {
+    id: number;
+    photo_path: string;
+    fullname: string;
+    status: boolean;
 }

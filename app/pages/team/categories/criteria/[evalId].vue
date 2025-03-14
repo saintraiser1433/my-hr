@@ -17,8 +17,18 @@ const { handleApiError } = useErrorHandler();
 const config = useRuntimeConfig();
 const selectedEmployee = ref<ListEmployee>({});
 const criteriaId = ref<number>(0);
+const employeeId = ref<number>(0);
+const teamleadData = ref<CriteriaColleague[]>([]);
 const question = ref<QuestionModel[]>([]);
 const legend = ref<TemplateDetail[]>([]);
+const colleagueItems = computed(() => employee.value || [])
+const groups = ref([
+  {
+    id: "Colleagues",
+    label: "Colleagues",
+    items: colleagueItems,
+  },
+]);
 const { data: employee, status: statEmp, error: errEmp } = await useAPI<ListEmployee[]>(
   `/teamlead/main/emp/${store.departmentId}`,
   {
@@ -35,93 +45,19 @@ const { data: employee, status: statEmp, error: errEmp } = await useAPI<ListEmpl
   }
 );
 
-const groups = ref([
-  {
-    id: "Colleagues",
-    label: "Colleagues",
-    items: employee,
-  },
-]);
 
 const {
-  openModal,
+  toggleModal,
+  remove,
+  edit,
+  submit,
+  teamleadForm,
+  dataTeamlead,
   description,
-  updateModal,
-  resetModal,
-  isOpen,
-  isUpdate,
   title,
-} = useCustomModal();
+  isOpen,
+} = useTeamLeadCategories(teamleadData, Number(route.params.evalId), '/teamlead/main/criteria', employeeId);
 
-const teamleadForm = reactive<CriteriaColleague>({
-  id: undefined,
-  name: "",
-  teamLeadEvaluationId: Number(route.params.evalId),
-  employeesId: undefined,
-});
-const teamleadData = ref<CriteriaColleague[]>([]);
-
-const teamleadRepo = repository<CriteriaColleague>($api, "/teamlead/main/criteria");
-const submit = async (response: CriteriaColleague) => {
-  try {
-    if (!isUpdate.value) {
-      const res = await teamleadRepo.add(response);
-      teamleadData.value = [...(teamleadData.value || []), res.data as CriteriaColleague];
-      $toast.success(res.message);
-    } else {
-      const res = await teamleadRepo.update(response);
-      if (res.data) {
-        const data = res.data as CriteriaColleague;
-        teamleadData.value = teamleadData.value?.map((item) =>
-          item.id === data.id ? { ...item, ...data } : item
-        );
-      }
-      $toast.success(res.message);
-    }
-    resetModal();
-  } catch (error) {
-    return handleApiError(error);
-  }
-};
-
-const edit = (response: CriteriaColleague) => {
-  teamleadForm.id = response.id;
-  teamleadForm.name = response.name;
-  teamleadForm.teamLeadEvaluationId = response.teamLeadEvaluationId;
-  teamleadForm.employeesId = response.employeesId;
-  updateModal(`Update Criteria`);
-};
-
-const remove = (id: number) => {
-  setAlert(
-    "warning",
-    "Are you sure you want to delete once delete it will delete also all the question associate in this category",
-    "",
-    "Confirm delete"
-  ).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const response = await teamleadRepo.delete(id);
-        teamleadData.value = teamleadData.value?.filter((item) => item.id !== id);
-        $toast.success(response.message);
-      } catch (error) {
-        return handleApiError(error);
-      }
-    }
-  });
-};
-
-// const {
-//   toggleModal,
-//   remove,
-//   edit,
-//   submit,
-//   teamleadForm,
-//   dataTeamlead,
-//   description,
-//   title,
-//   isOpen
-// } = useTeamLeadCategories(datas, Number(route.params.evalId));
 
 const {
   isUpdating,
@@ -138,6 +74,7 @@ const {
   resetForm,
 } = useQuestions(question, legend, criteriaId, "Custom");
 
+
 const fetchPeerQuestion = async (item: TeamLeadCriteria) => {
   try {
     const response = await $api<CombinedPeerQuestionWithLegend>(
@@ -152,21 +89,29 @@ const fetchPeerQuestion = async (item: TeamLeadCriteria) => {
   }
 };
 
+
+
+
+
+
+
+
+
+
+
 watch(
   () => selectedEmployee.value?.id ?? null,
   async (newId) => {
     if (!newId) {
       teamleadData.value = [];
-      teamleadForm.employeesId = 0;
       return;
     }
-
     try {
       const response = await $api<CriteriaColleague[]>(
         `/teamlead/main/criteria/${route.params.evalId}/${newId}`
       );
       teamleadData.value = response || [];
-      teamleadForm.employeesId = newId;
+      employeeId.value = newId;
     } catch (err) {
       handleApiError(err);
     }
@@ -176,26 +121,11 @@ watch(
 </script>
 
 <template>
-  <EvaluationTeamleadCriteriaForm
-    @data-criteria="submit"
-    :description="description"
-    v-model:state="teamleadForm"
-    :title="title"
-    v-model:open="isOpen"
-  />
-  <Question
-    :title="questionTitle"
-    :is-updating="isUpdating"
-    :legend-data="legendData"
-    :description="questionDesc"
-    :question-data="questionData"
-    @submit="submitQuestion"
-    @edit="editQuestion"
-    @delete="removeQuestion"
-    @reset="resetForm"
-    v-model:open="questionisOpen"
-    v-model:state="questionForm"
-  >
+  <EvaluationTeamleadCriteriaForm @data-criteria="submit" :description="description" v-model:state="teamleadForm"
+    :title="title" v-model:open="isOpen" />
+  <Question :title="questionTitle" :is-updating="isUpdating" :legend-data="legendData" :description="questionDesc"
+    :question-data="questionData" @submit="submitQuestion" @edit="editQuestion" @delete="removeQuestion"
+    @reset="resetForm" v-model:open="questionisOpen" v-model:state="questionForm">
   </Question>
 
   <div class="flex flex-col items-center lg:items-start mb-3">
@@ -204,36 +134,23 @@ watch(
   </div>
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-4">
-      <UCard
-        :ui="{
-          body: 'p-0 sm:p-0',
-          footer: 'p-0 sm:px-0',
-        }"
-      >
+      <UCard :ui="{
+        body: 'p-0 sm:p-0',
+        footer: 'p-0 sm:px-0',
+      }">
         <UCommandPalette v-model="selectedEmployee" :groups="groups" class="flex-1" />
       </UCard>
     </div>
     <div class="col-span-8">
-      <UCard
-        :ui="{
-          body: 'p-2 sm:p-2',
-          footer: 'p-0 sm:px-0',
-        }"
-      >
-        <EvaluationTeamleadCriteriaList
-          :data="teamleadData"
-          @modal-quest="fetchPeerQuestion"
-          @update="edit"
-          @delete="remove"
-        >
+      <UCard :ui="{
+        body: 'p-2 sm:p-2',
+        footer: 'p-0 sm:px-0',
+      }">
+        <EvaluationTeamleadCriteriaList :data="dataTeamlead" @modal-quest="fetchPeerQuestion" @update="edit"
+          @delete="remove">
           <template #actions>
-            <UButton
-              v-if="selectedEmployee"
-              icon="i-lucide-plus"
-              size="sm"
-              variant="solid"
-              @click="openModal('Add Criteria')"
-              >Add Criteria
+            <UButton v-if="selectedEmployee" icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add
+              Criteria
             </UButton>
           </template>
         </EvaluationTeamleadCriteriaList>

@@ -59,7 +59,7 @@ export const useQuestions = (
   const edit = (response: QuestionModel) => {
     questionForm.id = response.id;
     questionForm.question = response.question;
-    questionForm.teamLeadCriteriaId = response.teamLeadCriteriaId;
+    questionForm[idKey.value] = criteria.value;
     isUpdating.value = true;
   };
 

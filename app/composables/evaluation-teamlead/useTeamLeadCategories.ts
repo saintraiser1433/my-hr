@@ -1,9 +1,13 @@
 export const useTeamLeadCategories = (
-  teamleadData: Ref<TeamLeadCriteria[] | undefined>,
+  teamleadData: Ref<CriteriaColleague[] | undefined>,
   categoryId: number,
+  apiPath: string,
+  employeesId?: Ref<number>
 ) => {
   const { $api, $toast } = useNuxtApp();
   const { handleApiError } = useErrorHandler();
+  const employeeId = employeesId ?? ref<number | undefined>(undefined);
+
   const {
     openModal,
     description,
@@ -14,27 +18,36 @@ export const useTeamLeadCategories = (
     title,
   } = useCustomModal();
 
-  const initialState = {
+  let initialState: CriteriaColleague = {
     id: undefined,
     name: "",
     teamLeadEvaluationId: categoryId,
   };
+  if (!employeesId) {
+    initialState = {
+      id: undefined,
+      name: "",
+      teamLeadEvaluationId: categoryId,
+      employeesId: employeeId.value
+    };
+  }
 
-  const teamleadForm = reactive<TeamLeadCriteria>({ ...initialState });
-  // const teamleadData = ref<TeamLeadCriteria[]>([]);
+
+
+  const teamleadForm = reactive<CriteriaColleague>({ ...initialState });
   const dataTeamlead = computed(() => teamleadData.value || [])
 
-  const teamleadRepo = repository<TeamLeadCriteria>($api, "/teamlead/criteria");
-  const submit = async (response: TeamLeadCriteria) => {
+  const teamleadRepo = repository<CriteriaColleague>($api, apiPath);
+  const submit = async (response: CriteriaColleague) => {
     try {
       if (!isUpdate.value) {
         const res = await teamleadRepo.add(response);
-        teamleadData.value = [...(teamleadData.value || []), res.data as TeamLeadCriteria];
+        teamleadData.value = [...(teamleadData.value || []), res.data as CriteriaColleague];
         $toast.success(res.message);
       } else {
         const res = await teamleadRepo.update(response);
         if (res.data) {
-          const data = res.data as TeamLeadCriteria;
+          const data = res.data as CriteriaColleague;
           teamleadData.value = teamleadData.value?.map((item) =>
             item.id === data.id ? { ...item, ...data } : item
           );
@@ -49,11 +62,12 @@ export const useTeamLeadCategories = (
   };
 
 
-  const edit = (response: TeamLeadCriteria) => {
+  const edit = (response: CriteriaColleague) => {
     teamleadForm.id = response.id;
     teamleadForm.name = response.name;
     updateModal(`Update Criteria`);
   };
+
 
   const remove = (id: number) => {
     setAlert(
@@ -78,10 +92,25 @@ export const useTeamLeadCategories = (
     Object.assign(teamleadForm, initialState);
   };
 
+
+
+
+
   const toggleModal = () => {
     resetForm();
     openModal(`Add Criteria`);
   };
+
+
+  if (employeesId) {
+    watch(employeesId, (newVal, oldVal) => {
+      if (newVal !== oldVal) {
+        employeeId.value = newVal;
+        Object.assign(teamleadForm, { employeesId: newVal });
+      }
+    });
+  }
+
 
 
 
@@ -95,7 +124,7 @@ export const useTeamLeadCategories = (
     description,
     title,
     isOpen
-    
+
   }
 
 
