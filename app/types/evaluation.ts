@@ -55,6 +55,14 @@ export interface CriteriaColleague extends TeamLeadCriteria {
 }
 
 
+export interface SubmitTeamLeadResult {
+    evaluationId: number;
+    categoryId: number;
+    questionId: number;
+    employeesId: number;
+    templateDetailId: number;
+}
+
 
 
 

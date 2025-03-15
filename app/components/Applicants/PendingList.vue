@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { configs } from "#build/eslint.config.mjs";
 import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
 import { getPaginationRowModel } from "@tanstack/vue-table";
 const UButton = resolveComponent("UButton") as Component;
