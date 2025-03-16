@@ -90,7 +90,7 @@ watch(
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
-          <UButton icon="lucide:view" size="sm" @click="handleView(row.original.id)">
+          <UButton icon="lucide:view" size="sm" @click="handleView(row.original.id)" :disabled="row.original.status">
             Evaluate
           </UButton>
         </div>

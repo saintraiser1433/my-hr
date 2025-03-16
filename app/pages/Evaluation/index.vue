@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-    requiredRole: "Admin",
+  requiredRole: "Admin",
 });
 
 useSeoMeta({
@@ -12,7 +12,7 @@ useSeoMeta({
 
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
-const { openModal, updateModal,description, resetModal, isOpen, isUpdate, title } = useCustomModal();
+const { openModal, updateModal, description, resetModal, isOpen, isUpdate, title } = useCustomModal();
 
 const initialState = {
   id: undefined,
@@ -30,6 +30,12 @@ if (data.value) {
 if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
+
+const { data: template, status: statusTemp, error: errorTemp } = await useAPI<
+  TemplateModel[]
+>("/template");
+
+
 
 const submit = async (response: EvaluationModel) => {
   try {
@@ -59,6 +65,8 @@ const edit = (response: EvaluationModel) => {
   evaluationForm.status = response.status;
   evaluationForm.school_year = response.school_year;
   evaluationForm.semester = response.semester;
+  evaluationForm.peerTemplateId = Number(response.peerTemplateId);
+  evaluationForm.teamLeadTemplateId = Number(response.teamLeadTemplateId);
   updateModal(`Update Evaluation`);
 };
 
@@ -89,29 +97,19 @@ const toggleModal = () => {
 </script>
 
 <template>
-  <Suspense>
-    <div>
-      <EvaluationForm
-        @data-evaluation="submit"
-        :isUpdate="isUpdate"
-        v-model:state="evaluationForm"
-        :title="title"
-        :description="description"
-        v-model:open="isOpen"
-      />
-      <div class="flex flex-col items-center lg:items-start mb-3">
-        <h2 class="font-extrabold text-2xl">Evaluation Module</h2>
-        <span class="text-sm">Here's a list of Evaluation available!</span>
-      </div>
-
-      <EvaluationList :data="evaluationData" @update="edit" @delete="remove">
-        <template #actions>
-          <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
-            >Add Evaluation
-          </UButton>
-        </template>
-      </EvaluationList>
+  <div>
+    <EvaluationForm @data-evaluation="submit" :isUpdate="isUpdate" :template="template" :title="title"
+      :description="description" v-model:state="evaluationForm" v-model:open="isOpen" />
+    <div class="flex flex-col items-center lg:items-start mb-3">
+      <h2 class="font-extrabold text-2xl">Evaluation Module</h2>
+      <span class="text-sm">Here's a list of Evaluation available!</span>
     </div>
-    <template #fallback> Loading </template>
-  </Suspense>
+
+    <EvaluationList :data="evaluationData" @update="edit" @delete="remove">
+      <template #actions>
+        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add Evaluation
+        </UButton>
+      </template>
+    </EvaluationList>
+  </div>
 </template>

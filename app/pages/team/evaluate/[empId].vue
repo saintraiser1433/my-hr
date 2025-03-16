@@ -34,9 +34,9 @@ const items = questionnaires.value?.map((q) => {
   };
 });
 
-const selected = ref<Record<string, SubmitTeamLeadResult>>({});
+const selected = ref<Record<string, SubmitResult>>({});
 const comments = ref("")
-const handleCheckboxChange = (rowId: string, data: SubmitTeamLeadResult) => {
+const handleCheckboxChange = (rowId: string, data: SubmitResult) => {
   selected.value[rowId] = data;
 };
 
@@ -81,32 +81,38 @@ const handleSubmit = async () => {
     return $toast.error('Please enter a comment.');
   }
 
-  const selectedArray = Object.keys(selected.value).map((rowId) => ({
-    rowId,
-    data: selected.value[rowId],
-  }));
+  const evaluate = Object.keys(selected.value)
+  .map((rowId) => selected.value[rowId])
+  .filter((item): item is SubmitResult => item !== undefined);
 
-  const commentData = {
-    evaluationId: acad.acadId,
-    employeesId: route.params.empId,
-    commenterId: auth.getId,
+  const headerStatus : HeaderStatus = {
+    evaluationId: Number(acad.acadId) ,
+    employeesId: Number(route.params.empId),
+    commenterId: Number(auth.getId),
     description: comments.value,
+    type:Type.TEAMLEAD,
   };
 
-  const data = {
-    evaluate: selectedArray,
-    commentData,
+  const data :SubmissionModel = {
+    evaluate,
+    headerStatus,
   };
 
-  // Example: Submit data to an API
-  const evaluationRepo = repository<EvaluationModel>($api, "/evaluation/submit");
-  try {
-    const response = await evaluationRepo.add(data);
-    $toast.success('Evaluation submitted successfully!');
-  } catch (err) {
-    $toast.error('Failed to submit evaluation.');
-    handleApiError(err);
-  }
+  const submissionRepo = repository<SubmissionModel>($api, "/evaluation/submit");
+    setAlert("warning", "Are you sure you want to submit?", "", "Confirm submit").then(
+    async (result) => {
+      if (result.isConfirmed) {
+        try {
+            const response = await submissionRepo.add(data);
+            await navigateTo({name:'team-evaluate'});
+            $toast.success(response.message);
+        } catch (err) {
+          handleApiError(err);
+        }
+      }
+    }
+  );
+  
 };
 </script>
 

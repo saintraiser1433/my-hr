@@ -47,3 +47,8 @@ export enum InterviewStatusEnum {
   NONE = "",
 }
 
+export enum Type{
+  TEAMLEAD = 'TeamLead',
+  EMPLOYEE = 'Employee'
+}
+

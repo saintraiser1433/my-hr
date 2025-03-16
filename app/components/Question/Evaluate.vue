@@ -13,7 +13,7 @@ const props = defineProps({
     default: () => [],
   },
   selected: {
-    type: Object as PropType<Record<string, SubmitTeamLeadResult>>,
+    type: Object as PropType<Record<string, SubmitResult>>,
     required: true,
   },
   employeesId: {
@@ -40,7 +40,7 @@ const groupingState = ref(["name"]); // Initial grouping state
 
 const handleCheckboxChange = (
   rowId: string,
-  data: SubmitTeamLeadResult
+  data: SubmitResult
 ) => {
   emit('checkbox-change', rowId, data);
 };

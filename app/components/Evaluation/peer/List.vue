@@ -18,17 +18,13 @@ const props = defineProps({
 const emits = defineEmits<{
   (e: "update", payload: PeerModel): void;
   (e: "delete", id: number): void;
-  (e: "singleApply", payload: PeerModel): void;
   (e: "modalQuest", payload: PeerModel): void;
 }>();
 
 const { pagination, globalFilter, refreshTable } = usePagination();
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
-const { $toast } = useNuxtApp();
-const { itemTemplate } = toRefs(props);
 const expanded = ref({ 0: false });
-const value = ref(0);
 
 const handleDelete = (id: number) => {
   emits("delete", id);
@@ -42,19 +38,12 @@ const handleQuestion = (item: PeerModel) => {
   emits("modalQuest", item);
 };
 
-const onSubmit = (peerId: number, headerId: number) => {
-  const data = itemTemplate.value.find((item) => Number(item.id) == Number(headerId));
-  if (value.value === 0) {
-    $toast.error("Please select template before submit");
-  }
-  emits("singleApply", { id: peerId, template: data.label, templateHeaderId: data.id });
-};
+
 const columns: TableColumn<any>[] = [
   createColumn("#", "#", true, (row) => `${row.index + 1}`),
   createColumn("name", "Category", true, (row) =>
     h("span", { class: "capitalize" }, row.getValue("name"))
   ),
-  createColumn("template", "Template", true),
   createColumn("percentage", "Percentage", true),
   createColumn("action", "Action", false),
 ];
@@ -136,82 +125,8 @@ watch(
       <template #percentage-cell="{ row }">
         <span>{{ row.original.percentage * 100 }}%</span>
       </template>
-      <template #template-cell="{ row }">
-        <div class="flex items-center uppercase gap-1" v-if="row.original.template">
-          <UBadge variant="soft">{{ row.original.template }}</UBadge>
-          <UPopover
-            arrow
-            :content="{
-              align: 'center',
-              side: 'right',
-              sideOffset: 8,
-            }"
-          >
-            <UButton
-              variant="ghost"
-              size="sm"
-              color="success"
-              icon="material-symbols:change-circle-outline"
-            ></UButton>
 
-            <template #content>
-              <div class="flex flex-col items-start gap-2 p-2">
-                <h5 class="font-semibold">Template</h5>
-                <USelectMenu
-                  v-model="value"
-                  size="sm"
-                  value-key="id"
-                  :items="itemTemplate"
-                  class="w-48"
-                  :ui="{
-                    item: 'capitalize',
-                  }"
-                  placeholder="Select Template"
-                />
-                <UButton @click="onSubmit(row.original.id, value)" variant="solid"
-                  >Save</UButton
-                >
-              </div>
-            </template>
-          </UPopover>
-        </div>
-        <div class="flex items-center uppercase gap-1" v-else>
-          <UBadge color="error" variant="soft">Template Not Set</UBadge>
-          <UPopover
-            arrow
-            :content="{
-              align: 'center',
-              side: 'right',
-              sideOffset: 8,
-            }"
-          >
-            <UButton
-              variant="ghost"
-              color="success"
-              icon="material-symbols:change-circle-outline"
-            ></UButton>
-            <template #content>
-              <div class="flex flex-col items-start gap-2 p-2">
-                <h5 class="font-semibold">Template</h5>
-                <USelectMenu
-                  v-model="value"
-                  size="sm"
-                  value-key="id"
-                  :items="itemTemplate"
-                  class="w-48"
-                  :ui="{
-                    item: 'capitalize',
-                  }"
-                  placeholder="Select Template"
-                />
-                <UButton @click="onSubmit(row.original.id, value)" variant="solid"
-                  >Save</UButton
-                >
-              </div>
-            </template>
-          </UPopover>
-        </div>
-      </template>
+      
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
           <UDropdownMenu :items="getDropdownActions(row.original)">

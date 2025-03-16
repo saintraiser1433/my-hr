@@ -33,8 +33,6 @@ const {
   description,
   title,
   isOpen,
-  applyAll,
-  applySingle,
   submit,
   edit,
   remove,
@@ -103,33 +101,10 @@ const fetchPeerQuestion = async (item: PeerModel) => {
       @modal-quest="fetchPeerQuestion"
       :data="peerData"
       :item-template="itemTemplate"
-      @single-apply="applySingle"
       @update="edit"
       @delete="remove"
     >
       <template #actions>
-        <USelectMenu
-          v-model="selectValue"
-          value-key="id"
-          :items="itemTemplate"
-          class="w-48"
-          :ui="{
-            item: 'capitalize',
-          }"
-          placeholder="Select Template"
-        />
-
-        <UButton
-          v-if="selectValue"
-          icon="i-lucide-check"
-          size="sm"
-          color="success"
-          variant="solid"
-          @click="applyAll"
-        >
-          Apply to all</UButton
-        >
-
         <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
           >Add Peer Category</UButton
         >

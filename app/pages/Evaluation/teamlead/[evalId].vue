@@ -30,7 +30,6 @@ const initialState = {
   percentage: undefined,
   forTeamLead: false,
 };
-const value = ref(0);
 const teamleadForm = reactive<TeamLeadModel>({ ...initialState });
 const teamleadData = ref<TeamLeadModel[]>([]);
 const itemTemplate = computed(() =>
@@ -76,53 +75,8 @@ const submit = async (response: TeamLeadModel) => {
   }
 };
 
-const assignTemplateRepo = repository<TeamLeadModel>($api, "/teamlead/temp");
-const applyAll = async () => {
-  const template = itemTemplate.value?.find((item) => item.id === value.value);
-  setAlert(
-    "warning",
-    `Are you sure you want to replace all category templates with ${template?.label} `,
-    "",
-    "Confirm to replace"
-  ).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const data = {
-          id: Number(route.params.evalId),
-          templateHeaderId: value.value,
-        };
 
-        const response = await assignTemplateRepo.update(data);
-        $toast.success(response.message);
 
-        teamleadData.value = teamleadData.value.map((item) => ({
-          ...item,
-          template: template?.label,
-        }));
-        value.value = 0;
-      } catch (error) {
-        return handleApiError(error);
-      }
-    }
-  });
-};
-const assignTemplateSingleRepo = repository<TeamLeadModel>($api, "/teamlead/temp/s");
-const applySingle = async (res: TeamLeadModel) => {
-  try {
-    const data = {
-      id: res.id,
-      template: res.template,
-      templateHeaderId: res.templateHeaderId,
-    };
-    const response = await assignTemplateSingleRepo.update(data);
-    teamleadData.value = teamleadData.value.map((item) =>
-      item.id === data.id ? { ...item, ...data } : item
-    );
-    $toast.success(response.message);
-  } catch (error) {
-    return handleApiError(error);
-  }
-};
 
 const edit = (response: TeamLeadModel) => {
   teamleadForm.id = response.id;
@@ -182,32 +136,11 @@ const toggleModal = () => {
     >
       <EvaluationTeamleadList
         :data="teamleadData"
-        @single-apply="applySingle"
         :item-template="itemTemplate"
         @update="edit"
         @delete="remove"
       >
         <template #actions>
-          <USelectMenu
-            v-model="value"
-            value-key="id"
-            :items="itemTemplate"
-            class="w-48"
-            :ui="{
-              item: 'capitalize',
-            }"
-            placeholder="Select Template"
-          />
-          <UButton
-            v-if="value"
-            icon="i-lucide-check"
-            size="sm"
-            color="success"
-            variant="solid"
-            @click="applyAll"
-            >Apply to all</UButton
-          >
-
           <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
             >Add Category</UButton
           >

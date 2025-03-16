@@ -135,3 +135,19 @@ export const TAB_EMP = [
     slot: 'settings'
   }
 ]
+
+export const SEMESTER_ITEM = [
+  {
+    id: 1,
+    label: 'First Semester'
+  },
+  {
+    id: 2,
+    label: 'Second Semester'
+  }
+]
+
+export const STATUS_ITEM: statusesEvaluation[] = [
+  'ONGOING',
+  'FINISHED'
+]

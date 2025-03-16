@@ -51,53 +51,7 @@ export const usePeerCategories = (
     }
   };
 
-  const assignTemplateRepo = repository<PeerModel>($api, "/peer/temp");
-  const applyAll = async () => {
-    const template = itemTemplate.value?.find((item) => item.id === selectValue.value);
-    setAlert(
-      "warning",
-      `Are you sure you want to replace all category templates with ${template?.label} `,
-      "",
-      "Confirm to replace"
-    ).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const data = {
-            id: evalId,
-            templateHeaderId: selectValue.value,
-          }
 
-          const response = await assignTemplateRepo.update(data);
-          $toast.success(response.message);
-
-          peer.value = peer.value?.map((item) => ({
-            ...item,
-            template: template?.label,
-          }))
-          selectValue.value = 0
-        } catch (error) {
-          return handleApiError(error);
-        }
-      }
-    });
-  }
-
-  const assignTemplateSingleRepo = repository<PeerModel>($api, "/peer/temp/s");
-  const applySingle = async (res: PeerModel) => {
-    try {
-
-      const data = {
-        id: res.id,
-        template: res.template,
-        templateHeaderId: res.templateHeaderId,
-      }
-      const response = await assignTemplateSingleRepo.update(data);
-      peer.value = peer.value?.map((item) => item.id === data.id ? { ...item, ...data } : item);
-      $toast.success(response.message);
-    } catch (error) {
-      return handleApiError(error);
-    }
-  }
 
   const edit = (response: PeerModel) => {
     peerForm.id = response.id;
@@ -136,8 +90,6 @@ export const usePeerCategories = (
     peerData,
     peerForm,
     itemTemplate,
-    applyAll,
-    applySingle,
     submit,
     edit,
     remove,
