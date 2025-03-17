@@ -4,6 +4,7 @@ import { CircleProgressBar } from 'circle-progress.vue';
 // optional styles
 import Vue3Toastify, { toast, type ToastContainerOptions, type ToastOptions } from 'vue3-toastify';
 import { useAcademicYearStore } from '~/store/academicYear';
+import * as echarts from 'echarts';
 export default defineNuxtPlugin(async (nuxtApp) => {
     const academicYearStore = useAcademicYearStore();
     await academicYearStore.fetchActiveYear();
@@ -19,6 +20,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         getDay,
     });
     nuxtApp.provide('toast', toast)
+    nuxtApp.provide('echarts', echarts);
     nuxtApp.provide('joi', Joi);
     nuxtApp.vueApp.component('CircleProgressBar', CircleProgressBar)
 })

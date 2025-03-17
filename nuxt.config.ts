@@ -79,6 +79,11 @@ export default defineNuxtConfig({
       theme: 'github-dark',
     },
   },
+  echarts: {
+    renderer: ['svg', 'canvas'],
+    charts: ['BarChart', 'LineChart', 'PieChart'],
+    components: ['DatasetComponent', 'GridComponent', 'TooltipComponent']
+  },
   ssr: false,
 
 })

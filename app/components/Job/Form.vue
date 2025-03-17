@@ -146,7 +146,7 @@ const removeRequirements = (id: number) => {
                 <USwitch
                   color="neutral"
                   :default-value="model.status"
-                  @update:modelValue="(value) => (model.status = value)"
+                  @update:modelValue="(value:any) => (model.status = value)"
                 />
               </UFormField>
             </div>

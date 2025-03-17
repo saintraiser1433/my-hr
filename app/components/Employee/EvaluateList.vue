@@ -9,28 +9,31 @@ const props = defineProps({
     required: true,
     default: () => [],
   },
+  type: {
+    type:String,
+    default:'evaluate'
+  }
 });
 
 
-
-const emits = defineEmits<{
-  (e: "view", id: number): void;
-}>();
-
+const emits = defineEmits(['view'])
 const { pagination, globalFilter, refreshTable } = usePagination();
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const config = useRuntimeConfig();
-const handleView = async(id: number) => {
+const handleEvaluate = async(id: number) => {
   await navigateTo({name:'team-evaluate-empId',params:{empId:id}})
 };
+
+const handleView = async(employeeId: number) => {
+  emits('view',employeeId)
+};
+
 
 
 const columns: TableColumn<any>[] = [
   createColumn("#", "#", true, (row) => `${row.index + 1}`),
   createColumn("fullname", "Full Name", true),
-  createColumn("numerical-ratings", "Numerical Rating", true),
-  createColumn("adjective-ratings", "Adjective Rating", true),
   createColumn("status", "Evaluation Status", true),
   createColumn("action", "Action", false),
 ];
@@ -90,8 +93,11 @@ watch(
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
-          <UButton icon="lucide:view" size="sm" @click="handleView(row.original.id)" :disabled="row.original.status">
+          <UButton v-if="type === 'evaluate'" icon="lucide:view" size="sm" @click="handleEvaluate(row.original.id)" :disabled="row.original.status">
             Evaluate
+          </UButton>
+          <UButton v-else-if="type === 'custom'" icon="lucide:view" size="sm" @click="handleView(row.original.id)" :disabled="!row.original.status">
+            View Ratings
           </UButton>
         </div>
       </template>

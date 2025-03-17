@@ -4,6 +4,10 @@ const props = defineProps({
     type: Object as PropType<PersonalInformation>,
     required: true,
   },
+  type :{
+    type:Boolean,
+    default:true
+  }
 });
 
 const { $datefns } = useNuxtApp();
@@ -54,7 +58,8 @@ const emit = defineEmits(["submit"]);
           }}
         </h5>
       </div>
-      <USeparator class="py-2"></USeparator>
+      <div v-if="type">
+        <USeparator class="py-2"></USeparator>
       <div class="flex items-center justify-between gap-5">
         <USwitch v-if="store.getRole === 'Admin'" v-model="statusModel" size="lg" label="Active Status" />
         <UButton
@@ -65,6 +70,9 @@ const emit = defineEmits(["submit"]);
           >Save</UButton
         >
       </div>
+      
+      </div>
+      <div v-else></div>
     </div>
   </div>
 </template>

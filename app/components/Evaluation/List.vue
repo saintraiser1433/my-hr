@@ -32,6 +32,8 @@ const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
   createColumn("school_year", "School Year", true, (row) => row.getValue("school_year")),
   createColumn("semester", "Semester", true),
+  createColumn("peerTemplate", "Peer Template", true),
+  createColumn("teamLeadTemplate", "TeamLead Template", true),
   createColumn("status", "Status", true),
   createColumn("action", "Action", false),
 ];
@@ -132,6 +134,15 @@ watch(
         >
         <UBadge v-else color="neutral">FINISHED</UBadge>
       </template>
+      <template #peerTemplate-cell="{row}">
+        <UBadge v-if="row.original.peerTemplate" class="uppercase">{{row.original.peerTemplate.template_name}}</UBadge>
+        <UBadge v-else class="uppercase" color="error">NO TEMPLATE</UBadge>
+      </template>
+      <template #teamLeadTemplate-cell="{row}">
+        <UBadge v-if="row.original.teamLeadTemplate" class="uppercase">{{row.original.teamLeadTemplate.template_name}}</UBadge>
+        <UBadge v-else class="uppercase" color="error">NO TEMPLATE</UBadge>
+      </template>
+      
       <template #semester-cell="{ row }">
         <div v-if="row.original.semester === 1">
           <span>First Semester</span>

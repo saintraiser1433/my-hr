@@ -94,11 +94,6 @@ const fetchPeerQuestion = async (item: TeamLeadCriteria) => {
 
 
 
-
-
-
-
-
 watch(
   () => selectedEmployee.value?.id ?? null,
   async (newId) => {

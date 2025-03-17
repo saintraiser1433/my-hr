@@ -5,7 +5,8 @@ export interface EvaluationModel extends Timestamped {
   status?: statusesEvaluation;
   peerTemplateId?:number;
   teamLeadTemplateId?:number;
-  action?: string;
+  teamLeadTemplate?: TemplateModel
+  peerTemplate?:TemplateModel
 }
 export interface CombinedPeerQuestionWithLegend {
   questions: QuestionModel[];
@@ -72,4 +73,6 @@ export interface SubmissionModel {
   headerStatus: HeaderStatus;
 }
 
-export type statusesEvaluation = "NOT SET" | "ONGOING" | "FINISHED";
+export type statusesEvaluation = "NOT_SET" | "ONGOING" | "FINISHED";
+
+export type Mode = "Peer" | "TeamLead"

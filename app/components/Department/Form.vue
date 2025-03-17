@@ -66,7 +66,7 @@ const submitForm = () => {
           <UITextInput v-model.trim="model.title" placeholder="Enter Department" />
         </UFormField>
         <UFormField v-if="isUpdate" label="Status" name="status">
-          <USwitch color="neutral" :modelValue="model.status"  @update:modelValue="(value) => model.status = value"  />
+          <USwitch color="neutral" :modelValue="model.status"  @update:modelValue="(value:any) => model.status = value"  />
         </UFormField>
       </UForm>
     </template>

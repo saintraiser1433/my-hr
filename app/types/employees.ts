@@ -122,6 +122,12 @@ export interface ListEmployee {
     photo?: string;
 }
 
+
+export interface ListDepartment {
+    id?:number;
+    label?:string;
+}
+
 export interface EmployeesEvaluate {
     id: number;
     photo_path: string;
