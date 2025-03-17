@@ -124,13 +124,14 @@ export interface ListEmployee {
 
 
 export interface ListDepartment {
-    id?:number;
-    label?:string;
+    id?: number;
+    label?: string;
 }
 
 export interface EmployeesEvaluate {
     id: number;
     photo_path: string;
     fullname: string;
+    role: string;
     status: boolean;
 }

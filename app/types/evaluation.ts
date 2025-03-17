@@ -3,10 +3,10 @@ export interface EvaluationModel extends Timestamped {
   school_year?: string;
   semester?: number;
   status?: statusesEvaluation;
-  peerTemplateId?:number;
-  teamLeadTemplateId?:number;
+  peerTemplateId?: number;
+  teamLeadTemplateId?: number;
   teamLeadTemplate?: TemplateModel
-  peerTemplate?:TemplateModel
+  peerTemplate?: TemplateModel
 }
 export interface CombinedPeerQuestionWithLegend {
   questions: QuestionModel[];
@@ -71,6 +71,33 @@ export interface HeaderStatus {
 export interface SubmissionModel {
   evaluate: SubmitResult[];
   headerStatus: HeaderStatus;
+}
+
+export interface EmployeeRating {
+  employeeId: number;
+  name: string;
+  comment: string; // Add comment
+  evaluatedBy: string; // Add evaluatedBy
+  rating: RatingModel[];
+  summaryRating?: {
+    rating: number;
+    adjectiveRating: string;
+  };
+  categoryCounts: CategoryCountModel[]
+}
+
+export interface CategoryCountModel {
+  Category: string; // Explicitly allow `Category` to be a string
+  [key: string]: number | string;
+}
+
+export interface RatingModel {
+  categoryName: string;
+  percentage: number;
+  ratingPercentage: number | null;
+  totalScore: number;
+  totalPossibleScore: number;
+  averageRating?: number;
 }
 
 export type statusesEvaluation = "NOT_SET" | "ONGOING" | "FINISHED";
