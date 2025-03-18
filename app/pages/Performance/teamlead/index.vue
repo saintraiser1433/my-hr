@@ -21,13 +21,6 @@ if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
 
-
-
-
-
-
-
-
 </script>
 
 <template>

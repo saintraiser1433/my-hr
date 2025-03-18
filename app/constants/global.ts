@@ -31,24 +31,19 @@ export const MENU_ITEMS: MenuItem[] = [
 
 export const MENU_ITEMS_EMP: MenuItem[] = [
   { label: "Navigation", type: 'label' },
-  { label: "Dashboard", icon: "i-tabler-device-analytics", to: "/Dashboard" },
+  { label: "Evaluate Colleague", icon: "i-hugeicons-peer-to-peer-02", to: "/performance/peer" },
+  { label: "Received Evaluation", icon: "i-hugeicons-peer-to-peer-03", to: "/performance/superior" },
   { label: "My Requirements", icon: "i-carbon-document-requirements", to: "/applicants" },
-  {
-    label: "Peer Evaluation",
-    icon: "i-mdi-graph-line",
-    slot: "components",
-    children: [
-      { label: "Evaluate Colleague", icon: "i-hugeicons-peer-to-peer-02", to: "/performance/peer" },
-      { label: "Received Evaluation", icon: "i-hugeicons-peer-to-peer-03", to: "/performance/superior" },
-    ],
-  },
+  
+  
 ];
 
 export const MENU_ITEMS_TEAM: MenuItem[] = [
   { label: "Navigation", type: 'label' },
-  { label: "Dashboard", icon: "i-tabler-device-analytics", to: "/Dashboard" },
-  { label: "My Requirements", icon: "i-carbon-document-requirements", to: "/team/requirements" },
+  // { label: "Dashboard", icon: "i-tabler-device-analytics", to: "/Dashboard" },
   { label: "Evaluate Colleague", icon: "i-hugeicons-peer-to-peer-02", to: "/team/evaluate" },
+  { label: "My Requirements", icon: "i-carbon-document-requirements", to: "/team/requirements" },
+
   { label: "Evaluate Forms", icon: "i-hugeicons-question", to: "/team/categories" },
 
 ];

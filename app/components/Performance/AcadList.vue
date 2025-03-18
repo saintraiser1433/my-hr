@@ -11,7 +11,6 @@ const props = defineProps({
   },
   type: {
     type: String as PropType<Mode>,
-    required:true
   }
 });
 

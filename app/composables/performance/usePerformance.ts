@@ -1,7 +1,10 @@
 export const usePerformance = (
-    chart: Ref<any>,
+    data:Ref<EmployeeRating[]>
 ) => {
-    const getCategoryScore = (data: CategoryCountModel[]): ECOption => {
+
+    
+    const optionCategory = shallowRef(getCategoryScore());
+    function getCategoryScore(): ECOption {
         const shadcnDarkColors = [
             "#0a0a0a", // black
             "#1f1f1f", // dark gray
@@ -10,12 +13,34 @@ export const usePerformance = (
             "#737373", // soft gray
         ];
 
+        // Transform the data into the required format
+        const transformedData = data.value[0]?.categoryCounts.map((item) => {
+            const row = [item.Category]; // Start with the category name
+            Object.keys(item).forEach((key) => {
+                if (key !== "Category") {
+                    row.push(String(item[key])); // Add the values for each key
+                }
+            });
+            return row;
+        }) || [];
+
+        const headers = ["Category", ...Object.keys(data.value[0]?.categoryCounts[0] || {}).filter((key) => key !== "Category")];
+
+
+        const capitalizedHeaders = headers.slice(1).map((header) =>
+            header
+                .split(" ")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")
+        );
+
         return {
             animation: true,
             animationEasing: "elasticIn",
             animationDuration: 100,
-            legend: {},
-
+            legend: {
+                data: capitalizedHeaders,
+            },
             tooltip: {
                 className: "echarts-tooltip",
             },
@@ -33,35 +58,33 @@ export const usePerformance = (
                 },
             },
             dataset: {
-
-                source: data.map((item) => item)
+                source: [headers, ...transformedData],
             },
             xAxis: { type: "category" },
             yAxis: {},
             itemStyle: { borderRadius: 5 },
-            series: data.map((item, index) => ({
-                type: 'bar',
+            series: headers.slice(1).map((header, index) => ({
+                type: "bar",
+                name: capitalizedHeaders[index],
                 itemStyle: {
-                    color: shadcnDarkColors[index]
-                }
-            }))
-
+                    color: shadcnDarkColors[index % shadcnDarkColors.length],
+                },
+            })),
         };
     }
 
+    watch(
+        data,
+        (newData) => {
+            optionCategory.value = getCategoryScore();
+        },
+        { deep: true } // Deep watch to detect changes within the array
+    )
 
 
-    const hideToolbox = () => {
-        chart.value?.setOption({ toolbox: { show: false } });
-    }
-    const showToolbox = () => {
-        chart.value?.setOption({ toolbox: { show: true } });
-    }
 
     return {
-        hideToolbox,
-        showToolbox,
-        getCategoryScore
+        optionCategory,
     }
 
 };

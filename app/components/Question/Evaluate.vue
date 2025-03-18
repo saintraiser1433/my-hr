@@ -2,7 +2,6 @@
 import { h, ref } from "vue";
 import type { TableColumn } from "@nuxt/ui";
 const UButton = resolveComponent("UButton") as Component;
-const URadioGroup = resolveComponent("URadioGroup") as Component;
 const props = defineProps({
   data: {
     type: Array as PropType<Criteria[]>,

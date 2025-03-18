@@ -104,12 +104,20 @@ const toggleModal = () => {
       <h2 class="font-extrabold text-2xl">Evaluation Module</h2>
       <span class="text-sm">Here's a list of Evaluation available!</span>
     </div>
-
-    <EvaluationList :data="evaluationData" @update="edit" @delete="remove">
+    <UCard
+    :ui="{
+      root: 'overflow-hidden border-b-3 border-(--ui-primary)  ',
+      body: 'p-0 px-2 pb-2 sm:p-0 sm:px-2 sm:pb-2',
+      footer: 'p-0 sm:px-0',
+    }"
+    >
+      <EvaluationList :data="evaluationData" @update="edit" @delete="remove">
       <template #actions>
         <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add Evaluation
         </UButton>
       </template>
     </EvaluationList>
+    </UCard>
+    
   </div>
 </template>

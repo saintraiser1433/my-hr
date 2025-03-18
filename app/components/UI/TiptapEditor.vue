@@ -4,6 +4,10 @@ const config = useRuntimeConfig();
 const repo = repository($api);
 const props = defineProps({
   modelValue: String,
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emits = defineEmits(["update:modelValue"]);
@@ -50,6 +54,7 @@ const focusEditor = () => {
 const lowlight = createLowlight(allLanguages);
 const editor = useEditor({
   content: props.modelValue,
+  editable: !props.disabled,
   extensions: [
     TiptapStarterKit.configure({
       codeBlock: false,

@@ -100,6 +100,14 @@ export interface RatingModel {
   averageRating?: number;
 }
 
+export interface GetEvaluateQuestion {
+  transformData:SubmitResult[]
+  commentsDetail: {
+    comment:string,
+    evaluatedBy:string;
+  }
+}
+
 export type statusesEvaluation = "NOT_SET" | "ONGOING" | "FINISHED";
 
 export type Mode = "Peer" | "TeamLead"

@@ -10,10 +10,11 @@ const props = defineProps({
     default: () => [],
   },
   type: {
-    type:String,
-    default:'evaluate'
+    type: String,
+    default: 'evaluate'
   }
 });
+
 
 
 const emits = defineEmits(['view'])
@@ -21,12 +22,12 @@ const { pagination, globalFilter, refreshTable } = usePagination();
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const config = useRuntimeConfig();
-const handleEvaluate = async(id: number) => {
-  await navigateTo({name:'team-evaluate-empId',params:{empId:id}})
+const handleEvaluate = async (id: number) => {
+  await navigateTo({ name: 'team-evaluate-empId', params: { empId: id } })
 };
 
-const handleView = async(employeeId: number) => {
-  emits('view',employeeId)
+const handleView = async (employeeId: number) => {
+  emits('view', employeeId)
 };
 
 
@@ -55,31 +56,18 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard
-    :ui="{
-      root: 'overflow-hidden ',
-      body: 'p-0 sm:p-0',
-      footer: 'p-0 sm:px-0',
-    }"
-  >
-    <UTable
-      sticky
-      class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto"
-      ref="table"
-      v-model:global-filter="globalFilter"
-      v-model:pagination="pagination"
-      :pagination-options="{
+  <UCard :ui="{
+    root: 'overflow-hidden ',
+    body: 'p-0 sm:p-0',
+    footer: 'p-0 sm:px-0',
+  }">
+    <UTable sticky class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto" ref="table"
+      v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }"
-      :data="data"
-      :columns="columns"
-    >
-      <template #fullname-cell="{row}">
+      }" :data="data" :columns="columns">
+      <template #fullname-cell="{ row }">
         <div class="flex items-center gap-3">
-          <UAvatar
-            :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.photo_path}`"
-            size="lg"
-          />
+          <UAvatar :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.photo_path}`" size="lg" />
           <div>
             <p class="font-medium capitalize text-(--ui-text-highlighted)">
               {{ row.original.fullname }}
@@ -87,19 +75,28 @@ watch(
           </div>
         </div>
       </template>
-      <template #status-cell="{row}">
-          <UBadge :color="row.original.status ? 'success' : 'error'" variant="subtle" 
+      <template #status-cell="{ row }">
+        <UBadge :color="row.original.status ? 'success' : 'error'" variant="subtle"
           :label="row.original.status ? 'Evaluated' : 'Not Evaluated'"></UBadge>
       </template>
       <template #action-cell="{ row }">
-        <div class="flex items-center gap-2">
-          <UButton v-if="type === 'evaluate'" icon="lucide:view" size="sm" @click="handleEvaluate(row.original.id)" :disabled="row.original.status">
+
+        <div class="flex gap-2" v-if="type === 'evaluate'">
+          <UButton v-if="!row.original.status" icon="lucide:view" size="sm" @click="handleEvaluate(row.original.id)"
+            :disabled="row.original.status">
             Evaluate
           </UButton>
-          <UButton v-else-if="type === 'custom'" icon="lucide:view" size="sm" @click="handleView(row.original.id)" :disabled="!row.original.status">
+          <UButton v-else icon="lucide:view" variant="subtle" size="sm" @click="handleView(row.original.id)">
             View Ratings
           </UButton>
         </div>
+        <div v-if="type === 'custom'">
+          <UButton icon="lucide:view" variant="subtle" size="sm" @click="handleView(row.original.id)">
+            View Ratings
+          </UButton>
+        </div>
+
+
       </template>
     </UTable>
     <UITablePagination :table="table" v-if="table">

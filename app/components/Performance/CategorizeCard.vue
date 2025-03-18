@@ -2,7 +2,6 @@
 const props = defineProps({
   data: {
     type: Object as PropType<RatingModel>,
-    // required: true,
     default: () => [],
   },
 });
@@ -28,11 +27,11 @@ const percentage = computed(
           color-filled="#062d19"
           color-unfilled="#3c3c3c"
           animation-duration="1s"
-          :value="25.8"
-          :max="30"
+          :value="data.ratingPercentage"
+          :max="percentage"
           rounded
         >
-          <span class="font-bold"> 30% </span>
+          <span class="font-bold"> {{data.ratingPercentage}}% </span>
         </CircleProgressBar>
       </div>
       <div>

@@ -13,10 +13,19 @@ useSeoMeta({
 const { $toast, $api } = useNuxtApp();
 const { acadId } = useAcademicYearStore();
 const { departmentId } = useAuthStore();
+const { handleApiError } = useErrorHandler();
+const {
+  openModal,
+  isOpen,
+  title,
+  description,
+} = useCustomModal();
+
 const employeeData = computed(() =>
   employee.value?.filter((item) => item.role !== "TeamLead")
 );
 
+const employeeRatingData = ref<EmployeeRating[]>([])
 const { data: employee, status: employeeStatus, error: employeeError } = await useAPI<
   EmployeesEvaluate[]
 >(`/employees/evaluate/${departmentId}/${acadId}`);
@@ -24,12 +33,32 @@ const { data: employee, status: employeeStatus, error: employeeError } = await u
 if (employeeError.value) {
   $toast.error(employeeError.value.message || "Failed to fetch items");
 }
+
+const viewRating = async (employeeId: number) => {
+  openModal("View Ratings");
+  try {
+    const response = await $api<EmployeeRating[]>(
+      `/evaluation/result/${acadId}/${employeeId}`
+    );
+    employeeRatingData.value = response || [];
+  } catch (err) {
+    handleApiError(err);
+  }
+};
 </script>
 
 <template>
+    <PerformanceViewRatings
+    :eval-id="acadId ?? 0"
+    v-model:open="isOpen"
+    :data="employeeRatingData"
+    :title="title"
+    :description="description"
+  >
+  </PerformanceViewRatings>
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl">Evaluate Colleagues</h2>
     <span class="text-sm">Here's a list evaluate colleagues!</span>
   </div>
-  <EmployeeEvaluateList :data="employeeData"> </EmployeeEvaluateList>
+  <EmployeeEvaluateList :data="employeeData" @view="viewRating" />
 </template>

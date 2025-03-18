@@ -15,15 +15,12 @@ const { handleApiError } = useErrorHandler();
 const route = useRoute();
 const {
   openModal,
-  updateModal,
-  resetModal,
   isOpen,
-  isUpdate,
   title,
   description,
 } = useCustomModal();
 const employeeData = ref<EmployeesEvaluate[]>([]);
-const employeeRatingData = ref<EmployeeRating>();
+const employeeRatingData = ref<EmployeeRating[]>();
 const departmentItems = computed(
   () =>
     departments.value?.map((item) => ({
@@ -52,7 +49,7 @@ const groups = ref([
 const viewRating = async (employeeId: number) => {
   openModal("View Ratings");
   try {
-    const response = await $api<EmployeeRating>(
+    const response = await $api<EmployeeRating[]>(
       `/evaluation/result/${route.params.evalId}/${employeeId}`
     );
     employeeRatingData.value = response || [];
@@ -83,8 +80,9 @@ watch(
 
 <template>
   <PerformanceViewRatings
+    :eval-id="Number(route.params.evalId)"
     v-model:open="isOpen"
-    :team-lead-data="employeeRatingData"
+    :data="employeeRatingData"
     :title="title"
     :description="description"
   >
@@ -97,7 +95,7 @@ watch(
     <div class="col-span-4">
       <UCard
         :ui="{
-          root: 'overflow-hidden border-b-3 border-(--ui-primary) ',
+          root: 'overflow-hidden border-t-3 border-(--ui-primary) ',
           body: 'p-0 sm:p-0',
           footer: 'p-0 sm:px-0',
         }"
@@ -113,12 +111,12 @@ watch(
     <div class="col-span-8">
       <UCard
         :ui="{
-          root: 'overflow-hidden border-b-3 border-(--ui-primary) ',
+          root: 'overflow-hidden border-t-3 border-(--ui-primary) ',
           body: 'p-2 sm:p-2',
           footer: 'p-0 sm:px-0',
         }"
       >
-        <EmployeeEvaluateList type="custom" :data="employeeData" @view="viewRating" />
+        <EmployeeEvaluateList type="custom"  :data="employeeData" @view="viewRating" />
       </UCard>
     </div>
   </div>
