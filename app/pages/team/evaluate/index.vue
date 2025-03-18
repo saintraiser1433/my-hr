@@ -14,18 +14,13 @@ const { $toast, $api } = useNuxtApp();
 const { acadId } = useAcademicYearStore();
 const { departmentId } = useAuthStore();
 const { handleApiError } = useErrorHandler();
-const {
-  openModal,
-  isOpen,
-  title,
-  description,
-} = useCustomModal();
+const { openModal, isOpen, title, description } = useCustomModal();
 
 const employeeData = computed(() =>
   employee.value?.filter((item) => item.role !== "TeamLead")
 );
 
-const employeeRatingData = ref<EmployeeRating[]>([])
+const employeeRatingData = ref<EmployeeRating[]>([]);
 const { data: employee, status: employeeStatus, error: employeeError } = await useAPI<
   EmployeesEvaluate[]
 >(`/employees/evaluate/${departmentId}/${acadId}`);
@@ -48,8 +43,8 @@ const viewRating = async (employeeId: number) => {
 </script>
 
 <template>
-    <PerformanceViewRatings
-    :eval-id="acadId ?? 0"
+  <PerformanceViewRatings
+    :acad-id="acadId ?? 0"
     v-model:open="isOpen"
     :data="employeeRatingData"
     :title="title"

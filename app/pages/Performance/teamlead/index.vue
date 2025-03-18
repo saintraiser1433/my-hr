@@ -10,7 +10,7 @@ useSeoMeta({
   ogDescription: "CRUD for Performance",
 });
 
-const {  $toast } = useNuxtApp();
+const { $toast } = useNuxtApp();
 
 const evaluationData = ref<EvaluationModel[]>([]);
 const { data, status, error } = await useAPI<EvaluationModel[]>("/evaluation");
@@ -20,7 +20,6 @@ if (data.value) {
 if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
-
 </script>
 
 <template>
@@ -30,7 +29,6 @@ if (error.value) {
       <span class="text-sm">Please select academic year for your choice</span>
     </div>
 
-    <PerformanceAcadList :data="evaluationData" >
-    </PerformanceAcadList>
+    <PerformanceAcadList :data="evaluationData"> </PerformanceAcadList>
   </div>
 </template>

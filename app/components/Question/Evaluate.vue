@@ -19,66 +19,72 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  evaluationId: {
+  academicYearId: {
     type: Number,
     required: true,
   },
 });
 const { data, legend } = toRefs(props);
 const { createColumn } = useTableColumns(UButton);
-const emit = defineEmits(['checkbox-change']);
+const emit = defineEmits(["checkbox-change"]);
 const columns: TableColumn<any>[] = [
   createColumn("name", "Category", true),
   createColumn("question", "", false),
   ...legend.value.map((item) =>
-    createColumn(item.id?.toString() || '', item.score?.toString(), false)
+    createColumn(item.id?.toString() || "", item.score?.toString(), false)
   ),
 ];
 const flatData = data.value.flatMap((group) => group.questions);
 const groupingState = ref(["name"]); // Initial grouping state
 
-const handleCheckboxChange = (
-  rowId: string,
-  data: SubmitResult
-) => {
-  emit('checkbox-change', rowId, data);
+const handleCheckboxChange = (rowId: string, data: SubmitResult) => {
+  emit("checkbox-change", rowId, data);
 };
 </script>
 
 <template>
-
-  <UCard :ui="{
-    root: 'overflow-hidden',
-    header: 'p-0 sm:px-3 py-2',
-    body: 'p-0 sm:px-0 sm:py-2',
-    footer: 'p-0 sm:px-0',
-  }">
-
+  <UCard
+    :ui="{
+      root: 'overflow-hidden',
+      header: 'p-0 sm:px-3 py-2',
+      body: 'p-0 sm:px-0 sm:py-2',
+      footer: 'p-0 sm:px-0',
+    }"
+  >
     <UTable :data="flatData" :columns="columns" v-model:grouping="groupingState">
       <!-- Question cell -->
       <template #question-cell="{ row }">
         <div class="text-wrap max-w-3xl" v-html="row.original.question"></div>
       </template>
-      <template v-for="(datas, index) in legend" :key="index" #[`${datas.id?.toString()}-cell`]="{ row }">
+      <template
+        v-for="(datas, index) in legend"
+        :key="index"
+        #[`${datas.id?.toString()}-cell`]="{ row }"
+      >
         <div @click.stop>
-          <UCheckbox :ui="{
-            base: 'ring-(--ui-primary)'
-          }" color="neutral" size="md"
-            :model-value="selected[row.original.id?.toString()]?.templateDetailId === datas.id" @update:model-value="(checked) => {
-              if (checked) {
-                handleCheckboxChange(
-                  row.original.id?.toString(),
-                  {
+          <UCheckbox
+            :ui="{
+              base: 'ring-(--ui-primary)',
+            }"
+            color="neutral"
+            size="md"
+            :model-value="
+              selected[row.original.id?.toString()]?.templateDetailId === datas.id
+            "
+            @update:model-value="
+              (checked) => {
+                if (checked) {
+                  handleCheckboxChange(row.original.id?.toString(), {
                     questionId: row.original.id,
                     employeesId,
                     templateDetailId: Number(datas.id),
-                    evaluationId,
-                    categoryId:row.original.categoryId
-                  }
-
-                );
+                    academicYearId,
+                    categoryId: row.original.categoryId,
+                  });
+                }
               }
-            }" />
+            "
+          />
         </div>
       </template>
 

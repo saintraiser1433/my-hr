@@ -21,7 +21,7 @@ const employeeId = ref<number>(0);
 const teamleadData = ref<CriteriaColleague[]>([]);
 const question = ref<QuestionModel[]>([]);
 const legend = ref<TemplateDetail[]>([]);
-const colleagueItems = computed(() => employee.value || [])
+const colleagueItems = computed(() => employee.value || []);
 const groups = ref([
   {
     id: "Colleagues",
@@ -45,7 +45,6 @@ const { data: employee, status: statEmp, error: errEmp } = await useAPI<ListEmpl
   }
 );
 
-
 const {
   toggleModal,
   remove,
@@ -56,8 +55,12 @@ const {
   description,
   title,
   isOpen,
-} = useTeamLeadCategories(teamleadData, Number(route.params.evalId), '/teamlead/main/criteria', employeeId);
-
+} = useTeamLeadCategories(
+  teamleadData,
+  Number(route.params.acadId),
+  "/teamlead/main/criteria",
+  employeeId
+);
 
 const {
   isUpdating,
@@ -74,7 +77,6 @@ const {
   resetForm,
 } = useQuestions(question, legend, criteriaId, "Custom");
 
-
 const fetchPeerQuestion = async (item: TeamLeadCriteria) => {
   try {
     const response = await $api<CombinedPeerQuestionWithLegend>(
@@ -89,11 +91,6 @@ const fetchPeerQuestion = async (item: TeamLeadCriteria) => {
   }
 };
 
-
-
-
-
-
 watch(
   () => selectedEmployee.value?.id ?? null,
   async (newId) => {
@@ -103,7 +100,7 @@ watch(
     }
     try {
       const response = await $api<CriteriaColleague[]>(
-        `/teamlead/main/criteria/${route.params.evalId}/${newId}`
+        `/teamlead/main/criteria/${route.params.acadId}/${newId}`
       );
       teamleadData.value = response || [];
       employeeId.value = newId;
@@ -116,11 +113,26 @@ watch(
 </script>
 
 <template>
-  <EvaluationTeamleadCriteriaForm @data-criteria="submit" :description="description" v-model:state="teamleadForm"
-    :title="title" v-model:open="isOpen" />
-  <Question :title="questionTitle" :is-updating="isUpdating" :legend-data="legendData" :description="questionDesc"
-    :question-data="questionData" @submit="submitQuestion" @edit="editQuestion" @delete="removeQuestion"
-    @reset="resetForm" v-model:open="questionisOpen" v-model:state="questionForm">
+  <EvaluationTeamleadCriteriaForm
+    @data-criteria="submit"
+    :description="description"
+    v-model:state="teamleadForm"
+    :title="title"
+    v-model:open="isOpen"
+  />
+  <Question
+    :title="questionTitle"
+    :is-updating="isUpdating"
+    :legend-data="legendData"
+    :description="questionDesc"
+    :question-data="questionData"
+    @submit="submitQuestion"
+    @edit="editQuestion"
+    @delete="removeQuestion"
+    @reset="resetForm"
+    v-model:open="questionisOpen"
+    v-model:state="questionForm"
+  >
   </Question>
 
   <div class="flex flex-col items-center lg:items-start mb-3">
@@ -129,23 +141,36 @@ watch(
   </div>
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-4">
-      <UCard :ui="{
-        body: 'p-0 sm:p-0',
-        footer: 'p-0 sm:px-0',
-      }">
+      <UCard
+        :ui="{
+          body: 'p-0 sm:p-0',
+          footer: 'p-0 sm:px-0',
+        }"
+      >
         <UCommandPalette v-model="selectedEmployee" :groups="groups" class="flex-1" />
       </UCard>
     </div>
     <div class="col-span-8">
-      <UCard :ui="{
-        body: 'p-2 sm:p-2',
-        footer: 'p-0 sm:px-0',
-      }">
-        <EvaluationTeamleadCriteriaList :data="dataTeamlead" @modal-quest="fetchPeerQuestion" @update="edit"
-          @delete="remove">
+      <UCard
+        :ui="{
+          body: 'p-2 sm:p-2',
+          footer: 'p-0 sm:px-0',
+        }"
+      >
+        <EvaluationTeamleadCriteriaList
+          :data="dataTeamlead"
+          @modal-quest="fetchPeerQuestion"
+          @update="edit"
+          @delete="remove"
+        >
           <template #actions>
-            <UButton v-if="selectedEmployee" icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add
-              Criteria
+            <UButton
+              v-if="selectedEmployee"
+              icon="i-lucide-plus"
+              size="sm"
+              variant="solid"
+              @click="toggleModal"
+              >Add Criteria
             </UButton>
           </template>
         </EvaluationTeamleadCriteriaList>

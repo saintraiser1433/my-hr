@@ -1,47 +1,51 @@
 <script lang="ts" setup>
-import type { ECBasicOption } from 'echarts/types/dist/shared';
+import type { ECBasicOption } from "echarts/types/dist/shared";
 
 defineProps({
   employeeId: {
-    type:Number,
-    required:true,
+    type: Number,
+    required: true,
+    default: 0,
   },
-  evalId: {
-    type:Number,
-    required:true,
+  acadId: {
+    type: Number,
+    required: true,
   },
   evaluatedBy: {
-    type:String,
-    required:true,
+    type: String,
+    required: true,
+    default: "",
   },
-  option:{
-    type:Object as PropType<ECBasicOption>,
+  option: {
+    type: Object as PropType<ECBasicOption>,
   },
   rating: {
     type: Array as PropType<RatingModel[]>,
-    default: () => []
+    default: () => [],
   },
   comment: {
     type: String,
-    default: ''
+    default: "",
   },
   averageRating: {
     type: Number,
-    default: 0
+    default: 0,
   },
   adjectiveRating: {
     type: String,
-    default: ''
+    default: "",
   },
   title: String,
-  subtitle: String
-})
+  subtitle: String,
+});
 </script>
 
 <template>
-  <UCard :ui="{
-    root: 'overflow-hidden border-t-3 border-(--ui-primary) ',
-  }">
+  <UCard
+    :ui="{
+      root: 'overflow-hidden border-t-3 border-(--ui-primary) ',
+    }"
+  >
     <template #header>
       <div class="flex flex-col justify-center">
         <h3 class="font-semibold">{{ title }}</h3>
@@ -60,8 +64,17 @@ defineProps({
         <PerformanceCategorizeCard :data="data" />
       </div>
     </div>
-    <PerformanceCategoryAnalytics :option="option" title="Category Scores"></PerformanceCategoryAnalytics>
-    <PerformanceActions :eval-id="evalId" :employee-id="employeeId" :averageRating="averageRating" :remarks="adjectiveRating">
+    <PerformanceCategoryAnalytics
+      :option="option"
+      title="Category Scores"
+    ></PerformanceCategoryAnalytics>
+
+    <PerformanceActions
+      :acad-id="acadId"
+      :employee-id="employeeId"
+      :averageRating="averageRating"
+      :remarks="adjectiveRating"
+    >
     </PerformanceActions>
   </UCard>
 </template>

@@ -82,7 +82,7 @@ const handleSubmit = async () => {
     .filter((item): item is SubmitResult => item !== undefined);
 
   const headerStatus: HeaderStatus = {
-    evaluationId: Number(acad.acadId),
+    academicYearId: Number(acad.acadId),
     employeesId: Number(route.params.empId),
     commenterId: Number(auth.getId),
     description: comments.value,
@@ -112,7 +112,6 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-
   <div class="flex flex-col py-4 px-2 gap-2">
     <h1 class="text-center font-bold font-poppins">
       EMPLOYEE PERFORMANCE APPRAISAL FORM
@@ -151,7 +150,7 @@ const handleSubmit = async () => {
           <USeparator class="py-2"></USeparator>
           <div class="py-2">
             <QuestionEvaluate
-              :evaluation-id="Number(acad.acadId)"
+              :academic-year-id="Number(acad.acadId)"
               :employees-id="Number(route.params.empId)"
               :data="q.criteria"
               :legend="q.template?.details"

@@ -30,7 +30,7 @@ export interface CommentsModel {
 export interface PeerModel {
   id?: number;
   name?: string;
-  evaluationId?: number;
+  academicYearId?: number;
   template?: string;
   templateHeaderId?: number;
   question?: QuestionModel[];
@@ -53,7 +53,7 @@ export interface CriteriaColleague extends TeamLeadCriteria {
 }
 
 export interface SubmitResult {
-  evaluationId: number;
+  academicYearId: number;
   categoryId: number;
   questionId: number;
   employeesId: number;
@@ -61,7 +61,7 @@ export interface SubmitResult {
 }
 
 export interface HeaderStatus {
-  evaluationId: number;
+  academicYearId: number;
   employeesId: number;
   commenterId: number;
   description: string;
@@ -101,10 +101,10 @@ export interface RatingModel {
 }
 
 export interface GetEvaluateQuestion {
-  transformData:SubmitResult[]
+  transformData: SubmitResult[]
   commentsDetail: {
-    comment:string,
-    evaluatedBy:string;
+    comment: string,
+    evaluatedBy: string;
   }
 }
 

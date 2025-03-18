@@ -19,7 +19,7 @@ const legend = ref<TemplateDetail[]>([]);
 const { data: template, status: statusTemp, error: errorTemp } = await useAPI<
   TemplateModel[]
 >("/template");
-const { data, status, error } = await useAPI<PeerModel[]>(`/peer/${route.params.evalId}`);
+const { data, status, error } = await useAPI<PeerModel[]>(`/peer/${route.params.acadId}`);
 
 if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
@@ -37,7 +37,7 @@ const {
   edit,
   remove,
   toggleModal,
-} = usePeerCategories(data, template, Number(route.params.evalId));
+} = usePeerCategories(data, template, Number(route.params.acadId));
 
 const {
   isUpdating,

@@ -1,20 +1,19 @@
 <script setup lang="ts">
 const route = useRoute();
 const { data: questionnaires, status, error } = await useAPI<TeamLeadQuestionnaires[]>(
-  `/evaluation/criteria/${route.params.empId}/${route.params.evalId}`
+  `/evaluation/criteria/${route.params.empId}/${route.params.acadId}`
 );
 
 const { data: questionAnswer } = await useAPI<GetEvaluateQuestion>(
-  `/evaluation/view/${route.params.empId}/${route.params.evalId}`
+  `/evaluation/view/${route.params.empId}/${route.params.acadId}`
 );
 
 const selected = ref<Record<string, SubmitResult>>({});
 
 questionAnswer.value?.transformData.forEach((item) => {
-  const key = item.questionId.toString();   
+  const key = item.questionId.toString();
   selected.value[key] = item;
 });
-
 
 const items = questionnaires.value?.map((q) => {
   const percentage = q.teamLeadEvaluation.percentage * 100;
@@ -24,16 +23,13 @@ const items = questionnaires.value?.map((q) => {
     slot: sanitizeKey(q.teamLeadEvaluation.name),
   };
 });
-
-
 </script>
 
 <template>
-
   <div class="flex flex-col py-4 px-2 gap-2">
     <div class="flex flex-col items-center lg:items-start mb-3">
-        <h2 class="font-extrabold text-2xl">View Evaluation Form</h2>
-        <span class="text-sm">Viewing evaluation of the evaluated user!</span>
+      <h2 class="font-extrabold text-2xl">View Evaluation Form</h2>
+      <span class="text-sm">Viewing evaluation of the evaluated user!</span>
     </div>
     <UTabs :items="items" variant="pill" class="gap-4 w-full" :ui="{ trigger: 'flex-1' }">
       <template
@@ -59,7 +55,7 @@ const items = questionnaires.value?.map((q) => {
               :legend="q.template?.details"
               :selected="selected"
               :employees-id="Number(route.params.empId)"
-              :evaluation-id="Number(route.params.evalId)"
+              :academic-year-id="Number(route.params.acadId)"
             ></QuestionEvaluate>
           </div>
         </div>
@@ -68,13 +64,18 @@ const items = questionnaires.value?.map((q) => {
     <div class="w-full py-2">
       <h2 class="font-bold">COMMENTS</h2>
       <USeparator class="py-2"></USeparator>
-      <UITiptapEditor :modelValue="questionAnswer?.commentsDetail.comment" :disabled="true" />
+      <UITiptapEditor
+        :modelValue="questionAnswer?.commentsDetail.comment"
+        :disabled="true"
+      />
     </div>
     <div class="py-2">
-        <h3 class="font-bold">Evaluated By: <span class="font-normal underline">{{ questionAnswer?.commentsDetail.evaluatedBy }}</span></h3>
+      <h3 class="font-bold">
+        Evaluated By:
+        <span class="font-normal underline">{{
+          questionAnswer?.commentsDetail.evaluatedBy
+        }}</span>
+      </h3>
     </div>
   </div>
 </template>
-
-
-

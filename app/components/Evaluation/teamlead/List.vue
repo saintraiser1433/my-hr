@@ -12,7 +12,7 @@ const props = defineProps({
   itemTemplate: {
     type: Array as PropType<any[]>,
     default: () => [],
-  }
+  },
 });
 
 const emits = defineEmits<{
@@ -34,24 +34,16 @@ const handleUpdate = (item: TeamLeadModel) => {
   emits("update", item);
 };
 
-
-
-
-
-
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
   createColumn("name", "Category", true, (row) =>
     h("span", { class: "capitalize" }, row.getValue("name"))
   ),
   createColumn("percentage", "Percentage", true),
-  ...(store.getRole === "Admin"
-    ? [createColumn("teamlead", "For Teamlead?", true)]
-    : []),
+  ...(store.getRole === "Admin" ? [createColumn("teamlead", "For Teamlead?", true)] : []),
 
   createColumn("action", "Action", false),
 ];
-
 
 const getDropdownActions = (datas: TeamLeadModel): DropdownMenuItem[][] => {
   const actions: DropdownMenuItem[] = [];
@@ -59,37 +51,32 @@ const getDropdownActions = (datas: TeamLeadModel): DropdownMenuItem[][] => {
   // Check if the user is a TeamLead
 
   if (!datas.forTeamLead) {
-    actions.push(
-      {
-        label: "Manage Criteria",
-        icon: "i-lucide-view",
-        onSelect: async () => {
-          await navigateTo({
-            name: "Evaluation-teamlead-criteria-id",
-            params: { id: Number(datas.id) },
-          });
-        },
+    actions.push({
+      label: "Manage Criteria",
+      icon: "i-lucide-view",
+      onSelect: async () => {
+        await navigateTo({
+          name: "Evaluation-teamlead-criteria-id",
+          params: { id: Number(datas.id) },
+        });
       },
-    );
+    });
   }
 
   if (store.getRole === "TeamLead") {
-    actions.push(
-      {
-        label: "Manage Employees Criteria",
-        icon: "i-lucide-view",
-        onSelect: async () => {
-          await navigateTo({
-            name: "team-categories-criteria-evalId",
-            params: { evalId: Number(datas.id) }
-          });
-        },
+    actions.push({
+      label: "Manage Employees Criteria",
+      icon: "i-lucide-view",
+      onSelect: async () => {
+        await navigateTo({
+          name: "team-categories-criteria-acadId",
+          params: { acadId: Number(datas.id) },
+        });
       },
-    );
+    });
   }
 
   if (store.getRole === "Admin") {
-
     actions.push(
       {
         type: "separator",
@@ -112,15 +99,12 @@ const getDropdownActions = (datas: TeamLeadModel): DropdownMenuItem[][] => {
         onSelect: () => {
           handleDelete(Number(datas.id));
         },
-      },
+      }
     );
   }
 
-
   return [actions];
 };
-
-
 
 watch(
   () => props.data,
@@ -138,24 +122,38 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
-  <UCard :ui="{
-    root: 'overflow-hidden ',
-    body: 'p-0 sm:p-0',
-    footer: 'p-0 sm:px-0',
-  }">
-    <UTable sticky class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto" ref="table"
-      v-model:expanded="expanded" :ui="{
+  <UCard
+    :ui="{
+      root: 'overflow-hidden ',
+      body: 'p-0 sm:p-0',
+      footer: 'p-0 sm:px-0',
+    }"
+  >
+    <UTable
+      sticky
+      class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto"
+      ref="table"
+      v-model:expanded="expanded"
+      :ui="{
         tr: 'data-[expanded=true]:bg-(--ui-bg-elevated)/50',
-      }" v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
+      }"
+      v-model:global-filter="globalFilter"
+      v-model:pagination="pagination"
+      :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
-      }" :data="data" :columns="columns">
+      }"
+      :data="data"
+      :columns="columns"
+    >
       <template #percentage-cell="{ row }">
         <span>{{ row.original.percentage * 100 }}%</span>
       </template>
       <template #teamlead-cell="{ row }">
-        <UBadge :icon="row.original.forTeamLead ? 'lucide-check' : 'lucide-x'"
+        <UBadge
+          :icon="row.original.forTeamLead ? 'lucide-check' : 'lucide-x'"
           :color="row.original.forTeamLead ? 'success' : 'error'"
-          :variant="row.original.forTeamLead ? 'solid' : 'outline'"></UBadge>
+          :variant="row.original.forTeamLead ? 'solid' : 'outline'"
+        ></UBadge>
       </template>
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">

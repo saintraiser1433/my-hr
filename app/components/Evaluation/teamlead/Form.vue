@@ -32,7 +32,7 @@ const schema = $joi.object({
     "number.empty": `Percentage is Required`,
   }),
   forTeamLead: $joi.boolean().optional(),
-  evaluationId: $joi.number().optional(),
+  academicYearId: $joi.number().optional(),
   id: $joi.number().optional(),
 });
 
@@ -46,18 +46,16 @@ const submitForm = () => {
     formRef.value.submit();
   }
 };
-const percentage = ref<{id:number,label:string}[]>([]);
+const percentage = ref<{ id: number; label: string }[]>([]);
 for (let i = 1; i <= 100; i++) {
   percentage.value.push({
-    id: i / 100,  // Convert to decimal
-    label: `${i}%`, 
+    id: i / 100, // Convert to decimal
+    label: `${i}%`,
   });
 }
-
 </script>
 
 <template>
-
   <UModal
     v-model:open="open"
     :description="description"
@@ -65,7 +63,6 @@ for (let i = 1; i <= 100; i++) {
     :ui="{ content: 'max-w-md' }"
   >
     <template #body>
-
       <UForm
         ref="formRef"
         :schema="schema"
@@ -86,7 +83,7 @@ for (let i = 1; i <= 100; i++) {
           />
         </UFormField>
         <UFormField name="forTeamLead">
-          <USwitch  v-model="model.forTeamLead" size="md" label="For Team Lead" />
+          <USwitch v-model="model.forTeamLead" size="md" label="For Team Lead" />
         </UFormField>
       </UForm>
     </template>

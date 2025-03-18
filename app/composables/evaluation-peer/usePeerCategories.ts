@@ -1,7 +1,7 @@
 export const usePeerCategories = (
   peer: Ref<PeerModel[] | undefined>,
   template: Ref<TemplateModel[] | undefined>,
-  evalId: number,
+  academicYearId: number,
 ) => {
   const { $api, $toast } = useNuxtApp();
   const { handleApiError } = useErrorHandler();
@@ -9,9 +9,9 @@ export const usePeerCategories = (
   const selectValue = ref(0);
   const peerData = computed(() => peer.value || []);
 
-  
 
-  
+
+
   const itemTemplate = computed(() => template.value?.map((item) => ({
     id: item.id,
     label: item.template_name,
@@ -21,7 +21,7 @@ export const usePeerCategories = (
   const initialState = {
     id: undefined,
     name: "",
-    evaluationId: evalId,
+    academicYearId: academicYearId,
     percentage: undefined,
   };
   const peerForm = reactive<PeerModel>({ ...initialState });

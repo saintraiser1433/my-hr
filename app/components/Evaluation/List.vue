@@ -42,12 +42,25 @@ function getDropdownActions(data: EvaluationModel): DropdownMenuItem[][] {
   return [
     [
       {
+        label: "Assign Peer Evaluations",
+        icon: "i-hugeicons-assignments",
+        onSelect: async () => {
+          await navigateTo({
+            name: "Evaluation-assign-acadId",
+            params: { acadId: data.id },
+          });
+        },
+      },
+      {
+        type: "separator",
+      },
+      {
         label: "Manage Peer Categories",
         icon: "i-hugeicons-assignments",
         onSelect: async () => {
           await navigateTo({
-            name: "Evaluation-peer-evalId",
-            params: { evalId: data.id },
+            name: "Evaluation-peer-acadId",
+            params: { acadId: data.id },
           });
         },
       },
@@ -59,8 +72,8 @@ function getDropdownActions(data: EvaluationModel): DropdownMenuItem[][] {
         icon: "i-mdi:lead-pencil",
         onSelect: async () => {
           await navigateTo({
-            name: "Evaluation-teamlead-evalId",
-            params: { evalId: data.id },
+            name: "Evaluation-teamlead-acadId",
+            params: { acadId: data.id },
           });
         },
       },
@@ -134,15 +147,19 @@ watch(
         >
         <UBadge v-else color="neutral">FINISHED</UBadge>
       </template>
-      <template #peerTemplate-cell="{row}">
-        <UBadge v-if="row.original.peerTemplate" class="uppercase">{{row.original.peerTemplate.template_name}}</UBadge>
+      <template #peerTemplate-cell="{ row }">
+        <UBadge v-if="row.original.peerTemplate" class="uppercase">{{
+          row.original.peerTemplate.template_name
+        }}</UBadge>
         <UBadge v-else class="uppercase" color="error">NO TEMPLATE</UBadge>
       </template>
-      <template #teamLeadTemplate-cell="{row}">
-        <UBadge v-if="row.original.teamLeadTemplate" class="uppercase">{{row.original.teamLeadTemplate.template_name}}</UBadge>
+      <template #teamLeadTemplate-cell="{ row }">
+        <UBadge v-if="row.original.teamLeadTemplate" class="uppercase">{{
+          row.original.teamLeadTemplate.template_name
+        }}</UBadge>
         <UBadge v-else class="uppercase" color="error">NO TEMPLATE</UBadge>
       </template>
-      
+
       <template #semester-cell="{ row }">
         <div v-if="row.original.semester === 1">
           <span>First Semester</span>

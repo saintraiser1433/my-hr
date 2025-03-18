@@ -26,7 +26,7 @@ const {
 const initialState = {
   id: undefined,
   name: "",
-  evaluationId: Number(route.params.evalId),
+  academicYearId: Number(route.params.acadId),
   percentage: undefined,
   forTeamLead: false,
 };
@@ -42,7 +42,7 @@ const { data: template, status: statusTemp, error: errorTemp } = await useAPI<
   TemplateModel[]
 >("/template");
 const { data, status, error } = await useAPI<TeamLeadModel[]>(
-  `/teamlead/${route.params.evalId}`
+  `/teamlead/${route.params.acadId}`
 );
 if (data.value) {
   teamleadData.value = data.value;
@@ -74,9 +74,6 @@ const submit = async (response: TeamLeadModel) => {
     return handleApiError(error);
   }
 };
-
-
-
 
 const edit = (response: TeamLeadModel) => {
   teamleadForm.id = response.id;

@@ -12,15 +12,7 @@ useSeoMeta({
 
 const store = useAcademicYearStore();
 const { $toast } = useNuxtApp();
-const auth = useAuthStore();
-const route = useRoute();
-const initialState = {
-  id: undefined,
-  name: "",
-  evaluationId: Number(route.params.evalId),
-  percentage: undefined,
-  forTeamLead: false,
-};
+
 const teamleadData = ref<TeamLeadModel[]>([]);
 const { data, status, error } = await useAPI<TeamLeadModel[]>(
   `/teamlead/main/${store.acadId}`

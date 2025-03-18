@@ -13,12 +13,7 @@ useSeoMeta({
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
 const route = useRoute();
-const {
-  openModal,
-  isOpen,
-  title,
-  description,
-} = useCustomModal();
+const { openModal, isOpen, title, description } = useCustomModal();
 const employeeData = ref<EmployeesEvaluate[]>([]);
 const employeeRatingData = ref<EmployeeRating[]>();
 const departmentItems = computed(
@@ -50,7 +45,7 @@ const viewRating = async (employeeId: number) => {
   openModal("View Ratings");
   try {
     const response = await $api<EmployeeRating[]>(
-      `/evaluation/result/${route.params.evalId}/${employeeId}`
+      `/evaluation/result/${route.params.acadId}/${employeeId}`
     );
     employeeRatingData.value = response || [];
   } catch (err) {
@@ -67,7 +62,7 @@ watch(
     }
     try {
       const response = await $api<EmployeesEvaluate[]>(
-        `/employees/evaluate/${newId}/${route.params.evalId}`
+        `/employees/evaluate/${newId}/${route.params.acadId}`
       );
       employeeData.value = response || [];
     } catch (err) {
@@ -80,7 +75,7 @@ watch(
 
 <template>
   <PerformanceViewRatings
-    :eval-id="Number(route.params.evalId)"
+    :acad-id="Number(route.params.acadId)"
     v-model:open="isOpen"
     :data="employeeRatingData"
     :title="title"
@@ -116,7 +111,7 @@ watch(
           footer: 'p-0 sm:px-0',
         }"
       >
-        <EmployeeEvaluateList type="custom"  :data="employeeData" @view="viewRating" />
+        <EmployeeEvaluateList type="custom" :data="employeeData" @view="viewRating" />
       </UCard>
     </div>
   </div>

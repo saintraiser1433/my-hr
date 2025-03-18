@@ -31,7 +31,7 @@ const schema = $joi.object({
     "any.required": `Percentage is Required`,
     "number.empty": `Percentage is Required`,
   }),
-  evaluationId: $joi.number().optional(),
+  academicYearId: $joi.number().optional(),
   id: $joi.number().optional(),
 });
 
@@ -45,18 +45,16 @@ const submitForm = () => {
     formRef.value.submit();
   }
 };
-const percentage = ref<{id:number,label:string}[]>([]);
+const percentage = ref<{ id: number; label: string }[]>([]);
 for (let i = 1; i <= 100; i++) {
   percentage.value.push({
-    id: i / 100,  // Convert to decimal
-    label: `${i}%`, 
+    id: i / 100, // Convert to decimal
+    label: `${i}%`,
   });
 }
-
 </script>
 
 <template>
-
   <UModal
     v-model:open="open"
     :description="description"
