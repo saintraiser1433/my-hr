@@ -39,7 +39,8 @@ const { hideToolbox, showToolbox } = usePerformance(chart);
 // function random() {
 //   return Math.round(300 + Math.random() * 700) / 10;
 // }
-const getCategoryScore = (): ECOption => {
+const option = shallowRef(getCategoryScore());
+function getCategoryScore(): ECOption {
   const shadcnDarkColors = [
     "#0a0a0a", // black
     "#1f1f1f", // dark gray
@@ -48,12 +49,32 @@ const getCategoryScore = (): ECOption => {
     "#737373", // soft gray
   ];
 
+  // Generate additional darker shades if needed
+  const generateDarkColor = (index: number) => {
+    const intensity = Math.max(0, 10 - index * 10); // Darken with step 10
+    return `rgb(${intensity}, ${intensity}, ${intensity})`;
+  };
+
+  // Extract all unique rating keys (excluding "Category")
+  const categoryCounts = teamLeadData.value[0]?.categoryCounts || [];
+  const ratingKeys = Array.from(
+    new Set(categoryCounts.flatMap((item) => Object.keys(item)))
+  ).filter((key) => key !== "Category");
+
+  // Construct dataset source dynamically
+  const sourceData = [
+    ["Category", ...ratingKeys], // Headers row
+    ...categoryCounts.map((item) => [
+      item.Category,
+      ...ratingKeys.map((key) => item[key] || 0), // Fill missing values with 0
+    ]),
+  ];
+
   return {
     animation: true,
     animationEasing: "elasticIn",
     animationDuration: 100,
     legend: {},
-
     tooltip: {
       className: "echarts-tooltip",
     },
@@ -71,21 +92,21 @@ const getCategoryScore = (): ECOption => {
       },
     },
     dataset: {
-      source: teamLeadData.value[0]?.categoryCounts.map((item) => item),
+      source: sourceData,
     },
     xAxis: { type: "category" },
     yAxis: {},
     itemStyle: { borderRadius: 5 },
-    series: teamLeadData.value[0]?.categoryCounts.map((item, index) => ({
+    series: ratingKeys.map((label, index) => ({
       type: "bar",
+      name: label,
       itemStyle: {
-        color: shadcnDarkColors[index],
+        color:
+          shadcnDarkColors[index] || generateDarkColor(index - shadcnDarkColors.length), // Use predefined colors first, then generate dark colors
       },
     })),
   };
-};
-
-const option = shallowRef(getCategoryScore());
+}
 </script>
 
 <template>
@@ -96,7 +117,7 @@ const option = shallowRef(getCategoryScore());
     :ui="{ content: 'max-w-8xl' }"
   >
     <template #body>
-      {{ option }}
+      {{ teamLeadData }}
       <div
         class="flex gap-5 py-3 px-2 rounded-md border-b-3 border-(--ui-primary) bg-(--sidebar-background) w-full shadow-lg"
       >
@@ -232,6 +253,11 @@ const option = shallowRef(getCategoryScore());
                 </ClientOnly>
               </div>
             </UCard>
+            <div class="py-2">
+              <h3>Comments</h3>
+              <UITiptapEditor />
+            </div>
+
             <PerformanceActions></PerformanceActions>
           </UCard>
         </div>
