@@ -7,9 +7,7 @@ export default defineNuxtConfig({
   routeRules: {
     '/': { redirect: '/auth' },
     '/team': { redirect: '/team/evaluate' },
-    '/emp': { redirect: '/team/evaluate' },
-    // '/admin/': { redirect: '/admin/home' },
-    // '/admin/home': { ssr: true },
+
   },
   modules: [
     '@nuxt/ui',

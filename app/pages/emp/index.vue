@@ -29,6 +29,13 @@ if (employeeError.value) {
   $toast.error(employeeError.value.message || "Failed to fetch items");
 }
 
+const evaluate = async (peerId: number, employeeId: number) => {
+  await navigateTo({
+    name: "emp-evaluate-empId-peerEvalId",
+    params: { empId: employeeId, peerEvalId: peerId },
+  });
+};
+
 const viewRating = async (employeeId: number) => {
   openModal("View Ratings");
   try {
@@ -43,7 +50,6 @@ const viewRating = async (employeeId: number) => {
 </script>
 
 <template>
-  
   <PerformanceViewRatings
     :acad-id="acadId ?? 0"
     v-model:open="isOpen"
@@ -56,5 +62,5 @@ const viewRating = async (employeeId: number) => {
     <h2 class="font-extrabold text-2xl">Evaluate Colleagues</h2>
     <span class="text-sm">Here's a list evaluate colleagues!</span>
   </div>
-  <EmployeeEvaluateList :data="employeeData" @view="viewRating" />
+  <EmployeeEvaluateList :data="employeeData" @evaluate="evaluate" @view="viewRating" />
 </template>

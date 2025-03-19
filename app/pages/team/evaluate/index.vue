@@ -23,16 +23,20 @@ const employeeData = computed(() =>
 const employeeRatingData = ref<EmployeeRating[]>([]);
 const { data: employee, status: employeeStatus, error: employeeError } = await useAPI<
   EmployeesEvaluate[]
->(`/employees/evaluate`,{
+>(`/employees/evaluate`, {
   params: {
     deptId: departmentId,
-    acadId:acadId
-  }
+    acadId: acadId,
+  },
 });
 
 if (employeeError.value) {
   $toast.error(employeeError.value.message || "Failed to fetch items");
 }
+
+const evaluate = async (id: number) => {
+  await navigateTo({ name: "team-evaluate-empId", params: { empId: id } });
+};
 
 const viewRating = async (employeeId: number) => {
   openModal("View Ratings");
@@ -60,5 +64,5 @@ const viewRating = async (employeeId: number) => {
     <h2 class="font-extrabold text-2xl">Evaluate Colleagues</h2>
     <span class="text-sm">Here's a list evaluate colleagues!</span>
   </div>
-  <EmployeeEvaluateList :data="employeeData" @view="viewRating" />
+  <EmployeeEvaluateList :data="employeeData" @evaluate="evaluate" @view="viewRating" />
 </template>

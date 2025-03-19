@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
-const { data: questionnaires, status, error } = await useAPI<TeamLeadQuestionnaires[]>(
+const { data: questionnaires, status, error } = await useAPI<Questionnaires[]>(
   `/evaluation/criteria/${route.params.empId}/${route.params.acadId}`
 );
 
@@ -16,11 +16,11 @@ questionAnswer.value?.transformData.forEach((item) => {
 });
 
 const items = questionnaires.value?.map((q) => {
-  const percentage = q.teamLeadEvaluation.percentage * 100;
-  const label = `${q.teamLeadEvaluation.name} - ${percentage}%`;
+  const percentage = q.evaluation.percentage * 100;
+  const label = `${q.evaluation.name} - ${percentage}%`;
   return {
     label: label,
-    slot: sanitizeKey(q.teamLeadEvaluation.name),
+    slot: sanitizeKey(q.evaluation.name),
   };
 });
 </script>
@@ -32,10 +32,7 @@ const items = questionnaires.value?.map((q) => {
       <span class="text-sm">Viewing evaluation of the evaluated user!</span>
     </div>
     <UTabs :items="items" variant="pill" class="gap-4 w-full" :ui="{ trigger: 'flex-1' }">
-      <template
-        v-for="q in questionnaires"
-        #[sanitizeKey(q.teamLeadEvaluation.name)]="{ item }"
-      >
+      <template v-for="q in questionnaires" #[sanitizeKey(q.evaluation.name)]="{ item }">
         <div class="p-4 border rounded-lg">
           <div class="flex items-center gap-2">
             <h4 class="font-semibold">Legends:</h4>
@@ -51,7 +48,7 @@ const items = questionnaires.value?.map((q) => {
           <USeparator class="py-2"></USeparator>
           <div class="py-2">
             <QuestionEvaluate
-              :data="q.criteria"
+              :data="q.questions"
               :legend="q.template?.details"
               :selected="selected"
               :employees-id="Number(route.params.empId)"

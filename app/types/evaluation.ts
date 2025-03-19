@@ -64,6 +64,7 @@ export interface SubmitResult {
   questionId: number;
   employeesId: number;
   templateDetailId: number;
+  peerEvalId?: number;
 }
 
 export interface HeaderStatus {

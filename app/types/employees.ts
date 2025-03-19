@@ -130,6 +130,7 @@ export interface ListDepartment {
 
 export interface EmployeesEvaluate {
     id: number;
+    employeeId: number,
     photo_path: string;
     evaluatee: string;
     role: string;

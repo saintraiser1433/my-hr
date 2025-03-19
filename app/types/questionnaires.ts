@@ -1,9 +1,10 @@
-export interface TeamLeadQuestionnaires {
-
-    teamLeadEvaluation: TeamLeadEvaluation;
+export interface Questionnaires {
+    evaluation: TeamLeadEvaluation;
     template: TemplateHeader | null;
-    criteria: Criteria[];
+    questions: Question[];
 }
+
+
 
 interface TeamLeadEvaluation {
     id: number;

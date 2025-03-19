@@ -4,7 +4,7 @@ import type { TableColumn } from "@nuxt/ui";
 const UButton = resolveComponent("UButton") as Component;
 const props = defineProps({
   data: {
-    type: Array as PropType<Criteria[]>,
+    type: Array as PropType<Question[]>,
     default: () => [],
   },
   legend: {
@@ -34,7 +34,7 @@ const columns: TableColumn<any>[] = [
     createColumn(item.id?.toString() || "", item.score?.toString(), false)
   ),
 ];
-const flatData = data.value.flatMap((group) => group.questions);
+
 const groupingState = ref(["name"]); // Initial grouping state
 
 const handleCheckboxChange = (rowId: string, data: SubmitResult) => {
@@ -51,7 +51,7 @@ const handleCheckboxChange = (rowId: string, data: SubmitResult) => {
       footer: 'p-0 sm:px-0',
     }"
   >
-    <UTable :data="flatData" :columns="columns" v-model:grouping="groupingState">
+    <UTable :data="data" :columns="columns" v-model:grouping="groupingState">
       <!-- Question cell -->
       <template #question-cell="{ row }">
         <div class="text-wrap max-w-3xl" v-html="row.original.question"></div>

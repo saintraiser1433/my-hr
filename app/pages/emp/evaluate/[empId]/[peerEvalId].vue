@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  requiredRole: "TeamLead",
+  requiredRole: "Employee",
 });
 
 useSeoMeta({
@@ -16,7 +16,7 @@ const auth = useAuthStore();
 const route = useRoute();
 
 const { data: questionnaires, status, error } = await useAPI<Questionnaires[]>(
-  `/evaluation/criteria/${route.params.empId}/${acad.acadId}`
+  `/evaluation/peer/category/${acad.acadId}`
 );
 
 if (error.value) {
@@ -41,7 +41,7 @@ const handleCheckboxChange = (rowId: string, data: SubmitResult) => {
 const totalCheckboxes = computed(() => {
   return (
     questionnaires.value?.reduce((total, q) => {
-      const questionCount = q.questions.length;
+      const questionCount = q.questions.length; // Fix: Directly use `.length` on questions array
       return total + questionCount;
     }, 0) || 0
   );
@@ -79,26 +79,14 @@ const handleSubmit = async () => {
     .map((rowId) => selected.value[rowId])
     .filter((item): item is SubmitResult => item !== undefined);
 
-  const headerStatus: HeaderStatus = {
-    academicYearId: Number(acad.acadId),
-    employeesId: Number(route.params.empId),
-    commenterId: Number(auth.getId),
-    description: comments.value,
-    type: Type.TEAMLEAD,
-  };
-
-  const data: SubmissionModel = {
-    evaluate,
-    headerStatus,
-  };
-
-  const submissionRepo = repository<SubmissionModel>($api, "/evaluation/submit");
+  const submissionRepo = repository<SubmitResult[]>($api, "/evaluation/submitPeer");
   setAlert("warning", "Are you sure you want to submit?", "", "Confirm submit").then(
     async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await submissionRepo.add(data);
-          await navigateTo({ name: "team-evaluate" });
+          // console.log(evaluate);
+          const response = await submissionRepo.add(evaluate);
+          await navigateTo({ name: "emp" });
           $toast.success(response.message);
         } catch (err) {
           handleApiError(err);
@@ -112,14 +100,24 @@ const handleSubmit = async () => {
 <template>
   <div class="flex flex-col py-4 px-2 gap-2">
     <h1 class="text-center font-bold font-poppins">
-      EMPLOYEE PERFORMANCE APPRAISAL FORM
+      PEER TO PEER EVALUATION FORM (INSTRUCTORS)
     </h1>
     <h4>
-      Employee Performance Appraisal shall be conducted periodically and designed to
-      measure the effectiveness of South East Asian Institute of Technology Inc. Employee
-      in performing his assigned duties & responsibilities. This shall also serve as a
-      tool in pinpointing their performance deficiencies.
+      The principal purpose of peer-to-peer teacher evaluation is to encourage staff
+      development, to strengthen teaching effectiveness, and to improve overall
+      performance. Specifically, the objectives of the performance evaluation are:
     </h4>
+    <ul>
+      <li>
+        1.To increase the effectiveness of each instructor and overall department success
+        in meeting the Institution's strategic goals
+      </li>
+      <li>
+        2.To increase awareness of the instructor's professional strengths and weaknesses;
+        and
+      </li>
+      <li>3.To identify opportunities for personal and professional growth.</li>
+    </ul>
     <USeparator class="py-2"></USeparator>
     <div class="flex items-center gap-5">
       <h3 class="font-bold">Evaluate:</h3>
