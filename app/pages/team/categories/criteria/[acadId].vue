@@ -16,12 +16,14 @@ const store = useAuthStore();
 const { handleApiError } = useErrorHandler();
 const config = useRuntimeConfig();
 const selectedEmployee = ref<ListEmployee>({});
+
 const criteriaId = ref<number>(0);
 const employeeId = ref<number>(0);
-const teamleadData = ref<CriteriaColleague[]>([]);
+// const teamleadData = ref<CriteriaColleague[]>([]);
 const question = ref<QuestionModel[]>([]);
 const legend = ref<TemplateDetail[]>([]);
 const colleagueItems = computed(() => employee.value || []);
+const empId = computed(() => selectedEmployee.value.id || 0);
 const groups = ref([
   {
     id: "Colleagues",
@@ -45,6 +47,19 @@ const { data: employee, status: statEmp, error: errEmp } = await useAPI<ListEmpl
   }
 );
 
+const { data: result, error:errorEvaluation  } = await useAPI<CriteriaColleague[]>(
+  `/teamlead/main/criteria`,{
+    watch:[selectedEmployee],
+    immediate:false,
+    params:{
+      acadId: route.params.acadId,
+      empId: empId
+    },
+    server:false
+  },
+);
+
+
 const {
   toggleModal,
   remove,
@@ -56,7 +71,7 @@ const {
   title,
   isOpen,
 } = useTeamLeadCategories(
-  teamleadData,
+  result,
   Number(route.params.acadId),
   "/teamlead/main/criteria",
   employeeId
@@ -95,20 +110,11 @@ watch(
   () => selectedEmployee.value?.id ?? null,
   async (newId) => {
     if (!newId) {
-      teamleadData.value = [];
       return;
     }
-    try {
-      const response = await $api<CriteriaColleague[]>(
-        `/teamlead/main/criteria/${route.params.acadId}/${newId}`
-      );
-      teamleadData.value = response || [];
-      employeeId.value = newId;
-    } catch (err) {
-      handleApiError(err);
-    }
+    employeeId.value = newId;
+   
   },
-  { flush: "post" }
 );
 </script>
 
@@ -158,7 +164,7 @@ watch(
         }"
       >
         <EvaluationTeamleadCriteriaList
-          :data="dataTeamlead"
+          :data="result"
           @modal-quest="fetchPeerQuestion"
           @update="edit"
           @delete="remove"

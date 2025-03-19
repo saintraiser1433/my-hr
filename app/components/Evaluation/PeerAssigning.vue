@@ -1,39 +1,62 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
 import { getPaginationRowModel } from "@tanstack/vue-table";
+
 const UButton = resolveComponent("UButton") as Component;
 
-const props = defineProps({
-  data: {
-    type: Array as PropType<EmployeesEvaluate[]>,
-    required: true,
-    default: () => [],
-  },
-  type: {
-    type: String,
-    default: "evaluate",
-  },
-});
+const props = defineProps<{ data: { [key: string]: any }[] }>();
+const emits = defineEmits<{ (e: "view"): void }>();
 
-const emits = defineEmits(["view"]);
 const { pagination, globalFilter, refreshTable } = usePagination();
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 
-const columns: TableColumn<any>[] = [
-  createColumn("#", "#", true, (row) => `${row.index + 1}`),
-  createColumn("evaluator", "Evaluator", true),
-  createColumn("status", "Evaluation Status", true),
-];
+// Store columns in a ref()
+const columns = ref<TableColumn<any>[]>([]);
+
+// Reactive key to force re-render
+const tableKey = ref(0);
+
+// Function to update columns dynamically
+const updateColumns = () => {
+  const maxEvaluateFields = props.data.reduce((max, item) => {
+    const evaluateFields = Object.keys(item).filter((key) =>
+      key.startsWith("evaluate")
+    );
+    return Math.max(max, evaluateFields.length);
+  }, 0);
+
+  // Generate dynamic columns for evaluate fields
+  const evaluateColumns = Array.from({ length: maxEvaluateFields }, (_, index) =>
+    createColumn(`evaluate${index + 1}`, `Evaluatee ${index + 1}`, true)
+  );
+
+  // Update the columns array
+  columns.value = [
+    createColumn("#", "#", true, (row) => `${row.index + 1}`),
+    createColumn("evaluator", "Evaluator", true),
+    ...evaluateColumns,
+  ];
+
+  console.log("New Columns:", columns.value);
+
+  // Force re-render by changing tableKey
+  tableKey.value++;
+};
 
 watch(
   () => props.data,
-  (newVal, oldVal) => {
-    if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
-      refreshTable();
-    }
-  }
+  () => {
+    updateColumns();
+    refreshTable(); 
+  },
+  { deep: true, immediate: true } 
 );
+
+
+const view = () => {
+  emits("view");
+};
 </script>
 
 <template>
@@ -42,6 +65,7 @@ watch(
       <slot name="actions"></slot>
     </template>
   </UITableSearch>
+
   <UCard
     :ui="{
       root: 'overflow-hidden ',
@@ -50,25 +74,24 @@ watch(
     }"
   >
     <UTable
+      :key="tableKey"
       sticky
       class="overflow-y-auto custom-scrollbar h-120 lg:h-150 cursor-auto"
       ref="table"
       v-model:global-filter="globalFilter"
       v-model:pagination="pagination"
-      :pagination-options="{
-        getPaginationRowModel: getPaginationRowModel(),
-      }"
+      :pagination-options="{ getPaginationRowModel: getPaginationRowModel() }"
       :data="data"
       :columns="columns"
     >
       <template #empty>
         <div class="flex flex-col items-center justify-center py-6 gap-3">
           <span class="italic text-sm">Click button to shuffle peers!</span>
-          <UButton size="lg" label="Random Shuffling" />
+          <UButton size="lg" @click="view" label="Random Shuffling" />
         </div>
       </template>
     </UTable>
 
-    <UITablePagination :table="table" v-if="table"> </UITablePagination>
+    <UITablePagination :table="table" v-if="table" />
   </UCard>
 </template>

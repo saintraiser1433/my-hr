@@ -34,7 +34,7 @@ const handleView = async (employeeId: number) => {
 
 const columns: TableColumn<any>[] = [
   createColumn("#", "#", true, (row) => `${row.index + 1}`),
-  createColumn("fullname", "Full Name", true),
+  createColumn("evaluatee", "Evaluatee", true),
   createColumn("status", "Evaluation Status", true),
   createColumn("action", "Action", false),
 ];
@@ -65,12 +65,12 @@ watch(
       v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
       }" :data="data" :columns="columns">
-      <template #fullname-cell="{ row }">
+      <template #evaluatee-cell="{ row }">
         <div class="flex items-center gap-3">
           <UAvatar :src="`${config.public.STORAGE_URL_AVATAR}/${row.original.photo_path}`" size="lg" />
           <div>
             <p class="font-medium capitalize text-(--ui-text-highlighted)">
-              {{ row.original.fullname }}
+              {{ row.original.evaluatee }}
             </p>
           </div>
         </div>

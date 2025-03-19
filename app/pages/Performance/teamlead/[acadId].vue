@@ -16,6 +16,9 @@ const route = useRoute();
 const { openModal, isOpen, title, description } = useCustomModal();
 const employeeData = ref<EmployeesEvaluate[]>([]);
 const employeeRatingData = ref<EmployeeRating[]>();
+const selectedDepartment = ref<ListDepartment>({});
+const deptId = computed(() => selectedDepartment.value.id || 0);
+
 const departmentItems = computed(
   () =>
     departments.value?.map((item) => ({
@@ -32,7 +35,22 @@ if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
 
-const selectedDepartment = ref<ListDepartment>({});
+const { data: result, error:errorEvaluation  } = await useAPI<EmployeesEvaluate[]>(
+  `/employees/evaluate`,{
+    watch:[selectedDepartment],
+    immediate:false,
+    params:{
+      acadId: route.params.acadId,
+      deptId:deptId
+    },
+    server:false
+  },
+);
+if (errorEvaluation.value) {
+  $toast.error(errorEvaluation.value.message || "Failed to fetch items");
+}
+
+
 const groups = ref([
   {
     id: "Departments",
@@ -53,27 +71,30 @@ const viewRating = async (employeeId: number) => {
   }
 };
 
-watch(
-  () => selectedDepartment.value?.id ?? null,
-  async (newId) => {
-    if (!newId) {
-      employeeData.value = [];
-      return;
-    }
-    try {
-      const response = await $api<EmployeesEvaluate[]>(
-        `/employees/evaluate/${newId}/${route.params.acadId}`
-      );
-      employeeData.value = response || [];
-    } catch (err) {
-      handleApiError(err);
-    }
-  },
-  { flush: "post" }
-);
+
+
+// watch(
+//   () => selectedDepartment.value?.id ?? null,
+//   async (newId) => {
+//     if (!newId) {
+//       employeeData.value = [];
+//       return;
+//     }
+//     try {
+//       const response = await $api<EmployeesEvaluate[]>(
+//         `/employees/evaluate/${newId}/${route.params.acadId}`
+//       );
+//       employeeData.value = response || [];
+//     } catch (err) {
+//       handleApiError(err);
+//     }
+//   },
+//   { flush: "post" }
+// );
 </script>
 
 <template>
+
   <PerformanceViewRatings
     :acad-id="Number(route.params.acadId)"
     v-model:open="isOpen"
@@ -111,7 +132,7 @@ watch(
           footer: 'p-0 sm:px-0',
         }"
       >
-        <EmployeeEvaluateList type="custom" :data="employeeData" @view="viewRating" />
+        <EmployeeEvaluateList type="custom" :data="result" @view="viewRating" />
       </UCard>
     </div>
   </div>

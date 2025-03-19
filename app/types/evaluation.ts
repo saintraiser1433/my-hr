@@ -22,6 +22,12 @@ export interface QuestionModel {
   criteria?: TeamLeadCriteria;
 }
 
+export interface AssignPeerEvaluations {
+  academicYearId: number;
+  departmentId: number;
+  peersToEvaluate: number;
+}
+
 export interface CommentsModel {
   id: number;
   description: string;
@@ -89,6 +95,11 @@ export interface EmployeeRating {
 export interface CategoryCountModel {
   Category: string; // Explicitly allow `Category` to be a string
   [key: string]: number | string;
+}
+
+export interface EvaluationResult {
+  evaluator: string;
+  [key: string]: string; // Dynamic fields for evaluate1, evaluate2, etc.
 }
 
 export interface RatingModel {

@@ -131,7 +131,7 @@ export interface ListDepartment {
 export interface EmployeesEvaluate {
     id: number;
     photo_path: string;
-    fullname: string;
+    evaluatee: string;
     role: string;
     status: boolean;
 }

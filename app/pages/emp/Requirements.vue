@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  requiredRole: "TeamLead",
+  requiredRole: "Employee",
 });
 
 useSeoMeta({
@@ -10,18 +10,12 @@ useSeoMeta({
   ogDescription: "CRUD for Screening Type",
 });
 const store = useAuthStore();
-const { $toast } = useNuxtApp();
-
+const {  $toast } = useNuxtApp();
 
 const requirementsData = ref<EmployeeRequirements[]>([]);
 const listRequirements = ref<UnchosenRequirements[]>([]);
 
-const initialState = {
-  id: undefined,
-  submittedAt: undefined,
-  expiryDate: undefined,
-  status: EmployeeRequirementStatus.PENDING,
-};
+
 //jobscreen list
 const { data, status, error } = await useAPI<EmployeeWithRequirementModel>(
   `/employees/req/${store.getId}`
@@ -39,7 +33,6 @@ if (error.value) {
 
 <template>
   
-
 
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl capitalize">My Requirements</h2>

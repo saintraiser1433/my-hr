@@ -23,7 +23,12 @@ const employeeData = computed(() =>
 const employeeRatingData = ref<EmployeeRating[]>([]);
 const { data: employee, status: employeeStatus, error: employeeError } = await useAPI<
   EmployeesEvaluate[]
->(`/employees/evaluate/${departmentId}/${acadId}`);
+>(`/employees/evaluate`,{
+  params: {
+    deptId: departmentId,
+    acadId:acadId
+  }
+});
 
 if (employeeError.value) {
   $toast.error(employeeError.value.message || "Failed to fetch items");

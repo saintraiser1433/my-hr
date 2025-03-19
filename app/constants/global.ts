@@ -31,9 +31,9 @@ export const MENU_ITEMS: MenuItem[] = [
 
 export const MENU_ITEMS_EMP: MenuItem[] = [
   { label: "Navigation", type: 'label' },
-  { label: "Evaluate Colleague", icon: "i-hugeicons-peer-to-peer-02", to: "/performance/peer" },
+  { label: "Evaluate Colleague", icon: "i-hugeicons-peer-to-peer-02", to: "/emp" },
   { label: "Received Evaluation", icon: "i-hugeicons-peer-to-peer-03", to: "/performance/superior" },
-  { label: "My Requirements", icon: "i-carbon-document-requirements", to: "/applicants" },
+  { label: "My Requirements", icon: "i-carbon-document-requirements", to: "/emp/requirements" },
   
   
 ];

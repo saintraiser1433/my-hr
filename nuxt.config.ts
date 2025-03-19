@@ -6,7 +6,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-27',
   routeRules: {
     '/': { redirect: '/auth' },
-    
+    '/team': { redirect: '/team/evaluate' },
+    '/emp': { redirect: '/team/evaluate' },
     // '/admin/': { redirect: '/admin/home' },
     // '/admin/home': { ssr: true },
   },
