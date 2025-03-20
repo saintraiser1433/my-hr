@@ -51,6 +51,7 @@ const viewRating = async (employeeId: number) => {
 
 <template>
   <PerformanceViewRatings
+    type="Peer"
     :acad-id="acadId ?? 0"
     v-model:open="isOpen"
     :data="employeeRatingData"

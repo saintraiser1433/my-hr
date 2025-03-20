@@ -23,6 +23,9 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  peerEvalId: {
+    type: Number,
+  },
 });
 const { data, legend } = toRefs(props);
 const { createColumn } = useTableColumns(UButton);
@@ -80,6 +83,7 @@ const handleCheckboxChange = (rowId: string, data: SubmitResult) => {
                     templateDetailId: Number(datas.id),
                     academicYearId,
                     categoryId: row.original.categoryId,
+                    peerEvalId: peerEvalId,
                   });
                 }
               }

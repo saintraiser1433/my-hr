@@ -24,6 +24,10 @@ const props = defineProps({
     required: true,
     default: 0,
   },
+  type: {
+    type: String,
+    default: "Admin",
+  },
 });
 const { data } = toRefs(props);
 const openModal = defineModel("open", { default: false, required: true });
@@ -75,7 +79,10 @@ const hiredData = "01-Jan-2024";
         </div>
       </div>
       <div class="grid grid-cols-12 gap-3 py-5">
-        <div class="col-span-6">
+        <div
+          v-if="type === 'Admin' || type === 'Peer'"
+          :class="[type === 'Admin' ? 'col-span-6' : 'col-span-12']"
+        >
           <UCard
             :ui="{
               root: 'overflow-hidden border-t-3 border-(--ui-primary) ',
@@ -126,7 +133,10 @@ const hiredData = "01-Jan-2024";
             <!-- <PerformanceActions></PerformanceActions> -->
           </UCard>
         </div>
-        <div class="col-span-6">
+        <div
+          v-if="type === 'Admin' || type === 'TeamLead'"
+          :class="[type === 'Admin' ? 'col-span-6' : 'col-span-12']"
+        >
           <PerformanceSummaryRatings
             :employee-id="data[0]?.employeeId"
             :acad-id="acadId"

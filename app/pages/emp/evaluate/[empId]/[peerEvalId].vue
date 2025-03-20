@@ -12,7 +12,6 @@ useSeoMeta({
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
 const acad = useAcademicYearStore();
-const auth = useAuthStore();
 const route = useRoute();
 
 const { data: questionnaires, status, error } = await useAPI<Questionnaires[]>(
@@ -145,6 +144,7 @@ const handleSubmit = async () => {
             <QuestionEvaluate
               :academic-year-id="Number(acad.acadId)"
               :employees-id="Number(route.params.empId)"
+              :peer-eval-id="Number(route.params.peerEvalId)"
               :data="q.questions"
               :legend="q.template?.details"
               :selected="selected"
