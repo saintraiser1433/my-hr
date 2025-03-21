@@ -79,7 +79,7 @@ const handleCheckboxChange = (rowId: string, data: SubmitResult) => {
                 if (checked) {
                   handleCheckboxChange(row.original.id?.toString(), {
                     questionId: row.original.id,
-                    employeesId,
+                    // employeesId,
                     templateDetailId: Number(datas.id),
                     academicYearId,
                     categoryId: row.original.categoryId,

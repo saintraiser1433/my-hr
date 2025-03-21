@@ -62,7 +62,7 @@ export interface SubmitResult {
   academicYearId: number;
   categoryId: number;
   questionId: number;
-  employeesId: number;
+  employeesId?: number;
   templateDetailId: number;
   peerEvalId?: number;
 }

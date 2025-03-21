@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  requiredRole: "TeamLead",
+  requiredRole: "Admin",
 });
 
 
