@@ -81,10 +81,11 @@ const handleSubmit = async () => {
 
   const headerStatus: HeaderStatus = {
     academicYearId: Number(acad.acadId),
-    employeesId: Number(route.params.empId),
-    commenterId: Number(auth.getId),
+    evaluateeId: Number(route.params.empId),
+    evaluatorId: Number(auth.getId),
     description: comments.value,
     type: Type.TEAMLEAD,
+    departmentsId: Number(route.params.deptId),
   };
 
   const data: SubmissionModel = {
@@ -146,7 +147,6 @@ const handleSubmit = async () => {
           <div class="py-2">
             <QuestionEvaluate
               :academic-year-id="Number(acad.acadId)"
-              :employees-id="Number(route.params.empId)"
               :data="q.questions"
               :legend="q.template?.details"
               :selected="selected"

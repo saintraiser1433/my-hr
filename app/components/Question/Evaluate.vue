@@ -15,15 +15,7 @@ const props = defineProps({
     type: Object as PropType<Record<string, SubmitResult>>,
     required: true,
   },
-  employeesId: {
-    type: Number,
-    required: true,
-  },
-  academicYearId: {
-    type: Number,
-    required: true,
-  },
-  peerEvalId: {
+  evaluationId: {
     type: Number,
   },
 });
@@ -79,11 +71,9 @@ const handleCheckboxChange = (rowId: string, data: SubmitResult) => {
                 if (checked) {
                   handleCheckboxChange(row.original.id?.toString(), {
                     questionId: row.original.id,
-                    // employeesId,
                     templateDetailId: Number(datas.id),
-                    academicYearId,
                     categoryId: row.original.categoryId,
-                    peerEvalId: peerEvalId,
+                    evaluationId: evaluationId,
                   });
                 }
               }

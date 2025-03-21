@@ -35,7 +35,10 @@ if (employeeError.value) {
 }
 
 const evaluate = async (id: number) => {
-  await navigateTo({ name: "team-evaluate-empId", params: { empId: id } });
+  await navigateTo({
+    name: "team-evaluate-empId-deptId",
+    params: { empId: id, deptId: departmentId },
+  });
 };
 
 const viewRating = async (employeeId: number) => {

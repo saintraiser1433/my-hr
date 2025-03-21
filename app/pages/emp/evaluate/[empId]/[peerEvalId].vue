@@ -77,14 +77,16 @@ const handleSubmit = async () => {
   const evaluate = Object.keys(selected.value)
     .map((rowId) => selected.value[rowId])
     .filter((item): item is SubmitResult => item !== undefined);
-
-  const submissionRepo = repository<SubmitResult[]>($api, "/evaluation/submitPeer");
+  const transFormData = {
+    result: evaluate,
+    comment: comments.value,
+  };
+  const submissionRepo = repository<SubmissionPeerModel>($api, "/evaluation/submitPeer");
   setAlert("warning", "Are you sure you want to submit?", "", "Confirm submit").then(
     async (result) => {
       if (result.isConfirmed) {
         try {
-          // console.log(evaluate);
-          const response = await submissionRepo.add(evaluate);
+          const response = await submissionRepo.add(transFormData);
           await navigateTo({ name: "emp" });
           $toast.success(response.message);
         } catch (err) {
@@ -143,8 +145,7 @@ const handleSubmit = async () => {
           <div class="py-2">
             <QuestionEvaluate
               :academic-year-id="Number(acad.acadId)"
-              :employees-id="Number(route.params.empId)"
-              :peer-eval-id="Number(route.params.peerEvalId)"
+              :evaluation-id="Number(route.params.peerEvalId)"
               :data="q.questions"
               :legend="q.template?.details"
               :selected="selected"

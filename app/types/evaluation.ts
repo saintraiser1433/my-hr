@@ -59,25 +59,29 @@ export interface CriteriaColleague extends TeamLeadCriteria {
 }
 
 export interface SubmitResult {
-  academicYearId: number;
   categoryId: number;
   questionId: number;
-  employeesId?: number;
   templateDetailId: number;
-  peerEvalId?: number;
+  evaluationId?: number;
 }
 
 export interface HeaderStatus {
   academicYearId: number;
-  employeesId: number;
-  commenterId: number;
+  evaluateeId: number;
+  evaluatorId: number;
   description: string;
+  departmentsId: number;
   type: string;
 }
 
 export interface SubmissionModel {
   evaluate: SubmitResult[];
   headerStatus: HeaderStatus;
+}
+
+export interface SubmissionPeerModel {
+  result: SubmitResult[];
+  comment: string;
 }
 
 export interface EmployeeRating {
