@@ -21,13 +21,17 @@ export type Role = "Admin" | "Employee" | "TeamLead";
 
 
 export interface EmployeeRatingStatus {
-    id:number;
-    photo_path:string;
-    evaluatee:string;
-    role:string;
-    peerToEvaluate:string;
-    isFinishedPeerEvaluate:boolean;
-    isEvaluatedByTeamLead:boolean;
+    id: number;
+    department: string;
+    employeeId: number;
+    hiredDate: Date;
+    job: string;
+    photo_path: string;
+    evaluatee: string;
+    role: string;
+    peerToEvaluate: string;
+    isFinishedPeerEvaluate: boolean;
+    isEvaluatedByTeamLead: boolean;
 }
 
 

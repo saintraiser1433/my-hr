@@ -10,13 +10,13 @@ useSeoMeta({
   ogDescription: "CRUD for Departments",
 });
 
-const {$toast } = useNuxtApp();
+const { $toast } = useNuxtApp();
 const route = useRoute();
 const { openModal, isOpen, title, description } = useCustomModal();
 const employeeIds = ref(0);
 const selectedDepartment = ref<ListDepartment>({});
 const deptId = computed(() => selectedDepartment.value.id || 0);
-
+const selectedEmployee = ref<EmployeeRatingStatus>();
 const departmentItems = computed(
   () =>
     departments.value?.map((item) => ({
@@ -40,69 +40,72 @@ if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
 
-const { data: result, error:errorEvaluation  } = await useAPI<EmployeeRatingStatus[]>(
-  `/evaluation/status`,{
-    watch:[selectedDepartment],
-    immediate:false,
-    params:{
+const { data: result, error: errorEvaluation } = await useAPI<EmployeeRatingStatus[]>(
+  `/evaluation/status`,
+  {
+    watch: [selectedDepartment],
+    immediate: false,
+    params: {
       acadId: route.params.acadId,
-      deptId:deptId
+      deptId: deptId,
     },
-    server:false
-  },
+    server: false,
+  }
 );
 if (errorEvaluation.value) {
   $toast.error(errorEvaluation.value.message || "Failed to fetch items");
 }
 
-const { data: teamResult,error:resultError } = await useAPI<EmployeeRating[]>(`/evaluation/teamResult`, {
-  watch:[employeeIds],
-  params: {
-    acadId: route.params.acadId,
-    empId: employeeIds,
-  },
-  immediate:false,
-});
+const { data: teamResult, error: resultError } = await useAPI<EmployeeRating[]>(
+  `/evaluation/teamResult`,
+  {
+    watch: [employeeIds],
+    params: {
+      acadId: route.params.acadId,
+      empId: employeeIds,
+    },
+    immediate: false,
+  }
+);
 if (resultError.value) {
   $toast.error(resultError.value.message || "Failed to fetch items");
 }
 
-const { data: peerResult,error:peerResultError } = await useAPI<EmployeeRating[]>(`/evaluation/peerResult`, {
-  watch:[employeeIds],
-  params: {
-    acadId: route.params.acadId,
-    empId: employeeIds,
-  },
-  immediate:false,
-});
+const { data: peerResult, error: peerResultError } = await useAPI<EmployeeRating[]>(
+  `/evaluation/peerResult`,
+  {
+    watch: [employeeIds],
+    params: {
+      acadId: route.params.acadId,
+      empId: employeeIds,
+    },
+    immediate: false,
+  }
+);
 if (peerResultError.value) {
   $toast.error(peerResultError.value.message || "Failed to fetch items");
 }
 
-
-const viewRating = async (employeeId: number) => {
+const viewRating = async (data: EmployeeRatingStatus) => {
   openModal("View Ratings");
-  employeeIds.value = employeeId;
+  employeeIds.value = data.employeeId;
+  selectedEmployee.value = data;
 };
-
-
-
-
 </script>
 
 <template>
-
   <PerformanceViewRatings
-    :acad-id="Number(route.params.acadId)"
     v-model:open="isOpen"
+    :information-data="selectedEmployee"
+    :acad-id="Number(route.params.acadId)"
     :peer-data="peerResult"
     :data="teamResult"
     :title="title"
     :description="description"
-  >
-  </PerformanceViewRatings>
+  />
+
   <div class="flex flex-col items-center lg:items-start mb-3">
-    <h2 class="font-extrabold text-2xl">Perforamnce Results</h2>
+    <h2 class="font-extrabold text-2xl">Performance Results</h2>
     <span class="text-sm">Here's a list of team leader per departments!</span>
   </div>
   <div class="grid grid-cols-12 gap-2">

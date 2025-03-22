@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-    requiredRole: "Admin",
+  requiredRole: "Admin",
 });
 
 useSeoMeta({
@@ -17,7 +17,7 @@ const employeeData = ref<EmployeeModel[]>([]);
 
 const { data: employee, status: employeeStatus, error: employeeError } = await useAPI<
   EmployeeModel[]
->(`/employees/${route.params.deptId}`);
+>(`/employees/dept/${route.params.deptId}`);
 
 if (employee.value) {
   employeeData.value = employee.value;

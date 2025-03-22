@@ -15,25 +15,26 @@ const { acadId } = useAcademicYearStore();
 const { getId } = useAuthStore();
 const { openModal, isOpen, title, description } = useCustomModal();
 const peerEvaluationId = ref(0);
+const selectedEmployees = ref<EmployeeRatingStatus>();
 const employeeData = computed(() =>
   employee.value?.filter((item) => item.role !== "TeamLead")
 );
 
-
 const { data: employee, status: employeeStatus, error: employeeError } = await useAPI<
-  EmployeesEvaluate[]
+  EmployeeRatingStatus[]
 >(`/evaluation/peer/${getId}`);
 
-const { data: peerResult, error:resultError } = await useAPI<EmployeeRating[]>(`/evaluation/peerResult`, {
-  watch:[peerEvaluationId],
-  params: {
-    peerEvaluationId: peerEvaluationId,
-
-  },
-  immediate:false,
-  server:false
-});
-
+const { data: peerResult, error: resultError } = await useAPI<EmployeeRating[]>(
+  `/evaluation/peerResult`,
+  {
+    watch: [peerEvaluationId],
+    params: {
+      peerEvaluationId: peerEvaluationId,
+    },
+    immediate: false,
+    server: false,
+  }
+);
 
 if (employeeError.value) {
   $toast.error(employeeError.value.message || "Failed to fetch items");
@@ -43,25 +44,26 @@ if (resultError.value) {
   $toast.error(resultError.value.message || "Failed to fetch items");
 }
 
-const evaluate = async (peerId: number, employeeId: number) => {
+const evaluate = async (data: EmployeeRatingStatus) => {
   await navigateTo({
     name: "emp-evaluate-empId-peerEvalId",
-    params: { empId: employeeId, peerEvalId: peerId },
+    params: { empId: data.employeeId, peerEvalId: data.id },
   });
 };
 
-const viewRating = async (peerEvalId: number) => {
+const viewRating = async (data: EmployeeRatingStatus) => {
   openModal("View Ratings");
-  peerEvaluationId.value = peerEvalId;
-
+  peerEvaluationId.value = data.id;
+  selectedEmployees.value = data;
 };
 </script>
 
 <template>
   <PerformanceViewRatings
     type="Peer"
-    :acad-id="acadId ?? 0"
     v-model:open="isOpen"
+    :information-data="selectedEmployees"
+    :acad-id="acadId ?? 0"
     :peerData="peerResult"
     :title="title"
     :description="description"
@@ -71,5 +73,10 @@ const viewRating = async (peerEvalId: number) => {
     <h2 class="font-extrabold text-2xl">Evaluate Colleagues</h2>
     <span class="text-sm">Here's a list evaluate colleagues!</span>
   </div>
-  <EmployeeEvaluateList role="peer" :data="employeeData" @evaluate="evaluate" @view="viewRating" />
+  <EmployeeEvaluateList
+    role="peer"
+    :data="employeeData"
+    @evaluate="evaluate"
+    @view="viewRating"
+  />
 </template>

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 const props = defineProps({
   employeeId: {
     type: Number,
@@ -14,6 +13,13 @@ const props = defineProps({
     type: String,
     required: true,
     default: "",
+  },
+  role: {
+    type: String,
+  },
+  peerEvaluationId: {
+    type: Number,
+    default: 0,
   },
   rating: {
     type: Array as PropType<RatingModel[]>,
@@ -35,6 +41,14 @@ const props = defineProps({
     type: Array as PropType<CategoryCountModel[]>,
     default: () => [],
   },
+  hideIdentity: {
+    type: Boolean,
+    default: false,
+  },
+  hidePrint: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const { categoryData } = toRefs(props);
@@ -42,11 +56,10 @@ const { optionCategory } = usePerformance(categoryData);
 </script>
 
 <template>
-
   <div class="mb-5">
     <h3 class="font-semibold">
       Evaluated by:
-      <span class="font-normal">{{ evaluatedBy }}</span>
+      <span class="font-normal">{{ hideIdentity ? "#######" : evaluatedBy }}</span>
     </h3>
   </div>
   <div class="grid grid-cols-12 gap-2 py-2">
@@ -56,17 +69,23 @@ const { optionCategory } = usePerformance(categoryData);
       </div>
     </div>
     <div class="col-span-8">
-      <PerformanceCategoryAnalytics :option="optionCategory" title="Category Scores"></PerformanceCategoryAnalytics>
+      <PerformanceCategoryAnalytics
+        :option="optionCategory"
+        title="Category Scores"
+      ></PerformanceCategoryAnalytics>
     </div>
   </div>
 
-
-  <PerformanceActions :acad-id="acadId" :employee-id="employeeId" :averageRating="averageRating"
-    :remarks="adjectiveRating">
+  <PerformanceActions
+    :role="role"
+    :hide-print="hidePrint"
+    :peer-evaluation-id="peerEvaluationId"
+    :acad-id="acadId"
+    :employee-id="employeeId"
+    :averageRating="averageRating"
+    :remarks="adjectiveRating"
+  >
   </PerformanceActions>
 
-
   <USeparator class="py-5"></USeparator>
-
-
 </template>

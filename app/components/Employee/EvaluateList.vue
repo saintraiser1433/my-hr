@@ -9,23 +9,23 @@ const props = defineProps({
     required: true,
     default: () => [],
   },
-  role:{
-    type:String,
-    default:'admin'
-  }
+  role: {
+    type: String,
+    default: "admin",
+  },
 });
 
 const emits = defineEmits(["view", "evaluate"]);
-const { pagination, globalFilter } = usePagination();
+const { pagination, globalFilter, refreshTable } = usePagination();
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const config = useRuntimeConfig();
-const handleEvaluate = async (id: number, employeeid?: number) => {
-  emits("evaluate", id, employeeid);
+const handleEvaluate = async (data: EmployeeRatingStatus) => {
+  emits("evaluate", data);
 };
 
-const handleView = async (employeeId: number) => {
-  emits("view", employeeId);
+const handleView = async (data: EmployeeRatingStatus) => {
+  emits("view", data);
 };
 
 const columns: TableColumn<any>[] = [
@@ -41,16 +41,21 @@ if (props.role === "admin") {
     createColumn("peer-to-evaluate", "Peer To Evaluate", true)
   );
 } else if (props.role === "peer") {
-  columns.push(
-    createColumn("peer-evaluation-status", "Peer Evaluation Status", true),
-  );
+  columns.push(createColumn("peer-evaluation-status", "Peer Evaluation Status", true));
 } else if (props.role === "teamlead") {
   columns.push(createColumn("team-evaluation-status", "Team Evaluation Status", true));
 }
 
 columns.push(createColumn("action", "Action", false));
 
-
+watch(
+  () => props.data,
+  (newVal, oldVal) => {
+    if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+      refreshTable();
+    }
+  }
+);
 </script>
 
 <template>
@@ -106,38 +111,36 @@ columns.push(createColumn("action", "Action", false));
         ></UBadge>
       </template>
       <template #peer-to-evaluate-cell="{ row }">
-        <span class="font-bold flex items-center justify-center">{{ row.original.peerToEvaluate}}</span>
+        <span class="font-bold">{{ row.original.peerToEvaluate }}</span>
       </template>
       <template #action-cell="{ row }">
         <div class="flex gap-2" v-if="role !== 'admin'">
-  <UButton
-    v-if="(role === 'teamlead' && !row.original.isEvaluatedByTeamLead) || 
-          (role === 'peer' && !row.original.isFinishedPeerEvaluate)"
-    icon="lucide:view"
-    size="sm"
-    @click="handleEvaluate(row.original.id, row.original.employeeId)"
-  >
-    Evaluate
-  </UButton>
-  <UButton
-    v-else
-    icon="lucide:view"
-    variant="subtle"
-    size="sm"
-    @click="handleView(row.original.id)"
-  >
-    View Ratings
-  </UButton>
-</div>
-<div v-if="role === 'admin'">
-  <UButton
-    icon="lucide:view"
-    size="sm"
-    @click="handleView(row.original.id)"
-  >
-    View Ratings
-  </UButton>
-</div>
+          <UButton
+            v-if="
+              (role === 'teamlead' && !row.original.isEvaluatedByTeamLead) ||
+              (role === 'peer' && !row.original.isFinishedPeerEvaluate)
+            "
+            icon="lucide:view"
+            size="sm"
+            @click="handleEvaluate(row.original)"
+          >
+            Evaluate
+          </UButton>
+          <UButton
+            v-else
+            icon="lucide:view"
+            variant="subtle"
+            size="sm"
+            @click="handleView(row.original)"
+          >
+            View Ratings
+          </UButton>
+        </div>
+        <div v-if="role === 'admin'">
+          <UButton icon="lucide:view" size="sm" @click="handleView(row.original)">
+            View Ratings
+          </UButton>
+        </div>
       </template>
     </UTable>
     <UITablePagination :table="table" v-if="table"> </UITablePagination>

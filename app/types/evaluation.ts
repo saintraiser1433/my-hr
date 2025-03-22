@@ -85,6 +85,7 @@ export interface SubmissionPeerModel {
 }
 
 export interface EmployeeRating {
+  peerEvalId?: number;
   employeeId: number;
   name: string;
   comment: string; // Add comment

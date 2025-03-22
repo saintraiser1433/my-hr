@@ -9,10 +9,9 @@ useHead({
 });
 
 const { $toast } = useNuxtApp();
-const store = useAuthStore()
+const store = useAuthStore();
 const { signIn, info } = useAuthentication();
 const { handleApiError } = useErrorHandler();
-
 
 const onSubmit = async (data: Login) => {
   try {
@@ -20,22 +19,21 @@ const onSubmit = async (data: Login) => {
     const role = JSON.parse(info.value).role as Role;
     if (role) {
       if (role === "Admin") {
-        return navigateTo({ path: '/Dashboard' });
+        return navigateTo({ path: "/Dashboard" });
       } else if (role === "Employee") {
         return navigateTo({ name: "emp" });
       } else if (role === "TeamLead") {
-        return navigateTo({ name: "team" });
+        return navigateTo({ name: "team-evaluate" });
       }
     }
 
-    $toast.error("No role Assigned")
+    $toast.error("No role Assigned");
   } catch (err) {
-    handleApiError(err)
+    console.error(err);
+    handleApiError(err);
   }
 };
-
 </script>
-
 
 <template>
   <Auth @submit="onSubmit"></Auth>

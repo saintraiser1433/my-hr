@@ -1,11 +1,12 @@
 <script setup lang="ts">
 const route = useRoute();
+
 const { data: questionnaires, status, error } = await useAPI<Questionnaires[]>(
-  `/evaluation/criteria/${route.params.empId}/${route.params.acadId}`
+  `/evaluation/peer/category/${route.params.acadId}`
 );
 
 const { data: questionAnswer } = await useAPI<GetEvaluateQuestion>(
-  `/evaluation/view/${route.params.empId}/${route.params.acadId}`
+  `/evaluation/viewPeerResult/${route.params.peerId}`
 );
 
 const selected = ref<Record<string, SubmitResult>>({});
@@ -51,8 +52,6 @@ const items = questionnaires.value?.map((q) => {
               :data="q.questions"
               :legend="q.template?.details"
               :selected="selected"
-              :employees-id="Number(route.params.empId)"
-              :academic-year-id="Number(route.params.acadId)"
             ></QuestionEvaluate>
           </div>
         </div>
@@ -66,13 +65,13 @@ const items = questionnaires.value?.map((q) => {
         :disabled="true"
       />
     </div>
-    <div class="py-2">
+    <!-- <div class="py-2">
       <h3 class="font-bold">
         Evaluated By:
         <span class="font-normal underline">{{
           questionAnswer?.commentsDetail.evaluatedBy
         }}</span>
       </h3>
-    </div>
+    </div> -->
   </div>
 </template>

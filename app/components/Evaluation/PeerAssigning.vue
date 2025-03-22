@@ -3,7 +3,7 @@ import type { TableColumn } from "@nuxt/ui";
 import { getPaginationRowModel } from "@tanstack/vue-table";
 
 const UButton = resolveComponent("UButton") as Component;
-
+const UBadge = resolveComponent("UBadge") as Component;
 const props = defineProps<{ data: { [key: string]: any }[] }>();
 const emits = defineEmits<{ (e: "view"): void }>();
 
@@ -17,30 +17,21 @@ const columns = ref<TableColumn<any>[]>([]);
 // Reactive key to force re-render
 const tableKey = ref(0);
 
-// Function to update columns dynamically
 const updateColumns = () => {
   const maxEvaluateFields = props.data.reduce((max, item) => {
-    const evaluateFields = Object.keys(item).filter((key) =>
-      key.startsWith("evaluate")
-    );
+    const evaluateFields = Object.keys(item).filter((key) => key.startsWith("evaluate"));
     return Math.max(max, evaluateFields.length);
   }, 0);
 
-  // Generate dynamic columns for evaluate fields
   const evaluateColumns = Array.from({ length: maxEvaluateFields }, (_, index) =>
     createColumn(`evaluate${index + 1}`, `Evaluatee ${index + 1}`, true)
   );
 
-  // Update the columns array
   columns.value = [
     createColumn("#", "#", true, (row) => `${row.index + 1}`),
     createColumn("evaluator", "Evaluator", true),
     ...evaluateColumns,
   ];
-
-  console.log("New Columns:", columns.value);
-
-  // Force re-render by changing tableKey
   tableKey.value++;
 };
 
@@ -48,11 +39,10 @@ watch(
   () => props.data,
   () => {
     updateColumns();
-    refreshTable(); 
+    refreshTable();
   },
-  { deep: true, immediate: true } 
+  { deep: true, immediate: true }
 );
-
 
 const view = () => {
   emits("view");
