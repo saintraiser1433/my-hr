@@ -13,25 +13,37 @@ useSeoMeta({
 const { $toast, $api } = useNuxtApp();
 const { acadId } = useAcademicYearStore();
 const { departmentId } = useAuthStore();
-const { handleApiError } = useErrorHandler();
 const { openModal, isOpen, title, description } = useCustomModal();
-
+const employeeIds = ref(0);
 const employeeData = computed(() =>
   employee.value?.filter((item) => item.role !== "TeamLead")
 );
 
-const employeeRatingData = ref<EmployeeRating[]>([]);
+
 const { data: employee, status: employeeStatus, error: employeeError } = await useAPI<
-  EmployeesEvaluate[]
->(`/employees/evaluate`, {
+  EmployeeRatingStatus[]
+>(`/evaluation/status`, {
   params: {
     deptId: departmentId,
     acadId: acadId,
   },
 });
 
+const { data: teamResult,error:resultError } = await useAPI<EmployeeRating[]>(`/evaluation/teamResult`, {
+  watch:[employeeIds],
+  params: {
+    acadId: acadId,
+    empId: employeeIds,
+  },
+  immediate:false,
+  server:false
+});
+
 if (employeeError.value) {
   $toast.error(employeeError.value.message || "Failed to fetch items");
+}
+if (resultError.value) {
+  $toast.error(resultError.value.message || "Failed to fetch items");
 }
 
 const evaluate = async (id: number) => {
@@ -43,14 +55,8 @@ const evaluate = async (id: number) => {
 
 const viewRating = async (employeeId: number) => {
   openModal("View Ratings");
-  try {
-    const response = await $api<EmployeeRating[]>(
-      `/evaluation/result/${acadId}/${employeeId}`
-    );
-    employeeRatingData.value = response || [];
-  } catch (err) {
-    handleApiError(err);
-  }
+  employeeIds.value = employeeId;
+
 };
 </script>
 
@@ -59,7 +65,7 @@ const viewRating = async (employeeId: number) => {
     type="TeamLead"
     :acad-id="acadId ?? 0"
     v-model:open="isOpen"
-    :data="employeeRatingData"
+    :data="teamResult ?? []"
     :title="title"
     :description="description"
   >
@@ -68,5 +74,5 @@ const viewRating = async (employeeId: number) => {
     <h2 class="font-extrabold text-2xl">Evaluate Colleagues</h2>
     <span class="text-sm">Here's a list evaluate colleagues!</span>
   </div>
-  <EmployeeEvaluateList :data="employeeData" @evaluate="evaluate" @view="viewRating" />
+  <EmployeeEvaluateList role="teamlead" :data="employeeData" @evaluate="evaluate" @view="viewRating" />
 </template>

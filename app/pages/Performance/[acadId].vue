@@ -10,12 +10,10 @@ useSeoMeta({
   ogDescription: "CRUD for Departments",
 });
 
-const { $api, $toast } = useNuxtApp();
-const { handleApiError } = useErrorHandler();
+const {$toast } = useNuxtApp();
 const route = useRoute();
 const { openModal, isOpen, title, description } = useCustomModal();
-const employeeData = ref<EmployeesEvaluate[]>([]);
-const employeeRatingData = ref<EmployeeRating[]>();
+const employeeIds = ref(0);
 const selectedDepartment = ref<ListDepartment>({});
 const deptId = computed(() => selectedDepartment.value.id || 0);
 
@@ -26,6 +24,13 @@ const departmentItems = computed(
       label: item.title,
     })) || []
 );
+const groups = ref([
+  {
+    id: "Departments",
+    label: "Departments",
+    items: departmentItems,
+  },
+]);
 
 const { data: departments, status, error } = await useAPI<DepartmentModel[]>(
   "/department"
@@ -35,8 +40,8 @@ if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
 
-const { data: result, error:errorEvaluation  } = await useAPI<EmployeesEvaluate[]>(
-  `/employees/evaluate`,{
+const { data: result, error:errorEvaluation  } = await useAPI<EmployeeRatingStatus[]>(
+  `/evaluation/status`,{
     watch:[selectedDepartment],
     immediate:false,
     params:{
@@ -50,47 +55,39 @@ if (errorEvaluation.value) {
   $toast.error(errorEvaluation.value.message || "Failed to fetch items");
 }
 
-
-const groups = ref([
-  {
-    id: "Departments",
-    label: "Departments",
-    items: departmentItems,
+const { data: teamResult,error:resultError } = await useAPI<EmployeeRating[]>(`/evaluation/teamResult`, {
+  watch:[employeeIds],
+  params: {
+    acadId: route.params.acadId,
+    empId: employeeIds,
   },
-]);
+  immediate:false,
+});
+if (resultError.value) {
+  $toast.error(resultError.value.message || "Failed to fetch items");
+}
+
+const { data: peerResult,error:peerResultError } = await useAPI<EmployeeRating[]>(`/evaluation/peerResult`, {
+  watch:[employeeIds],
+  params: {
+    acadId: route.params.acadId,
+    empId: employeeIds,
+  },
+  immediate:false,
+});
+if (peerResultError.value) {
+  $toast.error(peerResultError.value.message || "Failed to fetch items");
+}
+
 
 const viewRating = async (employeeId: number) => {
   openModal("View Ratings");
-  try {
-    const response = await $api<EmployeeRating[]>(
-      `/evaluation/result/${route.params.acadId}/${employeeId}`
-    );
-    employeeRatingData.value = response || [];
-  } catch (err) {
-    handleApiError(err);
-  }
+  employeeIds.value = employeeId;
 };
 
 
 
-// watch(
-//   () => selectedDepartment.value?.id ?? null,
-//   async (newId) => {
-//     if (!newId) {
-//       employeeData.value = [];
-//       return;
-//     }
-//     try {
-//       const response = await $api<EmployeesEvaluate[]>(
-//         `/employees/evaluate/${newId}/${route.params.acadId}`
-//       );
-//       employeeData.value = response || [];
-//     } catch (err) {
-//       handleApiError(err);
-//     }
-//   },
-//   { flush: "post" }
-// );
+
 </script>
 
 <template>
@@ -98,13 +95,14 @@ const viewRating = async (employeeId: number) => {
   <PerformanceViewRatings
     :acad-id="Number(route.params.acadId)"
     v-model:open="isOpen"
-    :data="employeeRatingData"
+    :peer-data="peerResult"
+    :data="teamResult"
     :title="title"
     :description="description"
   >
   </PerformanceViewRatings>
   <div class="flex flex-col items-center lg:items-start mb-3">
-    <h2 class="font-extrabold text-2xl">Superior to peer performance departments</h2>
+    <h2 class="font-extrabold text-2xl">Perforamnce Results</h2>
     <span class="text-sm">Here's a list of team leader per departments!</span>
   </div>
   <div class="grid grid-cols-12 gap-2">
@@ -132,7 +130,7 @@ const viewRating = async (employeeId: number) => {
           footer: 'p-0 sm:px-0',
         }"
       >
-        <EmployeeEvaluateList type="custom" :data="result" @view="viewRating" />
+        <EmployeeEvaluateList role="admin" :data="result" @view="viewRating" />
       </UCard>
     </div>
   </div>

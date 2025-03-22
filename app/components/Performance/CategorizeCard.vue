@@ -24,7 +24,7 @@ const percentage = computed(
         <CircleProgressBar
           stroke-width="16"
           size="160"
-          color-filled="#062d19"
+          color-filled="#3c3c3c"
           color-unfilled="#3c3c3c"
           animation-duration="1s"
           :value="data.ratingPercentage"

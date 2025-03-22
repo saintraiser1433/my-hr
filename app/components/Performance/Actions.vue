@@ -29,7 +29,7 @@ defineProps({
         icon="i-lucide-view"
         size="lg"
         variant="subtle"
-        :to="`performance/teamlead/view-record/${acadId}/${employeeId}`"
+        :to="`performance/view-record/${acadId}/${employeeId}`"
         target="_blank"
         >Show Evaluation Sheet</UButton
       >

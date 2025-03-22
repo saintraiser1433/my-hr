@@ -19,6 +19,18 @@ export interface EmployeeModel extends Timestamped {
 
 export type Role = "Admin" | "Employee" | "TeamLead";
 
+
+export interface EmployeeRatingStatus {
+    id:number;
+    photo_path:string;
+    evaluatee:string;
+    role:string;
+    peerToEvaluate:string;
+    isFinishedPeerEvaluate:boolean;
+    isEvaluatedByTeamLead:boolean;
+}
+
+
 export interface EmployeeWithRequirementModel {
     employeeRequirements: EmployeeRequirements[];
     unchosenRequirements: UnchosenRequirements[]
@@ -128,11 +140,3 @@ export interface ListDepartment {
     label?: string;
 }
 
-export interface EmployeesEvaluate {
-    id: number;
-    employeeId: number,
-    photo_path: string;
-    evaluatee: string;
-    role: string;
-    status: boolean;
-}

@@ -9,9 +9,6 @@ const props = defineProps({
     required: true,
     default: () => [],
   },
-  type: {
-    type: String as PropType<Mode>,
-  }
 });
 
 
@@ -83,7 +80,7 @@ const mydata = data.value.filter((item) => item.status !== 'NOT_SET');
       </template>
 
       <template #action-cell="{ row }">
-        <UButton icon="i-lucide-view" :to="type === 'Peer' ? `peer/${row.original.id}` : `teamlead/${row.original.id}`">View</UButton>
+        <UButton icon="i-lucide-view" :to="`performance/${row.original.id}`">View</UButton>
       </template>
     </UTable>
     <UITablePagination :table="table" v-if="table"> </UITablePagination>

@@ -8,6 +8,8 @@ defineProps({
     default:''
   }
 })
+
+
 const chart = useTemplateRef("chart");
 
 const hideToolbox = () => {

@@ -1,5 +1,5 @@
 export const usePerformance = (
-    data:Ref<EmployeeRating[]>
+    data:Ref<CategoryCountModel[]>
 ) => {
 
     
@@ -14,7 +14,7 @@ export const usePerformance = (
         ];
 
         // Transform the data into the required format
-        const transformedData = data.value[0]?.categoryCounts.map((item) => {
+        const transformedData = data.value.map((item) => {
             const row = [item.Category]; // Start with the category name
             Object.keys(item).forEach((key) => {
                 if (key !== "Category") {
@@ -24,7 +24,7 @@ export const usePerformance = (
             return row;
         }) || [];
 
-        const headers = ["Category", ...Object.keys(data.value[0]?.categoryCounts[0] || {}).filter((key) => key !== "Category")];
+        const headers = ["Category", ...Object.keys(data.value[0] || {}).filter((key) => key !== "Category")];
 
 
         const capitalizedHeaders = headers.slice(1).map((header) =>

@@ -7,11 +7,7 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     label: "Performance",
     icon: "i-mdi-graph-line",
-    slot: "components",
-    children: [
-      { label: "P2P Performance", icon: "i-hugeicons-peer-to-peer-02", to: "/performance/peer" },
-      { label: "SE Performance", icon: "i-hugeicons-peer-to-peer-03", to: "/performance/teamlead" },
-    ],
+    to: "/performance"
   },
   {
     label: "Evaluation",
