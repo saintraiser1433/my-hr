@@ -17,7 +17,8 @@ const emit = defineEmits(["add-work"]);
   <UCard
     class="w-full my-5"
     :ui="{
-      header: 'p-3 sm:p-3',
+      root: 'rounded-md',
+      header: 'border-l-3 rounded-t-lg border-l-(--ui-primary) p-3 sm:p-3',
       body: 'p-3 sm:p-3',
       footer: 'p-2 sm:p-2',
     }"

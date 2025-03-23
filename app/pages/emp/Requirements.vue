@@ -10,11 +10,10 @@ useSeoMeta({
   ogDescription: "CRUD for Screening Type",
 });
 const store = useAuthStore();
-const {  $toast } = useNuxtApp();
+const { $toast } = useNuxtApp();
 
 const requirementsData = ref<EmployeeRequirements[]>([]);
 const listRequirements = ref<UnchosenRequirements[]>([]);
-
 
 //jobscreen list
 const { data, status, error } = await useAPI<EmployeeWithRequirementModel>(
@@ -27,22 +26,19 @@ if (data.value) {
 if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
 }
-
-
 </script>
 
 <template>
-  
-
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl capitalize">My Requirements</h2>
-    <span class="text-sm"
-      >Here's a list pending and submitted requirements ! </span
-    >
+    <span class="text-sm">Here's a list pending and submitted requirements ! </span>
   </div>
-  <EmployeeRequireList
-    :data="requirementsData"
-    :items="listRequirements"
+  <UCard
+    :ui="{
+      root: 'border-b-3 border-(--ui-primary) rounded-md',
+    }"
   >
-  </EmployeeRequireList>
+    <EmployeeRequireList :data="requirementsData" :items="listRequirements">
+    </EmployeeRequireList>
+  </UCard>
 </template>

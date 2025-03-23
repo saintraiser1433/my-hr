@@ -23,6 +23,11 @@ if (ongoing.value) {
 <template>
   <ApplicantsProgressHeader :ongoingData="ongoingData" />
   <USeparator class="pb-2"></USeparator>
-
-  <ApplicantsViewProgress :data="ongoingData[0]?.progressList"> </ApplicantsViewProgress>
+  <UCard
+    :ui="{
+      root: 'border-b-3 border-(--ui-primary) rounded-md',
+    }"
+  >
+    <ApplicantsViewProgress :data="ongoingData[0]?.progressList" />
+  </UCard>
 </template>

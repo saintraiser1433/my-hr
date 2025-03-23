@@ -12,16 +12,16 @@ defineProps({
   },
   questionData: {
     type: Array as PropType<QuestionModel[]>,
-    default: () => []
+    default: () => [],
   },
   legendData: {
     type: Array as PropType<TemplateDetail[]>,
-    default: () => []
+    default: () => [],
   },
   isUpdating: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 const emits = defineEmits<{
@@ -31,13 +31,11 @@ const emits = defineEmits<{
   (e: "reset"): void;
 }>();
 
-
 const edit = (item: QuestionModel) => {
-  emits("edit", item)
-}
+  emits("edit", item);
+};
 const remove = (id: number) => {
   emits("delete", id);
-
 };
 const submit = (item: QuestionModel) => {
   emits("submit", item);
@@ -45,26 +43,42 @@ const submit = (item: QuestionModel) => {
 const reset = () => {
   emits("reset");
 };
-const model = defineModel<QuestionModel>("state",{ required: true })
+const model = defineModel<QuestionModel>("state", { required: true });
 const open = defineModel("open", { default: false, required: true });
 </script>
 
 <style></style>
 
 <template>
-  <UModal fullscreen v-model:open="open" :description="description" :title="title" :overlay="false" :dismissible="false">
+  <UModal
+    :ui="{ content: 'max-w-8xl' }"
+    v-model:open="open"
+    :description="description"
+    :title="title"
+    :overlay="false"
+    :dismissible="false"
+  >
     <template #body>
       <div class="grid grid-cols-12 gap-2">
         <div class="col-span-12 md:col-span-12 lg:col-span-3">
-          <QuestionForm @data-question="submit" @cancel="reset" :isUpdate="isUpdating" v-model:state="model" />
+          <QuestionForm
+            @data-question="submit"
+            @cancel="reset"
+            :isUpdate="isUpdating"
+            v-model:state="model"
+          />
         </div>
         <div class="col-span-12 md:col-span-12 lg:col-span-9">
-          <QuestionList :data="questionData" :legend="legendData" @update="edit" @delete="remove">
+          <QuestionList
+            :data="questionData"
+            :legend="legendData"
+            @update="edit"
+            @delete="remove"
+          >
           </QuestionList>
           <slot></slot>
         </div>
       </div>
     </template>
   </UModal>
-
 </template>

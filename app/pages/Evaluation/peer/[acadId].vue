@@ -96,19 +96,24 @@ const fetchPeerQuestion = async (item: PeerModel) => {
       <h2 class="font-extrabold text-2xl">Peer to Peer Categories Module</h2>
       <span class="text-sm">Here's a list of peer to peer categories available!</span>
     </div>
-
-    <EvaluationPeerList
-      @modal-quest="fetchPeerQuestion"
-      :data="peerData"
-      :item-template="itemTemplate"
-      @update="edit"
-      @delete="remove"
+    <UCard
+      :ui="{
+        root: 'border-b-3 border-(--ui-primary) rounded-md',
+      }"
     >
-      <template #actions>
-        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
-          >Add Peer Category</UButton
-        >
-      </template>
-    </EvaluationPeerList>
+      <EvaluationPeerList
+        @modal-quest="fetchPeerQuestion"
+        :data="peerData"
+        :item-template="itemTemplate"
+        @update="edit"
+        @delete="remove"
+      >
+        <template #actions>
+          <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
+            >Add Peer Category</UButton
+          >
+        </template>
+      </EvaluationPeerList>
+    </UCard>
   </div>
 </template>

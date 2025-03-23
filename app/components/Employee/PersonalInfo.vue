@@ -13,14 +13,20 @@ const maxLength = 11;
   <UCard
     class="w-full"
     :ui="{
-      header: 'p-3 sm:p-3',
+      root: 'rounded-md',
+      header: 'border-l-3 rounded-t-lg border-l-(--ui-primary) p-3 sm:p-3',
       body: 'p-3 sm:p-3',
       footer: 'p-2 sm:p-2',
     }"
   >
     <template #header>
-      <h3 class="font-semibold">Personal Information</h3>
-      <span class="text-gray-500">Enter your information</span>
+      <div class="flex justify-between items-center gap-2">
+        <div>
+          <h3 class="font-semibold">Personal Information</h3>
+          <span class="text-gray-500">Enter your information</span>
+        </div>
+        <!-- <svg-icon name="vector/empty" title="Empty Evaluation" /> -->
+      </div>
     </template>
     <div class="grid grid-cols-12 gap-5">
       <UFormField class="lg:col-span-4 col-span-6" label="First Name">

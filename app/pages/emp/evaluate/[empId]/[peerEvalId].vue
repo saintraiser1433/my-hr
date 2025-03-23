@@ -14,6 +14,9 @@ const { handleApiError } = useErrorHandler();
 const acad = useAcademicYearStore();
 const route = useRoute();
 
+const infoTeam = ref<EmployeeRatingStatus | null>(
+  JSON.parse(localStorage.getItem("evaluateeInfo") || "null")
+);
 const { data: questionnaires, status, error } = await useAPI<Questionnaires[]>(
   `/evaluation/peer/category/${acad.acadId}`
 );
@@ -99,50 +102,66 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col py-4 px-2 gap-2">
-    <h1 class="text-center font-bold font-poppins">
-      PEER TO PEER EVALUATION FORM (INSTRUCTORS)
-    </h1>
-    <h4>
-      The principal purpose of peer-to-peer teacher evaluation is to encourage staff
-      development, to strengthen teaching effectiveness, and to improve overall
-      performance. Specifically, the objectives of the performance evaluation are:
-    </h4>
-    <ul>
-      <li>
-        1.To increase the effectiveness of each instructor and overall department success
-        in meeting the Institution's strategic goals
-      </li>
-      <li>
-        2.To increase awareness of the instructor's professional strengths and weaknesses;
-        and
-      </li>
-      <li>3.To identify opportunities for personal and professional growth.</li>
-    </ul>
-    <USeparator class="py-2"></USeparator>
-    <div class="flex items-center gap-5">
-      <h3 class="font-bold">Evaluate:</h3>
-      <h3>John Rey Decosta</h3>
-      <h3 class="font-bold">Position:</h3>
-      <h3>Software Engineer</h3>
-    </div>
-    <USeparator class="py-2"></USeparator>
-    <UTabs :items="items" variant="pill" class="gap-4 w-full" :ui="{ trigger: 'flex-1' }">
-      <template v-for="q in questionnaires" #[sanitizeKey(q.evaluation.name)]="{ item }">
-        <div class="p-4 border rounded-lg">
-          <div class="flex items-center gap-2">
-            <h4 class="font-semibold">Legends:</h4>
-            <UBadge
-              variant="subtle"
-              size="md"
-              v-for="detail in q.template?.details"
-              :key="detail.id"
-            >
-              <span class="capitalize">{{ detail.score }} - {{ detail.title }}</span>
-            </UBadge>
-          </div>
-          <USeparator class="py-2"></USeparator>
-          <div class="py-2">
+  <UCard
+    :ui="{
+      root: 'border-b-3 border-(--ui-primary) rounded-md shadow-lg',
+      body: 'px-2 sm:px-2',
+    }"
+  >
+    <div class="flex flex-col py-4 px-2 gap-2">
+      <h1 class="text-center font-bold font-poppins">
+        PEER TO PEER EVALUATION FORM (INSTRUCTORS)
+      </h1>
+      <h4>
+        The principal purpose of peer-to-peer teacher evaluation is to encourage staff
+        development, to strengthen teaching effectiveness, and to improve overall
+        performance. Specifically, the objectives of the performance evaluation are:
+      </h4>
+      <ul>
+        <li>
+          1.To increase the effectiveness of each instructor and overall department
+          success in meeting the Institution's strategic goals
+        </li>
+        <li>
+          2.To increase awareness of the instructor's professional strengths and
+          weaknesses; and
+        </li>
+        <li>3.To identify opportunities for personal and professional growth.</li>
+      </ul>
+      <USeparator class="py-2"></USeparator>
+      <div class="flex items-center gap-5 capitalize">
+        <h3 class="font-bold">Evaluate:</h3>
+        <h3>{{ infoTeam?.evaluatee }}</h3>
+        <h3 class="font-bold">Position:</h3>
+        <h3>{{ infoTeam?.job }}</h3>
+      </div>
+      <USeparator class="py-2"></USeparator>
+      <UTabs
+        :items="items"
+        variant="pill"
+        class="gap-4 w-full"
+        :ui="{ trigger: 'flex-1' }"
+      >
+        <template
+          v-for="q in questionnaires"
+          #[sanitizeKey(q.evaluation.name)]="{ item }"
+        >
+          <UCard
+            :ui="{
+              root: 'rounded-md',
+            }"
+          >
+            <div class="flex items-center gap-2 px-5 py-2">
+              <h4 class="font-semibold">Legends:</h4>
+              <UBadge
+                variant="subtle"
+                size="md"
+                v-for="detail in q.template?.details"
+                :key="detail.id"
+              >
+                <span class="capitalize">{{ detail.score }} - {{ detail.title }}</span>
+              </UBadge>
+            </div>
             <QuestionEvaluate
               :academic-year-id="Number(acad.acadId)"
               :evaluation-id="Number(route.params.peerEvalId)"
@@ -151,16 +170,16 @@ const handleSubmit = async () => {
               :selected="selected"
               @checkbox-change="handleCheckboxChange"
             ></QuestionEvaluate>
-          </div>
-        </div>
-      </template>
-    </UTabs>
-    <div class="w-full py-2">
-      <h2 class="font-bold">ADD COMMENTS</h2>
-      <USeparator class="py-2"></USeparator>
-      <UITiptapEditor v-model="comments" />
-      <USeparator class="py-2"></USeparator>
-      <UButton size="lg" @click="handleSubmit">Submit Evaluation</UButton>
+          </UCard>
+        </template>
+      </UTabs>
+      <div class="w-full py-2">
+        <h3 class="font-bold">COMMENTS</h3>
+        <USeparator class="py-2"></USeparator>
+        <UITiptapEditor v-model="comments" />
+        <USeparator class="py-2"></USeparator>
+        <UButton size="lg" @click="handleSubmit">Submit Evaluation</UButton>
+      </div>
     </div>
-  </div>
+  </UCard>
 </template>

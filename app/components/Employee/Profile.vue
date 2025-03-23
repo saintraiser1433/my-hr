@@ -4,10 +4,10 @@ const props = defineProps({
     type: Object as PropType<PersonalInformation>,
     required: true,
   },
-  type :{
-    type:Boolean,
-    default:true
-  }
+  type: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const { $datefns } = useNuxtApp();
@@ -27,7 +27,9 @@ const emit = defineEmits(["submit"]);
 </script>
 
 <template>
-  <div class="flex gap-5 py-3 px-2 rounded-md bg-(--sidebar-background) w-full shadow-lg">
+  <div
+    class="flex gap-5 py-3 px-2 bg-(--sidebar-background) w-full shadow-lg border-l-3 border-(--ui-primary) rounded-md"
+  >
     <div
       class="flex items-center justify-center p-1 ml-5 border-1 bg-(--primary) rounded-full w-42 h-42"
     >
@@ -60,19 +62,22 @@ const emit = defineEmits(["submit"]);
       </div>
       <div v-if="type">
         <USeparator class="py-2"></USeparator>
-      <div class="flex items-center justify-between gap-5">
-        <USwitch v-if="store.getRole === 'Admin'" v-model="statusModel" size="lg" label="Active Status" />
-        <UButton
-          icon="i-lucide-edit"
-          variant="subtle"
-          color="success"
-          @click="emit('submit')"
-          >Save</UButton
-        >
+        <div class="flex items-center justify-between gap-5">
+          <USwitch
+            v-if="store.getRole === 'Admin'"
+            v-model="statusModel"
+            size="lg"
+            label="Active Status"
+          />
+          <UButton
+            icon="i-lucide-edit"
+            variant="subtle"
+            color="success"
+            @click="emit('submit')"
+            >Save</UButton
+          >
+        </div>
       </div>
-      
-      </div>
-      <div v-else></div>
     </div>
   </div>
 </template>

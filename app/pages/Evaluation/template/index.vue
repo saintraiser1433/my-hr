@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-    requiredRole: "Admin",
+  requiredRole: "Admin",
 });
 
 useSeoMeta({
@@ -99,13 +99,18 @@ const toggleModal = () => {
       <h2 class="font-extrabold text-2xl">Template Module</h2>
       <span class="text-sm">Here's a list of template available!</span>
     </div>
-
-    <EvaluationTemplateList :data="templateData" @update="edit" @delete="remove">
-      <template #actions>
-        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
-          >Add Template</UButton
-        >
-      </template>
-    </EvaluationTemplateList>
+    <UCard
+      :ui="{
+        root: 'border-b-3 border-(--ui-primary) rounded-md',
+      }"
+    >
+      <EvaluationTemplateList :data="templateData" @update="edit" @delete="remove">
+        <template #actions>
+          <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
+            >Add Template</UButton
+          >
+        </template>
+      </EvaluationTemplateList>
+    </UCard>
   </div>
 </template>

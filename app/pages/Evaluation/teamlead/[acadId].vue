@@ -127,8 +127,7 @@ const toggleModal = () => {
     </div>
     <UCard
       :ui="{
-        body: 'p-2 sm:p-2',
-        footer: 'p-0 sm:px-0',
+        root: 'border-b-3 border-(--ui-primary) rounded-md',
       }"
     >
       <EvaluationTeamleadList

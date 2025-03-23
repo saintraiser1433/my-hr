@@ -3,7 +3,6 @@ definePageMeta({
   requiredRole: "Admin",
 });
 
-
 useSeoMeta({
   title: "SUPERHURE Screening Type Module",
   description: "CRUD for Screening Type",
@@ -13,7 +12,15 @@ useSeoMeta({
 
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
-const { openModal, description,updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
+const {
+  openModal,
+  description,
+  updateModal,
+  resetModal,
+  isOpen,
+  isUpdate,
+  title,
+} = useCustomModal();
 
 const initialState = {
   id: undefined,
@@ -36,7 +43,6 @@ if (error.value) {
 const submit = async (response: ScreeningModel) => {
   try {
     if (!isUpdate.value) {
-      
       const res = await screeningTypeRepo.add(response); //error on this code
       screeningTypeData.value = [...screeningTypeData.value, res.data as ScreeningModel];
       $toast.success(res.message);
@@ -106,12 +112,17 @@ const toggleModal = () => {
     <h2 class="font-extrabold text-2xl">Screening Types Module</h2>
     <span class="text-sm">Here's a list of screening types available!</span>
   </div>
-
-  <ScreeningList :data="screeningTypeData" @update="edit" @delete="remove">
-    <template #actions>
-      <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
-        >Add Screening Type</UButton
-      >
-    </template>
-  </ScreeningList>
+  <UCard
+    :ui="{
+      root: 'border-b-3 border-(--ui-primary) rounded-md',
+    }"
+  >
+    <ScreeningList :data="screeningTypeData" @update="edit" @delete="remove">
+      <template #actions>
+        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
+          >Add Screening Type</UButton
+        >
+      </template>
+    </ScreeningList>
+  </UCard>
 </template>

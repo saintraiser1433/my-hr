@@ -35,7 +35,7 @@ const {
   description,
   title,
   isOpen,
-} = useTeamLeadCategories(data, Number(route.params.id),'/teamlead/criteria');
+} = useTeamLeadCategories(data, Number(route.params.id), "/teamlead/criteria");
 
 const {
   isUpdating,
@@ -92,18 +92,23 @@ const fetchPeerQuestion = async (item: TeamLeadCriteria) => {
       <h2 class="font-extrabold text-2xl">Criteria Module</h2>
       <span class="text-sm">Here's a list of Criteria module!</span>
     </div>
-
-    <EvaluationTeamleadCriteriaList
-      :data="dataTeamlead"
-      @modal-quest="fetchPeerQuestion"
-      @update="edit"
-      @delete="remove"
+    <UCard
+      :ui="{
+        root: 'border-b-3 border-(--ui-primary) rounded-md',
+      }"
     >
-      <template #actions>
-        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
-          >Add Criteria</UButton
-        >
-      </template>
-    </EvaluationTeamleadCriteriaList>
+      <EvaluationTeamleadCriteriaList
+        :data="dataTeamlead"
+        @modal-quest="fetchPeerQuestion"
+        @update="edit"
+        @delete="remove"
+      >
+        <template #actions>
+          <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
+            >Add Criteria</UButton
+          >
+        </template>
+      </EvaluationTeamleadCriteriaList>
+    </UCard>
   </div>
 </template>

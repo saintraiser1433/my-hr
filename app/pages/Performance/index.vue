@@ -28,7 +28,12 @@ if (error.value) {
       <h2 class="font-extrabold text-2xl">Team Lead to Peer Module</h2>
       <span class="text-sm">Please select academic year for your choice</span>
     </div>
-
-    <PerformanceAcadList :data="evaluationData"> </PerformanceAcadList>
+    <UCard
+      :ui="{
+        root: 'border-b-3 border-(--ui-primary) rounded-md',
+      }"
+    >
+      <PerformanceAcadList :data="evaluationData"> </PerformanceAcadList>
+    </UCard>
   </div>
 </template>

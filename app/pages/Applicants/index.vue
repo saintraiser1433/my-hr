@@ -177,24 +177,44 @@ const reject = async (applicantId: number) => {
         list: 'flex-wrap'
     }">
         <template #pending="{ item }">
-            <ApplicantsPendingList @review="review" :data="pendingData">
-            </ApplicantsPendingList>
+            <UCard  :ui="{
+                root: 'border-b-3 border-(--ui-primary) rounded-md',
+            }">
+                <ApplicantsPendingList @review="review" :data="pendingData"/>
+            </UCard>
+
         </template>
         <template #ongoing="{ item }">
-            <ApplicantsOngoingList :data="ongoingData">
-            </ApplicantsOngoingList>
+            <UCard  :ui="{
+                root: 'border-b-3 border-(--ui-primary) rounded-md',
+            }">
+                <ApplicantsOngoingList :data="ongoingData"/>
+            </UCard>
+    
         </template>
         <template #failed="{ item }">
-            <ApplicantsFailedList :data="failedData">
-            </ApplicantsFailedList>
+            <UCard  :ui="{
+                root: 'border-b-3 border-(--ui-primary) rounded-md',
+            }">
+                <ApplicantsFailedList :data="failedData"/>
+            </UCard>
+   
         </template>
         <template #passed="{ item }">
-            <ApplicantsPassedList :data="passedData">
-            </ApplicantsPassedList>
+            <UCard  :ui="{
+                root: 'border-b-3 border-(--ui-primary) rounded-md',
+            }">
+                 <ApplicantsPassedList :data="passedData"/>
+            </UCard>
+ 
         </template>
         <template #rejected="{ item }">
-            <ApplicantsRejectedList :data="rejectedData">
-            </ApplicantsRejectedList>
+            <UCard  :ui="{
+                root: 'border-b-3 border-(--ui-primary) rounded-md',
+            }">
+              <ApplicantsRejectedList :data="rejectedData"/>
+            </UCard>
+ 
         </template>
 
     </UTabs>

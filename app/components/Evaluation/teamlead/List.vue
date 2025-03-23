@@ -125,8 +125,6 @@ watch(
   <UCard
     :ui="{
       root: 'overflow-hidden ',
-      body: 'p-0 sm:p-0',
-      footer: 'p-0 sm:px-0',
     }"
   >
     <UTable

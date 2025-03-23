@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-    requiredRole: "Admin",
+  requiredRole: "Admin",
 });
 
 useSeoMeta({
@@ -12,7 +12,15 @@ useSeoMeta({
 
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
-const { openModal,description, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
+const {
+  openModal,
+  description,
+  updateModal,
+  resetModal,
+  isOpen,
+  isUpdate,
+  title,
+} = useCustomModal();
 
 const initialState = {
   id: undefined,
@@ -93,8 +101,8 @@ const edit = (response: JobModel) => {
   jobForm.status = response.status;
   const transformData = response.requirements.map((item) => ({
     id: item.id,
-    label: item.title
-  }))
+    label: item.title,
+  }));
   jobForm.requirements = transformData;
   updateModal(`${response.title}`);
 };
@@ -132,15 +140,30 @@ const toggleModal = () => {
 <template>
   <JobContent v-model:open="isViewing" :data="viewedJob"></JobContent>
 
-  <JobForm @data-job="submit" :description="description" :department="department" v-model:state="jobForm" :is-update="isUpdate" :title="title"
-    v-model:open="isOpen" />
+  <JobForm
+    @data-job="submit"
+    :description="description"
+    :department="department"
+    v-model:state="jobForm"
+    :is-update="isUpdate"
+    :title="title"
+    v-model:open="isOpen"
+  />
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl">Job Offers Module</h2>
     <span class="text-sm">Here's a list of Job offers !</span>
   </div>
-  <JobList :data="jobData" @update="edit" @delete="remove" @view="view">
-    <template #actions>
-      <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add Job Offer</UButton>
-    </template>
-  </JobList>
+  <UCard
+    :ui="{
+      root: 'border-b-3 border-(--ui-primary) rounded-md',
+    }"
+  >
+    <JobList :data="jobData" @update="edit" @delete="remove" @view="view">
+      <template #actions>
+        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
+          >Add Job Offer</UButton
+        >
+      </template>
+    </JobList>
+  </UCard>
 </template>

@@ -56,7 +56,7 @@ const { optionCategory } = usePerformance(categoryData);
 </script>
 
 <template>
-  <div class="mb-5">
+  <div class="mb-1">
     <h3 class="font-semibold">
       Evaluated by:
       <span class="font-normal">{{ hideIdentity ? "#######" : evaluatedBy }}</span>

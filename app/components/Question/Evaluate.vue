@@ -38,14 +38,7 @@ const handleCheckboxChange = (rowId: string, data: SubmitResult) => {
 </script>
 
 <template>
-  <UCard
-    :ui="{
-      root: 'overflow-hidden',
-      header: 'p-0 sm:px-3 py-2',
-      body: 'p-0 sm:px-0 sm:py-2',
-      footer: 'p-0 sm:px-0',
-    }"
-  >
+  <UCard>
     <UTable :data="data" :columns="columns" v-model:grouping="groupingState">
       <!-- Question cell -->
       <template #question-cell="{ row }">
@@ -81,8 +74,6 @@ const handleCheckboxChange = (rowId: string, data: SubmitResult) => {
           />
         </div>
       </template>
-
-      <!-- Name cell -->
       <template #name-cell="{ row }">
         <div class="w-2">{{ row.original.name }}</div>
       </template>

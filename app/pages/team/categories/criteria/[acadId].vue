@@ -47,18 +47,18 @@ const { data: employee, status: statEmp, error: errEmp } = await useAPI<ListEmpl
   }
 );
 
-const { data: result, error:errorEvaluation  } = await useAPI<CriteriaColleague[]>(
-  `/teamlead/main/criteria`,{
-    watch:[selectedEmployee],
-    immediate:false,
-    params:{
+const { data: result, error: errorEvaluation } = await useAPI<CriteriaColleague[]>(
+  `/teamlead/main/criteria`,
+  {
+    watch: [selectedEmployee],
+    immediate: false,
+    params: {
       acadId: route.params.acadId,
-      empId: empId
+      empId: empId,
     },
-    server:false
-  },
+    server: false,
+  }
 );
-
 
 const {
   toggleModal,
@@ -113,8 +113,7 @@ watch(
       return;
     }
     employeeId.value = newId;
-   
-  },
+  }
 );
 </script>
 
@@ -149,8 +148,7 @@ watch(
     <div class="col-span-4">
       <UCard
         :ui="{
-          body: 'p-0 sm:p-0',
-          footer: 'p-0 sm:px-0',
+          root: 'border-t-3 border-(--ui-primary) rounded-md',
         }"
       >
         <UCommandPalette v-model="selectedEmployee" :groups="groups" class="flex-1" />
@@ -159,8 +157,7 @@ watch(
     <div class="col-span-8">
       <UCard
         :ui="{
-          body: 'p-2 sm:p-2',
-          footer: 'p-0 sm:px-0',
+          root: 'border-t-3 border-(--ui-primary) rounded-md',
         }"
       >
         <EvaluationTeamleadCriteriaList

@@ -31,7 +31,12 @@ if (error.value) {
       <h2 class="font-extrabold text-2xl">Employee Performance Appraisal Module</h2>
       <span class="text-sm">Here's a list of employee performance appraisal module!</span>
     </div>
-
-    <EvaluationTeamleadList :data="teamleadData"> </EvaluationTeamleadList>
+    <UCard
+      :ui="{
+        root: 'border-b-3 border-(--ui-primary) rounded-md',
+      }"
+    >
+      <EvaluationTeamleadList :data="teamleadData"> </EvaluationTeamleadList>
+    </UCard>
   </div>
 </template>

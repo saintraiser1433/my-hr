@@ -49,9 +49,7 @@ export default defineNuxtConfig({
     fallback: "light",
   },
   svgSprite: {
-
-    input: '~/app/assets/sprite/svg', // Ensure the input path is correct
-    output: '~/app/assets/sprite/gen', // Keep a trailing slash,
+    // Keep a trailing slash,
   },
   future: {
     compatibilityVersion: 4

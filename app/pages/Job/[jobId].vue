@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-    requiredRole: "Admin",
+  requiredRole: "Admin",
 });
 
 useSeoMeta({
@@ -15,8 +15,10 @@ const { handleApiError } = useErrorHandler();
 const route = useRoute();
 const jobScreenData = ref<JobScreeningModel[]>([]);
 const screenData = ref<ScreeningModel[]>([]);
-const titleName = useState('title', () => localStorage.getItem('title') || 'Unknown module');
-
+const titleName = useState(
+  "title",
+  () => localStorage.getItem("title") || "Unknown module"
+);
 
 //typescreening
 const { data: screeningData, error: errorScreening } = await useAPI<ScreeningModel[]>(
@@ -48,7 +50,10 @@ const assignData = async (data: ScreeningModel[]) => {
       screening_id: Number(item.id),
     }));
     const response = await jobScreenRepo.add(payload);
-    jobScreenData.value = [...jobScreenData.value, ...response.data as JobScreeningModel[]];
+    jobScreenData.value = [
+      ...jobScreenData.value,
+      ...(response.data as JobScreeningModel[]),
+    ];
     screenData.value =
       screenData.value?.filter((item) => !data.some((items) => items.id === item.id)) ||
       [];
@@ -58,18 +63,18 @@ const assignData = async (data: ScreeningModel[]) => {
   }
 };
 
-const jobScreenRmvRepo = repository<ScreeningModel[]>(
-  $api,
-  "/screening/assign/delete"
-);
+const jobScreenRmvRepo = repository<ScreeningModel[]>($api, "/screening/assign/delete");
 const unAssignJob = (data: number[]) => {
   setAlert("warning", "Are you sure you want to delete?", "", "Confirm delete").then(
     async (result) => {
       if (result.isConfirmed) {
         try {
           const response = await jobScreenRmvRepo.deleteMany(data);
- 
-          screenData.value = [...screenData.value, ...response.data as ScreeningModel[]];
+
+          screenData.value = [
+            ...screenData.value,
+            ...(response.data as ScreeningModel[]),
+          ];
 
           jobScreenData.value = jobScreenData.value.filter(
             (item) => !data.includes(item.id || 0)
@@ -104,19 +109,28 @@ const down = async (datas: DirectionModel) => {
     handleApiError(error);
   }
 };
-
-
-
 </script>
 
 <template>
-
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl capitalize">{{ titleName }}</h2>
-    <span class="text-sm">Here's a list assigned screening type for {{ titleName }} !</span>
+    <span class="text-sm"
+      >Here's a list assigned screening type for {{ titleName }} !</span
+    >
   </div>
-
-  <JobAssignList :data="jobScreenData" :items="screenData" @up="up" @down="down" @assign="assignData"
-    @unAssign="unAssignJob">
-  </JobAssignList>
+  <UCard
+    :ui="{
+      root: 'border-b-3 border-(--ui-primary) rounded-md',
+    }"
+  >
+    <JobAssignList
+      :data="jobScreenData"
+      :items="screenData"
+      @up="up"
+      @down="down"
+      @assign="assignData"
+      @unAssign="unAssignJob"
+    >
+    </JobAssignList>
+  </UCard>
 </template>

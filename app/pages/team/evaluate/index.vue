@@ -16,6 +16,16 @@ const { departmentId } = useAuthStore();
 const { openModal, isOpen, title, description } = useCustomModal();
 const employeeIds = ref(0);
 const selectedEmployee = ref<EmployeeRatingStatus>();
+const evaluateeInfo = useLocalStorage<EmployeeRatingStatus | null>(
+  "evaluateeInfo",
+  null,
+  {
+    serializer: {
+      read: (v) => (v ? JSON.parse(v) : null), // Parse when reading
+      write: (v) => JSON.stringify(v), // Stringify when writing
+    },
+  }
+);
 const employeeData = computed(() =>
   employee.value?.filter((item) => item.role !== "TeamLead")
 );
@@ -49,6 +59,7 @@ if (resultError.value) {
 }
 
 const evaluate = async (data: EmployeeRatingStatus) => {
+  evaluateeInfo.value = data;
   await navigateTo({
     name: "team-evaluate-empId-deptId",
     params: { empId: data.employeeId, deptId: departmentId },
@@ -58,7 +69,7 @@ const evaluate = async (data: EmployeeRatingStatus) => {
 const viewRating = async (data: EmployeeRatingStatus) => {
   openModal("View Ratings");
   employeeIds.value = data.employeeId;
-  selectedEmployee.value = data;
+  selectedEmployee.value = { ...data };
 };
 </script>
 
@@ -77,10 +88,16 @@ const viewRating = async (data: EmployeeRatingStatus) => {
     <h2 class="font-extrabold text-2xl">Evaluate Colleagues</h2>
     <span class="text-sm">Here's a list evaluate colleagues!</span>
   </div>
-  <EmployeeEvaluateList
-    role="teamlead"
-    :data="employeeData"
-    @evaluate="evaluate"
-    @view="viewRating"
-  />
+  <UCard
+    :ui="{
+      root: 'border-b-3 border-(--ui-primary) rounded-md',
+    }"
+  >
+    <EmployeeEvaluateList
+      role="teamlead"
+      :data="employeeData"
+      @evaluate="evaluate"
+      @view="viewRating"
+    />
+  </UCard>
 </template>

@@ -112,14 +112,13 @@ const viewRating = async (data: EmployeeRatingStatus) => {
     <div class="col-span-4">
       <UCard
         :ui="{
-          root: 'overflow-hidden border-t-3 border-(--ui-primary) ',
-          body: 'p-0 sm:p-0',
-          footer: 'p-0 sm:px-0',
+          root: 'border-t-3 border-(--ui-primary) rounded-md',
         }"
       >
         <UCommandPalette
           v-model="selectedDepartment"
           :groups="groups"
+          placeholder="Please select department or search department"
           class="flex-1"
           :ui="{ item: 'capitalize' }"
         />
@@ -128,9 +127,7 @@ const viewRating = async (data: EmployeeRatingStatus) => {
     <div class="col-span-8">
       <UCard
         :ui="{
-          root: 'overflow-hidden border-t-3 border-(--ui-primary) ',
-          body: 'p-2 sm:p-2',
-          footer: 'p-0 sm:px-0',
+          root: 'border-t-3 border-(--ui-primary) rounded-md',
         }"
       >
         <EmployeeEvaluateList role="admin" :data="result" @view="viewRating" />

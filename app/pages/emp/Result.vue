@@ -51,6 +51,7 @@ if (peerResultError.value) {
       v-if="peerData.length > 0"
       :ui="{
         root: 'overflow-hidden border-t-3 border-(--ui-primary) ',
+        body: 'sm:p-5 p-5',
       }"
     >
       <template #header>
@@ -95,6 +96,7 @@ if (peerResultError.value) {
       v-if="teamData.length > 0"
       :ui="{
         root: 'overflow-hidden border-t-3 border-(--ui-primary) ',
+        body: 'sm:p-5 p-5',
       }"
     >
       <template #header>

@@ -52,10 +52,10 @@ const props = defineProps({
 
     <div class="flex gap-3 items-center">
       <h3 class="font-bold">
-        Total Ratings: <span class="font-normal">{{ averageRating }}</span>
+        Total Ratings: <span class="font-normal underline">{{ averageRating }}</span>
       </h3>
       <h3 class="font-bold">
-        Remarks: <span class="font-normal capitalize">{{ remarks }}</span>
+        Remarks: <span class="font-normal capitalize underline">{{ remarks }}</span>
       </h3>
     </div>
   </div>

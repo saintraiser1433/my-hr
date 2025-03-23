@@ -47,14 +47,13 @@ const submitForm = () => {
 <template>
   <UCard
     :ui="{
-      root: 'overflow-hidden ',
+      root: 'border-b-3 border-b-(--ui-primary) rounded-md',
       header: 'p-0 sm:px-3 py-2',
       body: 'p-4 sm:px-3 sm:py-2',
-      footer: 'p-0 sm:px-0',
     }"
   >
     <template #header>
-      <h3 class="font-bold text-(--foreground)">MANAGE QUESTIONS</h3>
+      <h3 class="font-bold text-(--foreground)">Manage Questions</h3>
     </template>
     <UForm
       ref="formRef"
@@ -63,7 +62,7 @@ const submitForm = () => {
       class="space-y-4"
       @submit="onSubmit"
     >
-      <UFormField class="my-2" label="Description" name="question" required>
+      <UFormField class="my-2" label="" name="question" required>
         <UITiptapEditor v-model="model.question" class="pt-1" />
       </UFormField>
     </UForm>

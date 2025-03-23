@@ -113,6 +113,13 @@ export default defineAppConfig({
         base: 'capitalize'
       }
     },
+    card: {
+      slots: {
+        root: 'overflow-hidden rounded-none ',
+        body: 'p-0 sm:p-0',
+        footer: 'p-0 sm:px-0',
+      }
+    },
 
 
     dropdownMenu: {

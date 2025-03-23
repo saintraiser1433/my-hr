@@ -52,7 +52,7 @@ const openModal = defineModel("open", {
   >
     <template #body>
       <div
-        class="flex gap-5 py-3 px-2 rounded-md border-b-3 border-(--ui-primary) bg-(--sidebar-background) w-full shadow-lg"
+        class="flex gap-5 py-3 px-2 rounded-md border-l-3 border-(--ui-primary) bg-(--sidebar-background) w-full shadow-lg"
       >
         <div
           class="flex items-center justify-center p-1 ml-5 border-1 bg-(--primary) rounded-full w-42 h-42"
@@ -88,7 +88,8 @@ const openModal = defineModel("open", {
           <UCard
             v-if="peerData.length > 0"
             :ui="{
-              root: 'overflow-hidden border-t-3 border-(--ui-primary) ',
+              root: 'overflow-hidden border-t-3 border-(--ui-primary) rounded-md ',
+              body: 'sm:p-3 p-3',
             }"
           >
             <template #header>
@@ -127,7 +128,8 @@ const openModal = defineModel("open", {
           <UCard
             v-if="data.length > 0"
             :ui="{
-              root: 'overflow-hidden border-t-3 border-(--ui-primary) ',
+              root: 'overflow-hidden border-t-3 border-(--ui-primary) rounded-md ',
+              body: 'sm:p-3 p-3',
             }"
           >
             <template #header>

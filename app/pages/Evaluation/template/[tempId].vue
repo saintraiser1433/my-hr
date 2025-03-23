@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-    requiredRole: "Admin",
+  requiredRole: "Admin",
 });
 
 useSeoMeta({
@@ -18,14 +18,16 @@ const initialState = {
   id: undefined,
   title: "",
   description: "",
-  score:0,
-  templateId:Number(route.params.tempId)
+  score: 0,
+  templateId: Number(route.params.tempId),
 };
 const templateForm = reactive<TemplateDetail>({ ...initialState });
 const templateData = ref<TemplateDetail[]>([]);
 const templateRepo = repository<TemplateDetail>($api, "/template/detail");
 
-const { data, status, error } = await useAPI<TemplateDetail[]>(`/template/detail/${route.params.tempId}`);
+const { data, status, error } = await useAPI<TemplateDetail[]>(
+  `/template/detail/${route.params.tempId}`
+);
 if (data.value) {
   templateData.value = data.value;
 }
@@ -37,7 +39,7 @@ const submit = async (response: TemplateDetail) => {
   try {
     if (!isUpdate.value) {
       const res = await templateRepo.add(response); //error on this code
-      templateData.value = [res.data as TemplateDetail,...templateData.value];
+      templateData.value = [res.data as TemplateDetail, ...templateData.value];
       $toast.success(res.message);
     } else {
       const res = await templateRepo.update(response); //error on this code
@@ -102,12 +104,18 @@ const toggleModal = () => {
       <h2 class="font-extrabold text-2xl">Template Module</h2>
       <span class="text-sm">Here's a list of template available!</span>
     </div>
-
-    <EvaluationTemplateDetailList :data="templateData" @update="edit" @delete="remove">
-      <template #actions>
-        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
-          >Add Template</UButton>
-      </template>
-    </EvaluationTemplateDetailList  >
+    <UCard
+      :ui="{
+        root: 'border-b-3 border-(--ui-primary) rounded-md',
+      }"
+    >
+      <EvaluationTemplateDetailList :data="templateData" @update="edit" @delete="remove">
+        <template #actions>
+          <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
+            >Add Template</UButton
+          >
+        </template>
+      </EvaluationTemplateDetailList>
+    </UCard>
   </div>
 </template>

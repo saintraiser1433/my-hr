@@ -3,7 +3,6 @@ definePageMeta({
   requiredRole: "Admin",
 });
 
-
 useSeoMeta({
   title: "SUPERHURE Requirements Module",
   description: "CRUD for Requirements",
@@ -13,7 +12,15 @@ useSeoMeta({
 
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
-const { openModal,description, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
+const {
+  openModal,
+  description,
+  updateModal,
+  resetModal,
+  isOpen,
+  isUpdate,
+  title,
+} = useCustomModal();
 
 const initialState = {
   id: undefined,
@@ -59,7 +66,7 @@ const edit = (response: RequirementModel) => {
   requirementsForm.id = response.id;
   requirementsForm.description = response.description;
   requirementsForm.title = response.title;
-  updateModal('Update Requirements');
+  updateModal("Update Requirements");
 };
 
 const remove = (id: number) => {
@@ -86,27 +93,36 @@ const resetForm = () => {
 
 const toggleModal = () => {
   resetForm();
-  openModal('Create Requirements');
+  openModal("Create Requirements");
 };
 </script>
 
 <template>
-  <div v-if="status === 'pending'">
-    Gwapo
-  </div>
+  <div v-if="status === 'pending'">Gwapo</div>
   <div v-else>
-    <RequirementsForm @data-requirements="submit" v-model:state="requirementsForm" :title="title"
-      v-model:open="isOpen" :description="description" />
+    <RequirementsForm
+      @data-requirements="submit"
+      v-model:state="requirementsForm"
+      :title="title"
+      v-model:open="isOpen"
+      :description="description"
+    />
     <div class="flex flex-col items-center lg:items-start mb-3">
       <h2 class="font-extrabold text-2xl">Requirements Module</h2>
       <span class="text-sm">Here's a list of requirements available!</span>
     </div>
-
-    <RequirementsList :data="requirementsData" @update="edit" @delete="remove">
-      <template #actions>
-        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add Requirements</UButton>
-      </template>
-    </RequirementsList>
+    <UCard
+      :ui="{
+        root: 'border-b-3 border-(--ui-primary) rounded-md',
+      }"
+    >
+      <RequirementsList :data="requirementsData" @update="edit" @delete="remove">
+        <template #actions>
+          <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
+            >Add Requirements</UButton
+          >
+        </template>
+      </RequirementsList>
+    </UCard>
   </div>
-
 </template>

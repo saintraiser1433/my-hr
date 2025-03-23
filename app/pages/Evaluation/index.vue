@@ -12,7 +12,15 @@ useSeoMeta({
 
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
-const { openModal, updateModal, description, resetModal, isOpen, isUpdate, title } = useCustomModal();
+const {
+  openModal,
+  updateModal,
+  description,
+  resetModal,
+  isOpen,
+  isUpdate,
+  title,
+} = useCustomModal();
 
 const initialState = {
   id: undefined,
@@ -34,8 +42,6 @@ if (error.value) {
 const { data: template, status: statusTemp, error: errorTemp } = await useAPI<
   TemplateModel[]
 >("/template");
-
-
 
 const submit = async (response: EvaluationModel) => {
   try {
@@ -98,26 +104,31 @@ const toggleModal = () => {
 
 <template>
   <div>
-    <EvaluationForm @data-evaluation="submit" :isUpdate="isUpdate" :template="template" :title="title"
-      :description="description" v-model:state="evaluationForm" v-model:open="isOpen" />
+    <EvaluationForm
+      @data-evaluation="submit"
+      :isUpdate="isUpdate"
+      :template="template"
+      :title="title"
+      :description="description"
+      v-model:state="evaluationForm"
+      v-model:open="isOpen"
+    />
     <div class="flex flex-col items-center lg:items-start mb-3">
       <h2 class="font-extrabold text-2xl">Evaluation Module</h2>
       <span class="text-sm">Here's a list of Evaluation available!</span>
     </div>
     <UCard
-    :ui="{
-      root: 'overflow-hidden border-b-3 border-(--ui-primary)  ',
-      body: 'p-0 px-2 pb-2 sm:p-0 sm:px-2 sm:pb-2',
-      footer: 'p-0 sm:px-0',
-    }"
+      :ui="{
+        root: 'overflow-hidden border-b-3 border-(--ui-primary)  rounded-md ',
+      }"
     >
       <EvaluationList :data="evaluationData" @update="edit" @delete="remove">
-      <template #actions>
-        <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal">Add Evaluation
-        </UButton>
-      </template>
-    </EvaluationList>
+        <template #actions>
+          <UButton icon="i-lucide-plus" size="sm" variant="solid" @click="toggleModal"
+            >Add Evaluation
+          </UButton>
+        </template>
+      </EvaluationList>
     </UCard>
-    
   </div>
 </template>

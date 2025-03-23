@@ -143,14 +143,18 @@ const pending = (response: SubmittedRequirements) => {
       >Here's a list assigned screening type for {{ titleName }} !</span
     >
   </div>
-
-  <EmployeeRequireList
-    @pending="pending"
-    @update="edit"
-    @assign="assignData"
-    @unAssign="unAssignJob"
-    :data="requirementsData"
-    :items="listRequirements"
+  <UCard
+    :ui="{
+      root: 'border-b-3 border-(--ui-primary) rounded-md',
+    }"
   >
-  </EmployeeRequireList>
+    <EmployeeRequireList
+      @pending="pending"
+      @update="edit"
+      @assign="assignData"
+      @unAssign="unAssignJob"
+      :data="requirementsData"
+      :items="listRequirements"
+    />
+  </UCard>
 </template>

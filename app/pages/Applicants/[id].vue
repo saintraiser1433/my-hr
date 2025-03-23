@@ -149,13 +149,17 @@ const finalizeApplicant = () => {
 <template>
   <ApplicantsProgressHeader :ongoingData="ongoingData"> </ApplicantsProgressHeader>
   <USeparator class="pb-2"></USeparator>
-
-  <ApplicantsProgress
-    @data-status="updateStatus"
-    @data-date="updateTime"
-    :data="ongoingData[0]?.progressList"
+  <UCard
+    :ui="{
+      root: 'border-b-3 border-(--ui-primary) rounded-md',
+    }"
   >
-  </ApplicantsProgress>
+    <ApplicantsProgress
+      @data-status="updateStatus"
+      @data-date="updateTime"
+      :data="ongoingData[0]?.progressList"
+    />
+  </UCard>
 
   <div class="flex justify-end items-center mt-2 gap-2">
     <UButton

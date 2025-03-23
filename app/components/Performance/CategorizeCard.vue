@@ -15,8 +15,8 @@ const percentage = computed(
 <template>
   <UCard
     :ui="{
-      root: 'overflow-hidden ',
-      body: 'p-3 sm:p-3',
+      root: 'overflow-hidden rounded-md border-l-3 border-(--ui-primary)',
+      body: 'p-2 sm:p-2',
     }"
   >
     <div class="flex items-center gap-3">
@@ -31,7 +31,7 @@ const percentage = computed(
           :max="percentage"
           rounded
         >
-          <span class="font-bold"> {{data.ratingPercentage}}% </span>
+          <span class="font-bold"> {{ data.ratingPercentage }}% </span>
         </CircleProgressBar>
       </div>
       <div>

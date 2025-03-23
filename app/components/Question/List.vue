@@ -60,16 +60,14 @@ watch(
 <template>
   <UCard
     :ui="{
-      root: 'overflow-hidden',
+      root: 'border-b-3 border-b-(--ui-primary) rounded-md',
       header: 'p-0 sm:px-3 py-2',
-      body: 'p-4 sm:px-2 sm:py-2',
-      footer: 'p-0 sm:px-0',
     }"
   >
     <template #header>
-      <h3 class="font-bold text-(--foreground)">LIST OF QUESTIONS</h3>
+      <h3 class="font-bold text-(--foreground)">List of Questions</h3>
     </template>
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4 p-2">
       <h4 class="font-semibold">LEGENDS:</h4>
       <div class="flex items-center gap-3">
         <UBadge
@@ -82,14 +80,8 @@ watch(
         </UBadge>
       </div>
     </div>
-    <USeparator class="my-2"></USeparator>
-    <UCard
-      :ui="{
-        root: 'overflow-hidden',
-        body: 'p-0 sm:p-0',
-        footer: 'p-0 sm:px-0',
-      }"
-    >
+    <!-- <USeparator class="pb-2"></USeparator> -->
+    <UCard>
       <UTable
         sticky
         class="overflow-y-auto custom-scrollbar h-150 cursor-auto"

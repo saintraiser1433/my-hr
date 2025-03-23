@@ -34,8 +34,12 @@ const items = questionnaires.value?.map((q) => {
     </div>
     <UTabs :items="items" variant="pill" class="gap-4 w-full" :ui="{ trigger: 'flex-1' }">
       <template v-for="q in questionnaires" #[sanitizeKey(q.evaluation.name)]="{ item }">
-        <div class="p-4 border rounded-lg">
-          <div class="flex items-center gap-2">
+        <UCard
+          :ui="{
+            root: 'rounded-md',
+          }"
+        >
+          <div class="flex items-center gap-2 px-5 py-2">
             <h4 class="font-semibold">Legends:</h4>
             <UBadge
               variant="subtle"
@@ -46,19 +50,16 @@ const items = questionnaires.value?.map((q) => {
               <span class="capitalize">{{ detail.score }} - {{ detail.title }}</span>
             </UBadge>
           </div>
-          <USeparator class="py-2"></USeparator>
-          <div class="py-2">
-            <QuestionEvaluate
-              :data="q.questions"
-              :legend="q.template?.details"
-              :selected="selected"
-            ></QuestionEvaluate>
-          </div>
-        </div>
+          <QuestionEvaluate
+            :data="q.questions"
+            :legend="q.template?.details"
+            :selected="selected"
+          ></QuestionEvaluate>
+        </UCard>
       </template>
     </UTabs>
     <div class="w-full py-2">
-      <h2 class="font-bold">COMMENTS</h2>
+      <h3 class="font-bold">COMMENTS</h3>
       <USeparator class="py-2"></USeparator>
       <UITiptapEditor
         :modelValue="questionAnswer?.commentsDetail.comment"

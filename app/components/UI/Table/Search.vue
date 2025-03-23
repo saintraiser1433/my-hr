@@ -21,10 +21,11 @@ const globalFilter = defineModel<string>('search',{ required: true });
 
 <template>
   <div
-    class="flex justify-center lg:justify-between flex-wrap items-center py-2 gap-2 w-full"
+    class="flex justify-center lg:justify-between px-2 flex-wrap items-center py-2 gap-2 w-full"
   >
     <div class="flex items-center gap-2">
-      <UInput v-if="hasSearch"
+      <UInput
+        v-if="hasSearch"
         type="search"
         color="neutral"
         class="w-full"
@@ -34,7 +35,8 @@ const globalFilter = defineModel<string>('search',{ required: true });
         placeholder="Search..."
       />
 
-      <UDropdownMenu v-if="hasColumnFilter"
+      <UDropdownMenu
+        v-if="hasColumnFilter"
         :items="table?.tableApi
                 ?.getAllColumns()
                 .filter((column:Column<any>) => column.getCanHide())

@@ -81,6 +81,11 @@ const unAssign = (data: EmployeeModel) => {
     <h2 class="font-extrabold text-2xl">Employee Module</h2>
     <span class="text-sm">Here's a list of employees!</span>
   </div>
-  <EmployeeList @assign="assign" @unassign="unAssign" :data="employeeData">
-  </EmployeeList>
+  <UCard
+    :ui="{
+      root: 'border-b-3 border-(--ui-primary) rounded-md',
+    }"
+  >
+    <EmployeeList @assign="assign" @unassign="unAssign" :data="employeeData" />
+  </UCard>
 </template>
