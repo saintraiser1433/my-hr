@@ -51,15 +51,15 @@ export interface EmployeeRequirements {
     status: EmployeeRequirementStatus;
     employeeId: number;
     requirementsId: number;
-    filename?:string
+    filename?: string
     submittedAt?: Date;
     expiryDate?: Date;
 }
 
 export interface UploadRequirements {
-    id:number;
-    filename:string;
-    status:string;
+    id: number;
+    filename: string;
+    status: string;
 }
 
 export interface SubmittedRequirements {
@@ -79,7 +79,9 @@ export interface SubmittedRequirements {
 export enum EmployeeRequirementStatus {
     PENDING = "PENDING",
     SUBMITTED = "SUBMITTED",
-    EXPIRED = "EXPIRED"
+    EXPIRED = "EXPIRED",
+    REJECTED = "REJECTED",
+    NOT_SUBMIT = "NOT_SUBMITTED"
 }
 
 export interface PersonalInformation {

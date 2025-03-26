@@ -52,7 +52,7 @@ const props = defineProps({
 });
 
 const { categoryData } = toRefs(props);
-const { optionCategory } = usePerformance(categoryData);
+const { optionCategory } = useStackedBar(categoryData);
 </script>
 
 <template>
@@ -69,10 +69,10 @@ const { optionCategory } = usePerformance(categoryData);
       </div>
     </div>
     <div class="col-span-8">
-      <PerformanceCategoryAnalytics
+      <DashboardBarChart
         :option="optionCategory"
         title="Category Scores"
-      ></PerformanceCategoryAnalytics>
+      ></DashboardBarChart>
     </div>
   </div>
 

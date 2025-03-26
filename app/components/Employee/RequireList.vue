@@ -18,7 +18,7 @@ const emits = defineEmits<{
   (e: "assign", payload: UnchosenRequirements[]): void;
   (e: "unAssign", payload: number[]): void;
   (e: "update", payload: EmployeeRequirements): void;
-  (e: "pending", payload: SubmittedRequirements): void;
+  (e: "reject", payload: SubmittedRequirements): void;
   (e: "submit", payload: EmployeeRequirements): void;
 }>();
 const config = useRuntimeConfig();
@@ -47,19 +47,18 @@ const unassign = () => {
 const update = (data: EmployeeRequirements) => {
   emits("update", data);
 };
-const pending = (data: SubmittedRequirements) => {
-  emits("pending", {
+const reject = (data: SubmittedRequirements) => {
+  emits("reject", {
     id: data.id,
     expiryDate: null,
     submittedAt: null,
-    status: EmployeeRequirementStatus.PENDING,
+    status: EmployeeRequirementStatus.REJECTED,
   });
 };
 
-const submit = (data:EmployeeRequirements) => {
-  emits("submit",data);
-
-}
+const submit = (data: EmployeeRequirements) => {
+  emits("submit", data);
+};
 
 const assign = () => {
   handleAssign();
@@ -78,7 +77,6 @@ const columns: TableColumn<any>[] = [
   createColumn("action", "Action", true),
   // ...(store.getRole === "Admin" ? [createColumn("action", "Action", false)] : []),
 ];
-
 </script>
 
 <template>
@@ -151,12 +149,22 @@ const columns: TableColumn<any>[] = [
 
         <UBadge color="error" variant="solid" v-else>N/A</UBadge>
       </template>
-      
+
       <template #document-cell="{ row }">
-        <UButton icon="i-lucide-eye" :to="`${config.public.STORAGE_URL_REQUIREMENTS}/${row.original.fileName}`" 
-        target="_blank" title="Review" size="sm"
-         :disabled="!row.original.fileName || row.original.status === 'NOT_SUBMITTED' || row.original.status === 'REJECTED'">
-         View </UButton>
+        <UButton
+          icon="i-lucide-eye"
+          :to="`${config.public.STORAGE_URL_REQUIREMENTS}/${row.original.fileName}`"
+          target="_blank"
+          title="Review"
+          size="sm"
+          :disabled="
+            !row.original.fileName ||
+            row.original.status === 'NOT_SUBMITTED' ||
+            row.original.status === 'REJECTED'
+          "
+        >
+          View
+        </UButton>
       </template>
       <template #status-cell="{ row }">
         <UBadge
@@ -176,10 +184,24 @@ const columns: TableColumn<any>[] = [
           color="error"
           >{{ row.original.status }}
         </UBadge>
-        <UBadge v-else-if="row.original.status === 'NOT_SUBMITTED'" icon="i-lucide-x" color="error" variant="solid">NO SUBMISSION YET</UBadge>
+        <UBadge
+          v-else-if="row.original.status === 'NOT_SUBMITTED'"
+          icon="i-lucide-x"
+          color="error"
+          variant="solid"
+          >NO SUBMISSION YET</UBadge
+        >
+        <UBadge
+          v-else-if="row.original.status === 'REJECTED'"
+          icon="i-lucide-x"
+          color="error"
+          variant="solid"
+          >REJECTED</UBadge
+        >
       </template>
       <template #action-cell="{ row }">
-        <UPopover v-if="store.getRole === 'Admin'"
+        <UPopover
+          v-if="store.getRole === 'Admin'"
           arrow
           :content="{
             align: 'center',
@@ -187,23 +209,39 @@ const columns: TableColumn<any>[] = [
             sideOffset: 8,
           }"
         >
-          <UButton icon="i-lucide-eye" title="Review" size="sm"> </UButton>
+          <UButton
+            icon="i-lucide-eye"
+            :disabled="
+              row.original.status === 'NOT_SUBMITTED' ||
+              row.original.status === 'REJECTED'
+            "
+            title="Review"
+            size="sm"
+          >
+          </UButton>
 
           <template #content>
             <div class="flex items-start gap-2 p-2">
               <UButton color="primary" icon="i-lucide-check" @click="update(row.original)"
                 >Submit</UButton
               >
-              <UButton
-                icon="mdi-account-pending"
-                variant="outline"
-                @click="pending(row.original)"
-                >Pending</UButton
+              <UButton icon="i-lucide-x" variant="outline" @click="reject(row.original)"
+                >Reject</UButton
               >
             </div>
           </template>
         </UPopover>
-          <UButton v-else-if="store.getRole !=='Admin'" icon="i-lucide-arrow-right" title="Submit" size="sm" @click="submit(row.original)" :disabled="row.original.status === 'PENDING' || row.original.status === 'SUBMITTED'">  </UButton>
+        <UButton
+          v-else-if="store.getRole !== 'Admin'"
+          icon="i-lucide-arrow-right"
+          title="Submit"
+          size="sm"
+          @click="submit(row.original)"
+          :disabled="
+            row.original.status === 'PENDING' || row.original.status === 'SUBMITTED'
+          "
+        >
+        </UButton>
         <!-- <span v-else-if="store.getRole !=='Admin' && row.original.status === 'PENDING' || row.original.status === 'SUBMITTED'"  > </span> -->
       </template>
     </UTable>

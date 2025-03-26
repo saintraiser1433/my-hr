@@ -17,19 +17,20 @@ defineProps({
 const open = defineModel("open", { default: false, required: true });
 const model = defineModel<SubmittedRequirements>("state", { required: true });
 const submittedAtFormatted = computed({
-  get: () => model.value.submittedAt ? model.value.submittedAt.toISOString().split("T")[0] : "",
+  get: () =>
+    model.value.submittedAt ? model.value.submittedAt.toISOString().split("T")[0] : "",
   set: (val: string) => {
     model.value.submittedAt = val ? new Date(val) : undefined;
-  }
+  },
 });
 
 const expiryDateFormatted = computed({
-  get: () => model.value.expiryDate ? model.value.expiryDate.toISOString().split("T")[0] : "",
+  get: () =>
+    model.value.expiryDate ? model.value.expiryDate.toISOString().split("T")[0] : "",
   set: (val: string) => {
     model.value.expiryDate = val ? new Date(val) : undefined;
-  }
+  },
 });
-
 
 const schema = $joi.object({
   submittedAt: $joi.date().allow(null).required().messages({
@@ -41,10 +42,11 @@ const schema = $joi.object({
   id: $joi.number().optional(),
 });
 
-
 const onSubmit = async (event: FormSubmitEvent<SubmittedRequirements>) => {
-  console.log(event.data);
-  emits("dataRequirement", {...event.data,status:EmployeeRequirementStatus.SUBMITTED});
+  emits("dataRequirement", {
+    ...event.data,
+    status: EmployeeRequirementStatus.SUBMITTED,
+  });
 };
 
 const formRef = useTemplateRef("formRef");
@@ -56,7 +58,6 @@ const submitForm = () => {
 </script>
 
 <template>
-
   <UModal
     v-model:open="open"
     description="Select the date you want to assign"
@@ -72,16 +73,24 @@ const submitForm = () => {
         @submit="onSubmit"
       >
         <UFormField label="Submitted Date" name="submittedAt" required>
-          <UITextInput type="date" v-model="submittedAtFormatted" placeholder="Select Submitted Date" />
+          <UITextInput
+            type="date"
+            v-model="submittedAtFormatted"
+            placeholder="Select Submitted Date"
+          />
         </UFormField>
         <UFormField label="Expiry Date" name="expiryDate" required>
-          <UITextInput type="date" v-model="expiryDateFormatted" placeholder="Selected Expiry Date" />
+          <UITextInput
+            type="date"
+            v-model="expiryDateFormatted"
+            placeholder="Selected Expiry Date"
+          />
         </UFormField>
       </UForm>
     </template>
 
     <template #footer>
-      <UButton label="Cancel"  variant="outline" @click="open = false" />
+      <UButton label="Cancel" variant="outline" @click="open = false" />
       <UButton label="Submit" type="submit" @click="submitForm" />
     </template>
   </UModal>

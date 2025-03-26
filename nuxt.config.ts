@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import 'dotenv/config';
+import { join } from 'path';
 export default defineNuxtConfig({
 
   devtools: { enabled: true },
@@ -48,10 +49,14 @@ export default defineNuxtConfig({
     preference: "light",
     fallback: "light",
   },
+  srcDir: 'app/',
   svgSprite: {
     // Keep a trailing slash,
-    input: '~/assets/sprite/svg',
-    output: '~/assets/sprite/gen'
+    input: '~/app/assets/sprite/svg',
+    output: '~/app/assets/sprite/gen'
+  },
+  alias: {
+    '~/app/assets/sprite/gen': join(__dirname, 'app/assets/sprite/gen'),
   },
   future: {
     compatibilityVersion: 4

@@ -30,6 +30,11 @@ export interface DirectionModel {
   direction: Directions
 }
 
+export interface ChartModel {
+  name: string;
+  value: number;
+}
+
 export type Directions = 'up' | 'down'
 
 export enum ApplicationStatus {
@@ -47,7 +52,7 @@ export enum InterviewStatusEnum {
   NONE = "",
 }
 
-export enum Type{
+export enum Type {
   TEAMLEAD = 'TeamLead',
   EMPLOYEE = 'Employee'
 }

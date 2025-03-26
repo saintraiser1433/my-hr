@@ -25,7 +25,7 @@ const initialState = {
   id: undefined,
   submittedAt: undefined,
   expiryDate: undefined,
-  status: EmployeeRequirementStatus.PENDING,
+  status: EmployeeRequirementStatus.NOT_SUBMIT,
 };
 const departmentForm = reactive<SubmittedRequirements>({ ...initialState });
 //jobscreen list
@@ -46,7 +46,7 @@ const assignData = async (data: UnchosenRequirements[]) => {
     const payload = data.map((item) => ({
       employeeId: Number(route.params.empId),
       requirementsId: Number(item.id),
-      status: EmployeeRequirementStatus.PENDING,
+      status: EmployeeRequirementStatus.NOT_SUBMIT,
     }));
     const response = await assignRequireRepo.add(payload);
     requirementsData.value = [
@@ -107,10 +107,10 @@ const edit = (data: EmployeeRequirements) => {
   updateModal(`Submit Requirements`);
 };
 
-const pending = (response: SubmittedRequirements) => {
+const reject = (response: SubmittedRequirements) => {
   setAlert(
     "warning",
-    "Are you sure you want to update this into pending?",
+    "Are you sure you want to update this into reject?",
     "",
     "Confirm to update"
   ).then(async (result) => {
@@ -149,7 +149,7 @@ const pending = (response: SubmittedRequirements) => {
     }"
   >
     <EmployeeRequireList
-      @pending="pending"
+      @reject="reject"
       @update="edit"
       @assign="assignData"
       @unAssign="unAssignJob"

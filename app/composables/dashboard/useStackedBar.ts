@@ -1,8 +1,8 @@
-export const usePerformance = (
-    data:Ref<CategoryCountModel[]>
+export const useStackedBar = (
+    data: Ref<CategoryCountModel[]>
 ) => {
 
-    
+
     const optionCategory = shallowRef(getCategoryScore());
     function getCategoryScore(): ECOption {
         const shadcnDarkColors = [
@@ -78,7 +78,7 @@ export const usePerformance = (
         (newData) => {
             optionCategory.value = getCategoryScore();
         },
-        { deep: true } // Deep watch to detect changes within the array
+        { deep: true }
     )
 
 

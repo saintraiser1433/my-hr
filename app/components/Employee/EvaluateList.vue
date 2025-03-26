@@ -111,7 +111,8 @@ watch(
         ></UBadge>
       </template>
       <template #peer-to-evaluate-cell="{ row }">
-        <span class="font-bold">{{ row.original.peerToEvaluate }}</span>
+        <span class="italic" v-if="!row.original.peerToEvaluate">To be set</span>
+        <span class="font-bold" v-else>{{ row.original.peerToEvaluate }}</span>
       </template>
       <template #action-cell="{ row }">
         <div class="flex gap-2" v-if="role !== 'admin'">

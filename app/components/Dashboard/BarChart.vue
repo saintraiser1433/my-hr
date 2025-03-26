@@ -7,6 +7,10 @@ defineProps({
     type: String,
     default: "",
   },
+  hiddenBorder: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const chart = useTemplateRef("chart");
@@ -22,7 +26,9 @@ const showToolbox = () => {
 <template>
   <UCard
     :ui="{
-      root: 'overflow-hidden my-2 border-b-3 border-(--ui-primary) rounded-md ',
+      root: `overflow-hidden my-2 ${
+        !hiddenBorder ? 'border-b-3 border-(--ui-primary) rounded-md' : ''
+      }  `,
     }"
   >
     <div class="flex items-center justify-center py-2">
