@@ -92,13 +92,32 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
             }
         });
 
-        // Append file if provided,
         if (file) {
             formData.append("file", file);
         }
 
         return fetch<ApiResponse<T>>(`${basePath}/${body.id}`, {
             method: 'PUT',  // Ensure backend handles PUT with multipart
+            body: formData,
+        });
+    },
+
+
+    async updateFileCustom(body: any,file:any,keyFile:string): Promise<ApiResponse<T>> {
+        const formData = new FormData();
+    
+        Object.entries(body).forEach(([key, value]) => {
+            if (value !== undefined) {
+                formData.append(key, String(value));
+            }
+        });
+
+        if (file) {
+            formData.append(keyFile, file);
+        }
+    
+        return fetch<ApiResponse<T>>(`${basePath}/${body.id}`, {
+            method: 'PUT',  
             body: formData,
         });
     },

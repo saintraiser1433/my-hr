@@ -8,6 +8,7 @@ defineProps({
 const maxLength = 11;
 
 const emit = defineEmits(["add-references"]);
+
 </script>
 
 <template>
@@ -48,11 +49,11 @@ const emit = defineEmits(["add-references"]);
           <UITextInput class="w-full" v-model="data.position" placeholder="Position" />
         </UFormField>
         <UFormField class="col-span-6 lg:col-span-4" label="Contact Number">
-          <UInput
-            type="number"
+          <UITextInput
+            type="text"
+            @input="(event:any) => validateMaxLength(event, maxLength)"
             v-model="data.ref_contact_number"
             class="w-full"
-            :maxlength="maxLength"
             aria-describedby="character-count"
             placeholder="Enter telephone"
             :ui="{ trailing: 'pointer-events-none' }"
@@ -67,7 +68,7 @@ const emit = defineEmits(["add-references"]);
                 <!-- {{ data.ref_contact_number?.length ?? 0 }}/{{ maxLength }} -->
               </div>
             </template>
-          </UInput>
+          </UITextInput>
         </UFormField>
       </div>
     </div>

@@ -7,6 +7,7 @@ defineProps({
 });
 
 const maxLength = 11;
+
 </script>
 
 <template>
@@ -78,11 +79,11 @@ const maxLength = 11;
         />
       </UFormField>
       <UFormField class="lg:col-span-4 col-span-6" label="Contact No.">
-        <UInput
-          type="number"
+        <UITextInput
+          type="text"
           v-model="information.contact_number"
           class="w-full"
-          :maxlength="maxLength"
+          @input="(event:any) => validateMaxLength(event, maxLength)"
           aria-describedby="character-count"
           placeholder="Enter contact"
           :ui="{ trailing: 'pointer-events-none' }"
@@ -94,17 +95,17 @@ const maxLength = 11;
               aria-live="polite"
               role="status"
             >
-              <!-- {{ information.contact_number.length }}/{{ maxLength }} -->
+
             </div>
           </template>
-        </UInput>
+        </UITextInput>
       </UFormField>
       <UFormField class="lg:col-span-4 col-span-6" label="Telephone No.">
         <UInput
-          type="number"
+          type="text"
           v-model="information.telephone_number"
           class="w-full"
-          :maxlength="maxLength"
+          @input="(event:any) => validateMaxLength(event, maxLength)"
           aria-describedby="character-count"
           placeholder="Enter telephone"
           :ui="{ trailing: 'pointer-events-none' }"

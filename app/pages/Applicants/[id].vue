@@ -130,6 +130,7 @@ const finalizeApplicant = () => {
         if (!ongoing) return;
         const data = {
           id: ongoing.id,
+          jobId:ongoing.jobId,
           status:
             ongoing.remarks === ApplicationStatus.PASSED
               ? ApplicationStatus.PASSED

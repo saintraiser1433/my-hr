@@ -50,6 +50,8 @@ export default defineNuxtConfig({
   },
   svgSprite: {
     // Keep a trailing slash,
+    input: '~/assets/sprite/svg',
+    output: '~/assets/sprite/gen'
   },
   future: {
     compatibilityVersion: 4
@@ -68,7 +70,8 @@ export default defineNuxtConfig({
       STORAGE_URL_UPLOADS: process.env.STORAGE_URL_JOB,
       STORAGE_URL_JOB: process.env.STORAGE_URL_JOB,
       STORAGE_URL_AVATAR: process.env.STORAGE_URL_AVATAR,
-      STORAGE_URL_RESUME: process.env.STORAGE_URL_RESUME
+      STORAGE_URL_RESUME: process.env.STORAGE_URL_RESUME,
+      STORAGE_URL_REQUIREMENTS: process.env.STORAGE_URL_REQUIREMENTS
     },
   },
   tiptap: {

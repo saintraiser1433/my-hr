@@ -6,12 +6,10 @@ const UCheckbox = resolveComponent("UCheckbox") as Component;
 const props = defineProps({
   data: {
     type: Array as PropType<EmployeeRequirements[]>,
-    required: true,
     default: () => [],
   },
   items: {
     type: Array as PropType<UnchosenRequirements[]>,
-    required: true,
     default: () => [],
   },
 });
@@ -21,9 +19,11 @@ const emits = defineEmits<{
   (e: "unAssign", payload: number[]): void;
   (e: "update", payload: EmployeeRequirements): void;
   (e: "pending", payload: SubmittedRequirements): void;
+  (e: "submit", payload: EmployeeRequirements): void;
 }>();
+const config = useRuntimeConfig();
 const { $datefns } = useNuxtApp();
-const { pagination, globalFilter, refreshTable } = usePagination();
+const { pagination, globalFilter } = usePagination();
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { createColumnWithCheckBox } = useTableColumnCheckBox(UCheckbox, table);
@@ -56,6 +56,11 @@ const pending = (data: SubmittedRequirements) => {
   });
 };
 
+const submit = (data:EmployeeRequirements) => {
+  emits("submit",data);
+
+}
+
 const assign = () => {
   handleAssign();
   emits("assign", value.value);
@@ -66,21 +71,14 @@ const columns: TableColumn<any>[] = [
   ...(store.getRole === "Admin" ? [createColumnWithCheckBox()] : []),
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
   createColumn("requirements", "Requirements", true),
-  createColumn("submitted_date", "Submitted Date", true),
-  createColumn("expiry_date", "Document Expiry", true),
   createColumn("status", "Status", true),
-  ...(store.getRole === "Admin" ? [createColumn("action", "Action", false)] : []),
+  createColumn("submitted_date", "Submitted Date", true),
+  createColumn("expiry_date", "Expiry Date", true),
+  createColumn("document", "Document", false),
+  createColumn("action", "Action", true),
+  // ...(store.getRole === "Admin" ? [createColumn("action", "Action", false)] : []),
 ];
 
-watch(
-  () => props.data,
-  (newVal, oldVal) => {
-    if (newVal.length !== oldVal.length) {
-      refreshTable();
-      rowSelection.value = {};
-    }
-  }
-);
 </script>
 
 <template>
@@ -153,7 +151,13 @@ watch(
 
         <UBadge color="error" variant="solid" v-else>N/A</UBadge>
       </template>
-
+      
+      <template #document-cell="{ row }">
+        <UButton icon="i-lucide-eye" :to="`${config.public.STORAGE_URL_REQUIREMENTS}/${row.original.fileName}`" 
+        target="_blank" title="Review" size="sm"
+         :disabled="!row.original.fileName || row.original.status === 'NOT_SUBMITTED' || row.original.status === 'REJECTED'">
+         View </UButton>
+      </template>
       <template #status-cell="{ row }">
         <UBadge
           v-if="row.original.status === 'PENDING'"
@@ -172,9 +176,10 @@ watch(
           color="error"
           >{{ row.original.status }}
         </UBadge>
+        <UBadge v-else-if="row.original.status === 'NOT_SUBMITTED'" icon="i-lucide-x" color="error" variant="solid">NO SUBMISSION YET</UBadge>
       </template>
       <template #action-cell="{ row }">
-        <UPopover
+        <UPopover v-if="store.getRole === 'Admin'"
           arrow
           :content="{
             align: 'center',
@@ -198,6 +203,8 @@ watch(
             </div>
           </template>
         </UPopover>
+          <UButton v-else-if="store.getRole !=='Admin'" icon="i-lucide-arrow-right" title="Submit" size="sm" @click="submit(row.original)" :disabled="row.original.status === 'PENDING' || row.original.status === 'SUBMITTED'">  </UButton>
+        <!-- <span v-else-if="store.getRole !=='Admin' && row.original.status === 'PENDING' || row.original.status === 'SUBMITTED'"  > </span> -->
       </template>
     </UTable>
     <UITablePagination :table="table" v-if="table"> </UITablePagination>

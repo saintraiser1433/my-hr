@@ -51,8 +51,22 @@ export interface EmployeeRequirements {
     status: EmployeeRequirementStatus;
     employeeId: number;
     requirementsId: number;
+    filename?:string
     submittedAt?: Date;
     expiryDate?: Date;
+}
+
+export interface UploadRequirements {
+    id:number;
+    filename:string;
+    status:string;
+}
+
+export interface SubmittedRequirements {
+    submittedAt?: Date | null;
+    expiryDate?: Date | null;
+    status: EmployeeRequirementStatus;
+    id?: number;
 }
 
 export interface SubmittedRequirements {
