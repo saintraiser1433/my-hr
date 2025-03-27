@@ -1,5 +1,5 @@
 export const useStackedBar = (
-    data: Ref<CategoryCountModel[]>
+    data: Ref<any>
 ) => {
 
 
@@ -14,7 +14,7 @@ export const useStackedBar = (
         ];
 
         // Transform the data into the required format
-        const transformedData = data.value.map((item) => {
+        const transformedData = data.value.map((item:any) => {
             const row = [item.Category]; // Start with the category name
             Object.keys(item).forEach((key) => {
                 if (key !== "Category") {

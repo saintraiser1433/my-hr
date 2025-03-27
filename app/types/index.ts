@@ -25,6 +25,8 @@ export interface MenuItem {
 }
 
 
+
+
 export interface DirectionModel {
   id: number,
   direction: Directions
@@ -33,6 +35,14 @@ export interface DirectionModel {
 export interface ChartModel {
   name: string;
   value: number;
+}
+
+export interface RankingModel {
+  name:string;
+  departmentName:string;
+  photo_path:string;
+  averageRating:number;
+
 }
 
 export type Directions = 'up' | 'down'

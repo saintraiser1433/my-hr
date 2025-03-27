@@ -3,148 +3,185 @@ definePageMeta({
   requiredRole: "Admin",
 });
 
-function random() {
-  return Math.round(300 + Math.random() * 700) / 10;
-}
-const data = ref([
-  {
-    Category: "Project Consultant",
-    count: random(),
-  },
-  {
-    Category: "IT Specialist",
-    count: random(),
-  },
-  {
-    Category: "Software Developer",
-    count: random(),
-  },
-  {
-    Category: "Teacher 1",
-    count: random(),
-  },
-  {
-    Category: "Teacher 2",
-    count: random(),
-  },
-  {
-    Category: "Teacher 3",
-    count: random(),
-  },
-]);
+const {$toast} = useNuxtApp();
 
-const dataPie = ref<ChartModel[]>([
-  {
-    name: "Project Consultant",
-    value: random(),
-  },
-  {
-    name: "IT Specialist",
-    value: random(),
-  },
-  {
-    name: "Software Developer",
-    value: random(),
-  },
-  {
-    name: "Teacher 1",
-    value: random(),
-  },
-  {
-    name: "Teacher 2",
-    value: random(),
-  },
-  {
-    name: "Teacher 3",
-    value: random(),
-  },
-]);
-
-const { optionCategory } = useStackedBar(data);
-
+const peerValue = ref(0)
+const teamLeadValue = ref(0)
 const { optionPie } = usePieChart();
+const {optionStackedBar} = useStackedBarChartv2()
 const { optionBarChart } = useBarChart();
+const peerDepartment = computed(() => optionBarChart(peerRankingsByDept).value);
+const teamDepartment = computed(() => optionBarChart(teamRankingByDept).value);
+const recruitmentData = computed(() => recruitment.value || []);
+const jobData = computed(() => topJob.value || []);
 
-const pieChartData = optionPie(dataPie);
-const barData = optionBarChart(dataPie);
+const departmentItem = computed(() => department.value?.map((item) => ({
+  id:item.id,
+  label:item.title
+})) || [])
+
+const peerRankingsByDept = computed<ChartModel[]>(() => {
+  return (topPeerHighestRanking.value || [])
+    .filter(employee => employee.departmentId === peerValue.value)
+    .map(({ name, averageRating }) => ({ 
+      name, 
+      value: averageRating 
+    }));
+});
+
+const teamRankingByDept = computed<ChartModel[]>(() => {
+  return (topTLHighestRanking.value || [])
+    .filter(employee => employee.departmentId === teamLeadValue.value)
+    .map(({ name, averageRating }) => ({ 
+      name, 
+      value: averageRating 
+    }));
+});
+
+const {data:recruitment,error:errorRecruitment} = await useAPI<any[]>('/applicant/countjob'); 
+const {data:department,error:errorDepartment} = await useAPI<DepartmentModel[]>('/department'); 
+const {data:topJob,error:errorJob} = await useAPI<ChartModel[]>('/applicant/topjob'); 
+
+
+const { data: topPeerHighestRanking, error: topPeerError } = await useAPI<any[]>('/evaluation/peerResult', {
+  transform: (data) => {
+    const employeeRatings = data.reduce((acc, item) => {
+      if (!acc[item.employeeId]) {
+        acc[item.employeeId] = {
+          name: item.name,
+          departmentId:item.departmentId,
+          departmentName:item.departmentName,
+          photo_path:item.photo_path,
+          totalRating: 0,
+          count: 0
+        };
+      }
+      acc[item.employeeId].totalRating += item.summaryRating.rating;
+      acc[item.employeeId].count++;
+      return acc;
+    }, {});
+    return Object.values(employeeRatings).map((employee: any) => ({
+      name: employee.name,
+      departmentId:employee.departmentId,
+      departmentName:employee.departmentName,
+      photo_path:employee.photo_path,
+      averageRating: parseFloat((employee.totalRating / employee.count).toFixed(2))
+    })).sort((a, b) => b.averageRating - a.averageRating); // Sort descending
+  }
+});
+
+const { data: topTLHighestRanking, error: topTLError } = await useAPI<any[]>('/evaluation/teamResult', {
+  transform: (data) => {
+    const employeeRatings = data.reduce((acc, item) => {
+      if (!acc[item.employeeId]) {
+        acc[item.employeeId] = {
+          name: item.name,
+          departmentId:item.departmentId,
+          departmentName:item.departmentName,
+          photo_path:item.photo_path,
+          totalRating: item.summaryRating.rating,
+        };
+      }
+      return acc;
+    }, {});
+
+    return Object.values(employeeRatings).map((employee: any) => ({
+      name: employee.name,
+      departmentId:employee.departmentId,
+      departmentName:employee.departmentName,
+      photo_path:employee.photo_path,
+      averageRating: parseFloat(employee.totalRating.toFixed(2))
+    })).sort((a, b) => b.averageRating - a.averageRating); 
+  }
+});
+
+if(errorRecruitment.value){
+  $toast.error(errorRecruitment.value || 'An error occured');
+}
+if(errorRecruitment.value){
+  $toast.error(errorJob.value || 'An error occured');
+}
+if(topPeerError.value){
+  $toast.error(topPeerError.value || 'An error occured');
+}
+if(topTLError.value){
+  $toast.error(topTLError.value || 'An error occured');
+}
+
+if(errorDepartment.value){
+  $toast.error(errorDepartment.value || 'An error occured');
+}
+
+const stackedBarData = optionStackedBar(recruitmentData)
+const pieChartData = optionPie(jobData);
+
+
 </script>
 <template>
+
   <div class="flex flex-col items-center lg:items-start mb-3">
-    <h2 class="font-extrabold text-2xl capitalize">My Analytical Dashbaord</h2>
-    <span class="text-sm">Analytical dashboard base on results ! </span>
+    <h2 class="font-extrabold text-2xl capitalize">My Analytical Dashboard</h2>
+    <span class="text-sm italic">For academic year 2021-2022 - First Sem </span>
   </div>
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 lg:col-span-8">
-      <UCard
-        :ui="{
-          header: 'p-0 px-2 py-2 sm:p-0 sm:px-2 sm:py-2',
-          root: 'border-b-3 border-(--ui-primary) rounded-md',
-        }"
-      >
-        <template #header>
-          <div class="flex items-center justify-between">
-            <div>
-              <h3 class="font-semibold">Recruitment Reference Analytics</h3>
-              <span class="italic text-xs"
-                >Analyzing Recruitment References for Smarter Hiring</span
-              >
-            </div>
-            <svg-icon name="iconx/job" width="32" height="32"></svg-icon>
-          </div>
-        </template>
-        <!--  :option="optionCategory" -->
-        <div class="w-full h-[400px] relative">
-          <VChart
-            ref="chart"
-            :option="barData"
-            class="w-full h-full"
-            :auto-resize="true"
-          />
-        </div>
-      </UCard>
+      <DashboardRecruitmentAnalytics title="Recruitment Reference Analytics" description="Analyzing Recruitment References for Smarter Hiring" :data="stackedBarData">
+        <template #icon><svg-icon name="iconx/job" width="32" height="32"></svg-icon></template> 
+      </DashboardRecruitmentAnalytics>
     </div>
     <div class="col-span-12 lg:col-span-4">
-      <UCard
-        :ui="{
-          header: 'p-0 px-2 py-2 sm:p-0 sm:px-2 sm:py-2',
-          root: 'border-b-3 border-(--ui-primary) rounded-md',
-        }"
-      >
-        <template #header>
-          <div class="flex items-center justify-between">
-            <div>
-              <h3 class="font-semibold">Trending Job to Apply</h3>
-              <span class="italic text-xs"
-                >Analyzing Recruitment References for Smarter Hiring</span
-              >
-            </div>
-            <svg-icon name="iconx/trend" width="32" height="32"></svg-icon>
-          </div>
-        </template>
-        <div class="w-full h-[400px] relative">
-          <VChart
-            ref="chart"
-            :option="pieChartData"
-            class="w-full h-full"
-            :auto-resize="true"
-          />
-        </div>
-      </UCard>
+      <DashboardRecruitmentAnalytics title="Trending Job to Apply" description="Analyzing Recruitment References for Smarter Hiring" :data="pieChartData">
+        <template #icon> <svg-icon name="iconx/trend" width="32" height="32"></svg-icon></template>  
+      </DashboardRecruitmentAnalytics>
     </div>
   </div>
 
   <div class="grid grid-cols-12 gap-2 py-4">
     <div class="col-span-12 md:col-span- lg:col-span-6">
       <DashboardRankings
+        :data="topPeerHighestRanking"
         title="Top 10 Overall Peer Highest Ranking"
         subtitle="Recognizing Top-Performing Peers in Evaluations"
-      />
+      >
+      <template #right>
+        <svg-icon name="iconx/peertop" width="32" height="32"></svg-icon>
+      </template>
+      </DashboardRankings>
     </div>
     <div class="col-span-12 md:col-span-6">
       <DashboardRankings
+        :data="topTLHighestRanking"
         title="Top 10 Overall Teamlead Highest Ranking"
         subtitle="Top-Ranked Team Leads Results"
-      />
+      >
+      <template #right>
+        <svg-icon name="iconx/peertop" width="32" height="32"></svg-icon>
+      </template>
+      </DashboardRankings>
+    </div>
+  </div>
+  <div class="grid grid-cols-12 gap-2">
+    <div class="col-span-12 md:col-span- lg:col-span-6">
+
+      <DashboardRecruitmentAnalytics title="Peer Result per Department" description="Recognizing Top-Performing Peers in Evaluations by Department" :data="peerDepartment">
+        <template #icon>
+          <div class="flex items-center gap-2">
+            <span>Department:</span>
+            <USelectMenu v-model="peerValue" value-key="id" :ui="{item:'capitalize'}" placeholder="Select Department"  :items="departmentItem" class="w-48" />
+          </div>
+        </template> 
+      </DashboardRecruitmentAnalytics>
+    </div>
+    <div class="col-span-12 md:col-span-6">
+      <DashboardRecruitmentAnalytics  title="Team Lead Result per Department"  description="Top-Ranked Team Leads Results by Department" :data="teamDepartment">
+        <template #icon>
+          <div class="flex items-center gap-2">
+            <span>Department:</span>
+            <USelectMenu v-model="teamLeadValue" value-key="id" :ui="{item:'capitalize'}"  placeholder="Select Department"  :items="departmentItem" class="w-48" />
+          </div>
+        </template> 
+      </DashboardRecruitmentAnalytics>
+
     </div>
   </div>
 </template>

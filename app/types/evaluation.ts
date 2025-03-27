@@ -88,6 +88,8 @@ export interface EmployeeRating {
   peerEvalId?: number;
   employeeId: number;
   name: string;
+  departmentName:string;
+  photo_path:string;
   comment: string; // Add comment
   evaluatedBy: string; // Add evaluatedBy
   rating: RatingModel[];

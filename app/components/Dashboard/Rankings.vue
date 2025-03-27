@@ -1,8 +1,16 @@
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
   title: String,
   subtitle: String,
+  data: {
+    type:Array as PropType<RankingModel[]>,
+    default: () => [],
+  }
 });
+const { data } = toRefs(props);
+const config = useRuntimeConfig();
+const transformData = computed(() => data.value.slice(0,10));
+
 </script>
 
 <template>
@@ -18,7 +26,7 @@ defineProps({
           <h3 class="font-semibold *:">{{ title }}</h3>
           <span class="italic text-xs">{{ subtitle }}</span>
         </div>
-        <svg-icon name="iconx/peertop" width="32" height="32"></svg-icon>
+        <slot name="right"></slot>
       </div>
     </template>
     <div class="grid grid-cols-12 gap-3 p-2 text-center font-bold">
@@ -31,39 +39,20 @@ defineProps({
 
     <div class="divide-y divide-gray-200 dark:divide-gray-700">
       <!-- v-for="(data, index) in data" -->
-      <div class="grid grid-cols-12 gap-3 p-2 text-sm text-center">
+      <div v-for="(i,index) in transformData" :key="index" class="grid grid-cols-12 gap-3 p-2 text-sm text-center">
         <div class="col-span-1 flex justify-center items-center gap-2">
-          <svg-icon name="iconx/firstmedal" width="24" height="24" />
+          <svg-icon v-if="index + 1 === 1" name="iconx/firstmedal" width="24" height="24" />
+          <svg-icon v-else-if="index + 1 === 2" name="iconx/secondmedal" width="24" height="24" />
+          <svg-icon v-else-if="index + 1 === 3" name="iconx/thirdmedal" width="24" height="24" />
         </div>
-        <div class="col-span-1">1</div>
-        <div class="col-span-5 capitalize">John Rey Decosta</div>
-        <div class="col-span-3 line-clamp-3">
-          Department of College Of Information Technology
+        <div class="col-span-1 capitalize flex gap-2 items-center justify-center">{{ index+1 }}</div>
+        <div class="col-span-5 capitalize flex gap-2 items-center justify-center font-semibold"><UAvatar size="lg" :src="`${config.public.STORAGE_URL_AVATAR}/${i.photo_path}`"/>{{ i.name }}</div>
+        <div class="col-span-3 capitalize flex gap-2 items-center justify-center line-clamp-3">
+          {{ i.departmentName }}
         </div>
-        <div class="col-span-2">5.3</div>
+        <div class="col-span-2 flex gap-2 items-center justify-center font-semibold">{{ i.averageRating }}</div>
       </div>
-      <div class="grid grid-cols-12 gap-3 p-2 text-sm text-center">
-        <div class="col-span-1 flex justify-center items-center gap-2">
-          <svg-icon name="iconx/secondmedal" width="24" height="24" />
-        </div>
-        <div class="col-span-1">2</div>
-        <div class="col-span-5 capitalize">John Rey Decosta</div>
-        <div class="col-span-3 line-clamp-3">
-          Department of College Of Information Technology
-        </div>
-        <div class="col-span-2">5.3</div>
-      </div>
-      <div class="grid grid-cols-12 gap-3 p-2 text-sm text-center">
-        <div class="col-span-1 flex justify-center items-center gap-2">
-          <svg-icon name="iconx/thirdmedal" width="24" height="24" />
-        </div>
-        <div class="col-span-1">3</div>
-        <div class="col-span-5 capitalize">John Rey Decosta</div>
-        <div class="col-span-3 line-clamp-3">
-          Department of College Of Information Technology
-        </div>
-        <div class="col-span-2">5.3</div>
-      </div>
+      
     </div>
   </UCard>
 </template>

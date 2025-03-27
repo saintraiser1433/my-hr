@@ -1,28 +1,6 @@
-const shadcnPalette = [
-  "#1E293B", // Dark Blue
-  "#3B82F6", // Blue
-  "#22C55E", // Green
-  "#EAB308", // Yellow
-  "#F97316", // Orange
-  "#EF4444", // Red
-  "#A855F7", // Purple
-  "#EC4899", // Pink
-  "#14B8A6", // Teal
-  "#6366F1", // Indigo
-];
 
-const shadowPalette = [
-  "rgba(30, 41, 59, 0.4)",  // Dark Blue
-  "rgba(59, 130, 246, 0.3)", // Blue
-  "rgba(34, 197, 94, 0.3)",  // Green
-  "rgba(234, 179, 8, 0.3)",  // Yellow
-  "rgba(249, 115, 22, 0.3)", // Orange
-  "rgba(239, 68, 68, 0.3)",  // Red
-  "rgba(168, 85, 247, 0.3)", // Purple
-  "rgba(236, 72, 153, 0.3)", // Pink
-  "rgba(20, 184, 166, 0.3)", // Teal
-  "rgba(99, 102, 241, 0.3)", // Indigo
-];
+
+const shadowPalette = shadcnPalette.map((color) => color.replace(")", ", 0.3)").replace("rgb", "rgba"));
 
 const getColor = (index: number) => shadcnPalette[index % shadcnPalette.length];
 const getShadowColor = (index: number) => shadowPalette[index % shadowPalette.length];
