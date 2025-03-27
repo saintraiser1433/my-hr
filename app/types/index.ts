@@ -15,6 +15,13 @@ export interface BreadcrumbItem {
   to?: string;
 }
 
+export interface SummaryModel {
+  departmentsCount:number;
+  employeesCount:number;
+  applicantsCount:number;
+  jobsCount:number;
+}
+
 export interface MenuItem {
   label: string;
   icon?: string;

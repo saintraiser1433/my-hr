@@ -38,6 +38,7 @@ const teamRankingByDept = computed<ChartModel[]>(() => {
     }));
 });
 
+const {data:summary,error:errorSummary} = await useAPI<SummaryModel>('/summary'); 
 const {data:recruitment,error:errorRecruitment} = await useAPI<any[]>('/applicant/countjob'); 
 const {data:department,error:errorDepartment} = await useAPI<DepartmentModel[]>('/department'); 
 const {data:topJob,error:errorJob} = await useAPI<ChartModel[]>('/applicant/topjob'); 
@@ -111,6 +112,11 @@ if(topTLError.value){
 if(errorDepartment.value){
   $toast.error(errorDepartment.value || 'An error occured');
 }
+if(errorSummary.value){
+  $toast.error(errorSummary.value || 'An error occured');
+}
+
+
 
 const stackedBarData = optionStackedBar(recruitmentData)
 const pieChartData = optionPie(jobData);
@@ -122,6 +128,40 @@ const pieChartData = optionPie(jobData);
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl capitalize">My Analytical Dashboard</h2>
     <span class="text-sm italic">For academic year 2021-2022 - First Sem </span>
+  </div>
+  <div class="grid grid-cols-12 gap-3 py-4">
+    <div class="col-span-12 lg:col-span-3">
+      <DashboardSummaryBar :total="summary?.applicantsCount" title="Total Applicants">
+        <template #icon>
+          <svg-icon name="iconx/apply" width="42" height="42"></svg-icon>
+        </template>
+       
+      </DashboardSummaryBar>
+    </div> 
+    <div class="col-span-12 lg:col-span-3">
+      <DashboardSummaryBar :total="summary?.employeesCount" title="Total Employees">
+        <template #icon>
+          <svg-icon name="iconx/employee" width="42" height="42"></svg-icon>
+        </template>
+       
+      </DashboardSummaryBar>
+    </div>
+    <div class="col-span-12 lg:col-span-3">
+      <DashboardSummaryBar :total="summary?.jobsCount" title="Total Jobs">
+        <template #icon>
+          <svg-icon name="iconx/jobs" width="42" height="42"></svg-icon>
+        </template>
+       
+      </DashboardSummaryBar>
+    </div>
+    <div class="col-span-12 lg:col-span-3">
+      <DashboardSummaryBar :total="summary?.departmentsCount" title="Total Departments">
+        <template #icon>
+          <svg-icon name="iconx/association" width="42" height="42"></svg-icon>
+        </template>
+       
+      </DashboardSummaryBar>
+    </div>
   </div>
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 lg:col-span-8">
