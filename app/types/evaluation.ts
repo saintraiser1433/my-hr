@@ -84,21 +84,6 @@ export interface SubmissionPeerModel {
   comment: string;
 }
 
-export interface EmployeeRating {
-  peerEvalId?: number;
-  employeeId: number;
-  name: string;
-  departmentName:string;
-  photo_path:string;
-  comment: string; // Add comment
-  evaluatedBy: string; // Add evaluatedBy
-  rating: RatingModel[];
-  summaryRating?: {
-    rating: number;
-    adjectiveRating: string;
-  };
-  categoryCounts: CategoryCountModel[]
-}
 
 export interface CategoryCountModel {
   Category: string; // Explicitly allow `Category` to be a string

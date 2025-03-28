@@ -30,12 +30,20 @@ const props = defineProps({
     default: false,
   },
 });
+
+const message = inject<EmployeeRating[]>("message", []);
 </script>
 
 <template>
   <div class="flex gap-2 justify-between items-center">
     <div class="flex gap-2">
-      <UButton v-if="!hidePrint" icon="i-lucide-printer" size="lg" @click="usePrintTeamResult">Print Result</UButton>
+      <UButton
+        v-if="!hidePrint"
+        icon="i-lucide-printer"
+        size="lg"
+        @click="usePrintPeerResult(message)"
+        >Print Result</UButton
+      >
       <UButton
         icon="i-lucide-view"
         size="lg"

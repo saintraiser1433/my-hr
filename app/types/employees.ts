@@ -45,6 +45,31 @@ export interface UnchosenRequirements {
     title: string
 }
 
+export interface EmployeeRating {
+    peerEvalId?: number;
+    employeeId: number;
+    name: string;
+    departmentName: string;
+    photo_path: string;
+    comment: string;
+    evaluatedBy: string;
+    template: TemplateDetail[]
+    rating: RatingModel[];
+    answersData: {
+        questionId: number;
+        peerCategory: string;
+        question: string;
+        templateDetailId: number;
+        templateDetailTitle: string;
+        templateDetailScore: number;
+    }[],
+    summaryRating?: {
+        rating: number;
+        adjectiveRating: string;
+    };
+    categoryCounts: CategoryCountModel[]
+}
+
 export interface EmployeeRequirements {
     requirements?: string;
     id?: number;

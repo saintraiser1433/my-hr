@@ -91,6 +91,8 @@ const viewRating = async (data: EmployeeRatingStatus) => {
   employeeIds.value = data.employeeId;
   selectedEmployee.value = data;
 };
+
+provide("message", peerResult);
 </script>
 
 <template>

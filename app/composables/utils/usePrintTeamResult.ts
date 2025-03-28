@@ -14,7 +14,6 @@ export const usePrintTeamResult = () => {
 
 
   const leftMargin = 40;
-  const checkIcon = '\u2714';
   const rightMargin = doc.internal.pageSize.width - 40;
   const centerX = doc.internal.pageSize.width / 2;
   const contentWidth = rightMargin - leftMargin;
@@ -37,7 +36,7 @@ export const usePrintTeamResult = () => {
 
   // Title
   doc.setFont("Helvetica", "bold").setFontSize(14);
-  doc.setTextColor(0,0,0);
+  doc.setTextColor(0, 0, 0);
   doc.text("EMPLOYEE PERFORMANCE APPRAISAL FORM", centerX, 90, { align: "center" });
 
   doc.setFont("Helvetica", "bold").setFontSize(10);
@@ -63,7 +62,7 @@ export const usePrintTeamResult = () => {
 
   // Employee Information Section
   doc.line(leftMargin, 240, rightMargin, 240);
-  doc.setFont("Helvetica", "normal");
+  doc.setFont("Helvetica", "normal").setFontSize(10);
   doc.text("Name of Employee:", leftMargin + 10, 260);
   doc.line(leftMargin + 130, 260, rightMargin - 10, 260);
 
@@ -84,11 +83,11 @@ export const usePrintTeamResult = () => {
   doc.text("SUMMARY OF RATING", centerX, 350, { align: "center" });
 
   doc.setFont("Helvetica", "normal").setFontSize(10);
-  doc.text("Numerical Rating:", leftMargin+100, 380);
-  doc.line(220, 380, rightMargin - 100 , 380); // Line for numerical rating
+  doc.text("Numerical Rating:", leftMargin + 100, 380);
+  doc.line(220, 380, rightMargin - 100, 380); // Line for numerical rating
 
-  doc.text("Adjective Rating:", leftMargin+100, 400);
-  doc.line(220, 402, rightMargin - 100 , 402); // Line for numerical rating
+  doc.text("Adjective Rating:", leftMargin + 100, 400);
+  doc.line(220, 402, rightMargin - 100, 402); // Line for numerical rating
 
   doc.addPage();
 
@@ -98,7 +97,7 @@ export const usePrintTeamResult = () => {
   doc.text("South East Asian Institute of Technology, Inc.", centerX, 30, { align: "center" });
   doc.setFont("Helvetica", "bold");
   doc.setFontSize(8).setTextColor(0, 100, 0);
-  
+
   doc.text("National Highway, Barangay Crossing Rubber, Tupi, South Cotabato", 225, 40, { align: "center" });
   doc.text("Tel No. (083) 226-1202   EMAIL ADDRESS: seaitinc@yahoo.com", 218, 50, { align: "center" });
   doc.setDrawColor(0, 100, 0); // RGB Green
@@ -108,16 +107,16 @@ export const usePrintTeamResult = () => {
 
 
   // Title
- 
+
   doc.setFont("Helvetica", "bold").setFontSize(12);
-  doc.setTextColor(0,0,0);
+  doc.setTextColor(0, 0, 0);
   doc.text("A. Performance", leftMargin, 90, { align: "left" });
   doc.setFont("Helvetica", "bold").setFontSize(8);
-  const columns = ['Function/Specific Tasks', '1-Fail', '2-Poor','3-Satisfactory','4-Very Satisfactory','5-Outstanding'];
+  const columns = ['Function/Specific Tasks', '1-Fail', '2-Poor', '3-Satisfactory', '4-Very Satisfactory', '5-Outstanding'];
 
   // Table rows
   const rows = [
-    ["Can you tell me about the important people in your life?",'/'],
+    ["Can you tell me about the important people in your life?", '/'],
     ["What have been some of the happiest moments in your life? The saddest?"],
     ["Who has been the biggest influence on your life? What lessons did that person or those people teach you?"],
   ];
@@ -131,7 +130,7 @@ export const usePrintTeamResult = () => {
     startY: 100, // Position of the table
     styles: {
       fontSize: 8, // Change this to your desired font size
-      font:'Helvetica',
+      font: 'Helvetica',
       lineWidth: 0.5, // Border thickness
       lineColor: [0, 0, 0], // Black border color
     },
@@ -149,7 +148,7 @@ export const usePrintTeamResult = () => {
     bodyStyles: {
       fontSize: 8, // Font size for table rows
     },
-    
+
   });
 
 
@@ -169,7 +168,7 @@ export const usePrintTeamResult = () => {
   doc.setDrawColor(0, 0, 0); // RGB Green
 
   //end header
-  doc.setFontSize(12).setFont("tahoma", "bold").setTextColor(0, 0, 0);;
+  doc.setFontSize(12).setFont("Helvetica", "bold").setTextColor(0, 0, 0);;
 
   doc.text("SUMMARY OF RATING", centerX, 90, { align: "center" });
 
@@ -178,10 +177,10 @@ export const usePrintTeamResult = () => {
   doc.line(leftMargin, 100, rightMargin, 100);
   // Line thickness
   // Performance Factors Section
-  doc.setFont("tahoma", "bold").setFontSize(10);
+  doc.setFont("Helvetica", "bold").setFontSize(10);
   doc.text("I. OBJECTIVE PERFORMANCE", leftMargin, 120);
 
-  doc.setFont("tahoma", "normal");
+  doc.setFont("Helvetica", "normal");
   const col1 = leftMargin + 10, col2 = rightMargin - 90, col3 = rightMargin - 10;
 
   doc.text("PERFORMANCE FACTORS", col1, 135);
@@ -226,12 +225,12 @@ export const usePrintTeamResult = () => {
   doc.line(leftMargin + signatureWidth + 20, signatureYStart, rightMargin, signatureYStart);
   doc.text("Raters' Signature", leftMargin + signatureWidth + 20, signatureYStart + 10);
 
-  doc.setFont("tahoma").setFontSize(8);
+  doc.setFont("Helvetica").setFontSize(8);
   doc.line(leftMargin + signatureWidth + 20, signatureYStart + 30, rightMargin, signatureYStart + 30);
   doc.text("Signature over Printed Name of Immediate Supervisor/Dept. Head",
     leftMargin + signatureWidth + 20, signatureYStart + 40, { maxWidth: signatureWidth });
 
-  doc.setFont("tahoma").setFontSize(10);
+  doc.setFont("Helvetica").setFontSize(10);
   doc.line(leftMargin + signatureWidth + 20, signatureYStart + 60, rightMargin, signatureYStart + 60);
   doc.text("Position", leftMargin + signatureWidth + 20, signatureYStart + 70);
   // Noted By Section
@@ -241,10 +240,10 @@ export const usePrintTeamResult = () => {
   doc.text("Noted by:", centerX, notedByYStart - 50, { align: "center" });
 
 
-  doc.setFont("tahoma", "bold");
+  doc.setFont("Helvetica", "bold");
   doc.text("ENGR. MILAGROS S. TAMAYO, MIM", centerX, notedByYStart + 35, { align: "center" });
 
-  doc.setFont("tahoma", "normal");
+  doc.setFont("Helvetica", "normal");
   doc.text("Vice President for Admin and Finance", centerX, notedByYStart + 55, { align: "center" });
   doc.text("Human Resource Development Officer", centerX, notedByYStart + 75, { align: "center" });
 
