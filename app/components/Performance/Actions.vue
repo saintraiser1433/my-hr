@@ -35,7 +35,7 @@ const props = defineProps({
 <template>
   <div class="flex gap-2 justify-between items-center">
     <div class="flex gap-2">
-      <UButton v-if="!hidePrint" icon="i-lucide-printer" size="lg">Print Result</UButton>
+      <UButton v-if="!hidePrint" icon="i-lucide-printer" size="lg" @click="usePrintTeamResult">Print Result</UButton>
       <UButton
         icon="i-lucide-view"
         size="lg"

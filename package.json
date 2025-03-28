@@ -31,6 +31,7 @@
     "dotenv": "^16.4.7",
     "echarts": "^5.6.0",
     "joi": "^17.13.3",
+    "jspdf": "^3.0.1",
     "nuxt": "^3.16.0",
     "nuxt-echarts": "^0.2.6",
     "nuxt-tiptap-editor": "^2.1.4",
