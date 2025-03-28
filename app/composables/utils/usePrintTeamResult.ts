@@ -1,4 +1,5 @@
 import { jsPDF } from "jspdf";
+import autoTable from 'jspdf-autotable';
 import "~/assets/fonts/oldenglishtextmt-bold.js";
 import "~/assets/fonts/tahoma-normal.js";
 import "~/assets/fonts/tahoma-bold.js";
@@ -13,7 +14,7 @@ export const usePrintTeamResult = () => {
 
 
   const leftMargin = 40;
-
+  const checkIcon = '\u2714';
   const rightMargin = doc.internal.pageSize.width - 40;
   const centerX = doc.internal.pageSize.width / 2;
   const contentWidth = rightMargin - leftMargin;
@@ -24,7 +25,7 @@ export const usePrintTeamResult = () => {
   doc.addImage(seait, "PNG", 50, 18, 40, 40);
   doc.setFont("oldenglishtextmt", "bold").setFontSize(16).setTextColor(0, 100, 0);
   doc.text("South East Asian Institute of Technology, Inc.", centerX, 30, { align: "center" });
-  doc.setFont("Franklin Gothic Bold", "bold");
+  doc.setFont("Helvetica", "bold");
   doc.setFontSize(8).setTextColor(0, 100, 0);
   doc.text("National Highway, Barangay Crossing Rubber, Tupi, South Cotabato", 225, 40, { align: "center" });
   doc.text("Tel No. (083) 226-1202   EMAIL ADDRESS: seaitinc@yahoo.com", 218, 50, { align: "center" });
@@ -84,19 +85,81 @@ export const usePrintTeamResult = () => {
 
   doc.setFont("Helvetica", "normal").setFontSize(10);
   doc.text("Numerical Rating:", leftMargin+100, 380);
-  doc.line(220, 385, rightMargin - 100 , 385); // Line for numerical rating
+  doc.line(220, 380, rightMargin - 100 , 380); // Line for numerical rating
 
   doc.text("Adjective Rating:", leftMargin+100, 400);
-  doc.line(220, 405, rightMargin - 100 , 405); // Line for numerical rating
+  doc.line(220, 402, rightMargin - 100 , 402); // Line for numerical rating
 
   doc.addPage();
 
+  // looping station
+  doc.addImage(seait, "PNG", 50, 18, 40, 40);
+  doc.setFont("oldenglishtextmt", "bold").setFontSize(16).setTextColor(0, 100, 0);
+  doc.text("South East Asian Institute of Technology, Inc.", centerX, 30, { align: "center" });
+  doc.setFont("Helvetica", "bold");
+  doc.setFontSize(8).setTextColor(0, 100, 0);
+  
+  doc.text("National Highway, Barangay Crossing Rubber, Tupi, South Cotabato", 225, 40, { align: "center" });
+  doc.text("Tel No. (083) 226-1202   EMAIL ADDRESS: seaitinc@yahoo.com", 218, 50, { align: "center" });
+  doc.setDrawColor(0, 100, 0); // RGB Green
+
+  doc.line(0, 60, fullWidth, 60);
+  doc.setDrawColor(0, 0, 0); // RGB Green
+
+
+  // Title
+ 
+  doc.setFont("Helvetica", "bold").setFontSize(12);
+  doc.setTextColor(0,0,0);
+  doc.text("A. Performance", leftMargin, 90, { align: "left" });
+  doc.setFont("Helvetica", "bold").setFontSize(8);
+  const columns = ['Function/Specific Tasks', '1-Fail', '2-Poor','3-Satisfactory','4-Very Satisfactory','5-Outstanding'];
+
+  // Table rows
+  const rows = [
+    ["Can you tell me about the important people in your life?",'/'],
+    ["What have been some of the happiest moments in your life? The saddest?"],
+    ["Who has been the biggest influence on your life? What lessons did that person or those people teach you?"],
+  ];
+
+  // Add title
+
+  // Add autoTable
+  autoTable(doc, {
+    head: [columns], // Table headers
+    body: rows, // Table rows
+    startY: 100, // Position of the table
+    styles: {
+      fontSize: 8, // Change this to your desired font size
+      font:'Helvetica',
+      lineWidth: 0.5, // Border thickness
+      lineColor: [0, 0, 0], // Black border color
+    },
+    tableLineColor: [0, 0, 0], // Border color for the whole table
+    tableLineWidth: 0.5,
+    columnStyles: {
+      0: { cellWidth: 150 }, // Wider first column for text wrapping
+
+    },
+    headStyles: {
+      fontSize: 8, // Font size for headers
+      fillColor: [22, 160, 133], // Custom header background color
+      textColor: [255, 255, 255] // White text colors
+    },
+    bodyStyles: {
+      fontSize: 8, // Font size for table rows
+    },
+    
+  });
+
+
+  doc.addPage();
 
   //summary
   doc.addImage(seait, "PNG", 50, 18, 40, 40);
   doc.setFont("oldenglishtextmt", "bold").setFontSize(16).setTextColor(0, 100, 0);
   doc.text("South East Asian Institute of Technology, Inc.", centerX, 30, { align: "center" });
-  doc.setFont("Franklin Gothic Bold", "bold");
+  doc.setFont("Helvetica", "bold");
   doc.setFontSize(8).setTextColor(0, 100, 0);
   doc.text("National Highway, Barangay Crossing Rubber, Tupi, South Cotabato", 225, 40, { align: "center" });
   doc.text("Tel No. (083) 226-1202   EMAIL ADDRESS: seaitinc@yahoo.com", 218, 50, { align: "center" });
