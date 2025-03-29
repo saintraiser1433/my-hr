@@ -57,7 +57,8 @@ export interface EmployeeRating {
     rating: RatingModel[];
     answersData: {
         questionId: number;
-        peerCategory: string;
+        category: string;
+        criteria?:string;
         question: string;
         templateDetailId: number;
         templateDetailTitle: string;

@@ -156,10 +156,10 @@ export const usePrintPeerResult = (data: EmployeeRating[]) => {
 
     // Group answers by category with type safety
     evaluation.answersData.forEach(answer => {
-      if (!rowsByCategory[answer.peerCategory]) {
-        rowsByCategory[answer.peerCategory] = [];
+      if (!rowsByCategory[answer.category]) {
+        rowsByCategory[answer.category] = [];
       }
-
+    
       // Create a row for this question with proper typing
       const row: RowInput = [
         {
@@ -168,17 +168,19 @@ export const usePrintPeerResult = (data: EmployeeRating[]) => {
             fontStyle: 'normal'
           }
         },
-        ...templateTitles.map(title => ({
-          content: answer.templateDetailTitle === title ? 'X' : '',
+        ...evaluation.template.map(t => ({
+          content: answer.templateDetailTitle === t.title ? 'X' : '',
           styles: {
             halign: 'center' as const,
-            fontStyle: getFontStyle(answer.templateDetailTitle === title)
+            fontStyle: getFontStyle(answer.templateDetailTitle === t.title)
           }
         }))
       ];
-
-      rowsByCategory[answer.peerCategory]?.push(row);
+    
+      rowsByCategory[answer.category]?.push(row);
     });
+
+    
 
     // Now create the tables for each category with proper typing
     let firstCategory = true;
