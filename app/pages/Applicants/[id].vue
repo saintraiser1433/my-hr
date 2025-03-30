@@ -9,17 +9,13 @@ useSeoMeta({
   ogDescription: "CRUD for Applicants Progress",
 });
 
-defineProps({
-  mode: {
-    type: String,
-  },
-});
-
 const ongoingData = ref<OngoingApplicantDetails[]>([]);
 
 const route = useRoute();
 const { handleApiError } = useErrorHandler();
-const { $api, $toast } = useNuxtApp();
+const { $api, $toast, $datefns } = useNuxtApp();
+const { send } = useSms();
+const { templates } = useInterviewResults();
 const { data: ongoing, status: ongoingStatus, error: ongoingError } = await useAPI<
   OngoingApplicantDetails[]
 >(`/applicant/ongoing/${route.params.id}`);
@@ -41,6 +37,19 @@ const updateTime = async (data: InterviewDate) => {
       },
     ];
     $toast.success(response.message);
+
+    if (ongoing.value && ongoing.value[0]) {
+      await send(
+        `Dear ${ongoing.value[0].applicantName},\n\n` +
+          `Your ${data.screening} interview for SEAIT School has been scheduled for ` +
+          `${$datefns.format(new Date(data.date), "dd MMMM yyyy 'at' hh:mm a")}.\n\n` +
+          `Please arrive 10 minutes prior to your scheduled time.\n` +
+          `Should you require any assistance, kindly contact our office.\n\n` +
+          `Best regards,\n` +
+          `SEAIT School Hiring Committee`,
+        ongoing.value[0].contactNumber
+      );
+    }
   } catch (err) {
     return handleApiError(err);
   }
@@ -130,14 +139,39 @@ const finalizeApplicant = () => {
         if (!ongoing) return;
         const data = {
           id: ongoing.id,
-          jobId:ongoing.jobId,
+          jobId: ongoing.jobId,
           status:
             ongoing.remarks === ApplicationStatus.PASSED
               ? ApplicationStatus.PASSED
               : ApplicationStatus.FAILED,
         };
+
         const response = await finalizedRepo.update(data);
         $toast.success(response.message);
+
+        if (ongoing.remarks === ApplicationStatus.PASSED) {
+        }
+
+        if (ongoing.remarks === ApplicationStatus.PASSED) {
+          await send(
+            templates.passed({
+              name: ongoing.applicantName,
+              position: ongoing.jobTitle,
+              startDate: $datefns.format(new Date(), "MMMM d, yyyy"),
+              hrContact: "hr-team@seait.edu",
+            }),
+            ongoing.contactNumber
+          );
+        } else {
+          await send(
+            templates.failed({
+              name: ongoing.applicantName,
+              position: ongoing.jobTitle,
+              feedback: "We suggest strengthening your technical demonstration skills",
+            }),
+            ongoing.contactNumber
+          );
+        }
         await navigateTo({ path: "/applicants" });
       } catch (error) {
         return handleApiError(error);

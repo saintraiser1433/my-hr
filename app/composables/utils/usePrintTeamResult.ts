@@ -154,16 +154,16 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
   // ======================
   // Category Pages (Looping Table)
   // ======================
-  const sortedTemplate = data[0].template 
+  const sortedTemplate = data[0].template
     ? [...data[0].template]
-        .sort((a, b) => a.score - b.score)
-        .map(t => ({
-          ...t,
-          title: t.title
-            .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-            .join(' ')
-        }))
+      .sort((a, b) => a.score - b.score)
+      .map(t => ({
+        ...t,
+        title: t.title
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ')
+      }))
     : [];
 
   // Group questions by category and criteria
@@ -172,14 +172,14 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
   if (data[0]?.answersData) {
     data[0].answersData.forEach(answer => {
       if (!answer?.category) return;
-  
+
       if (!groupedData[answer.category]) {
         groupedData[answer.category] = {};
       }
-  
+
       const categoryGroup = groupedData[answer.category];
       const criteria = answer.criteria || 'General';
-  
+
       if (categoryGroup) {
         categoryGroup[criteria] = categoryGroup[criteria] || [];
         categoryGroup[criteria].push(answer);
@@ -201,7 +201,7 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
 
     const criteriaData = groupedData[category] ?? {};
     const categoryPrefix = `${String.fromCharCode(categoryLetter)}.`;
-    
+
     // Category title
     doc.setFont("Helvetica", "bold").setFontSize(12).setTextColor(0, 0, 0);
     doc.text(`${categoryPrefix} ${category.toUpperCase()}`, leftMargin, startY);
@@ -210,9 +210,9 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
     // Prepare table data
     const columns = [
       { header: 'CRITERIA', dataKey: 'criteria' },
-      ...sortedTemplate.map(t => ({ 
-        header: `${t.score}. ${t.title}`,
-        dataKey: t.title 
+      ...sortedTemplate.map(t => ({
+        header: `${t.score}`,
+        dataKey: t.title
       }))
     ];
 
@@ -225,7 +225,7 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
       questionCounter = 0;
 
       // Add criteria row
-      const criteriaRow: any = { 
+      const criteriaRow: any = {
         criteria: `${criteriaCounter}. ${criteria}`,
         _isCriteria: true
       };
@@ -236,14 +236,14 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
       questions.forEach(question => {
         questionCounter++;
         const cleanQuestion = question.question.replace(/<[^>]*>/g, '').trim();
-        const questionRow: any = { 
+        const questionRow: any = {
           criteria: `   ${criteriaCounter}.${questionCounter} ${cleanQuestion}`,
           _isQuestion: true
         };
         sortedTemplate.forEach(t => {
-          questionRow[t.title] = 
-            question.templateDetailTitle?.toLowerCase() === t.title?.toLowerCase() 
-              ? 'X' 
+          questionRow[t.title] =
+            question.templateDetailTitle?.toLowerCase() === t.title?.toLowerCase()
+              ? 'X'
               : '';
         });
         tableData.push(questionRow);
@@ -258,9 +258,9 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
     autoTable(doc, {
       head: [columns.map(c => c.header)],
       body: tableData.map(row => [
-        { 
+        {
           content: row.criteria,
-          styles: { 
+          styles: {
             cellWidth: firstColWidth,
             fontStyle: row._isCriteria ? 'bold' : 'normal',
             valign: 'middle'
@@ -268,7 +268,7 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
         },
         ...sortedTemplate.map(t => ({
           content: row[t.title],
-          styles: { 
+          styles: {
             halign: 'center' as HAlignType,
             cellWidth: ratingColWidth
           }
@@ -278,7 +278,7 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
       margin: { left: leftMargin, right: rightMargin, top: startY, bottom: footerHeight },
       tableWidth: contentWidth,
       styles: {
-        fontSize: 8,
+        fontSize: 10,
         font: 'Helvetica',
         lineWidth: 0.5,
         lineColor: [0, 0, 0],
@@ -286,24 +286,23 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
         overflow: 'linebreak',
       },
       columnStyles: {
-        0: { 
+        0: {
           cellWidth: firstColWidth,
           valign: 'middle'
         },
-        ...Object.fromEntries(sortedTemplate.map((_, i) => [i + 1, { 
+        ...Object.fromEntries(sortedTemplate.map((_, i) => [i + 1, {
           cellWidth: ratingColWidth,
           halign: 'center'
         }]))
       },
       headStyles: {
-        fontSize: 7,
+        fontSize: 10,
         fillColor: [22, 160, 133],
         textColor: [255, 255, 255],
         halign: 'center',
-        cellPadding: { top: 2, right: 1, bottom: 2, left: 1 },
       },
       bodyStyles: {
-        fontSize: 8,
+        fontSize: 10,
         textColor: [0, 0, 0],
         cellPadding: { top: 3, right: 2, bottom: 3, left: 2 },
       },
@@ -318,46 +317,46 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
   doc.addPage();
   addHeader();
   doc.setFontSize(12).setFont("Helvetica", "bold").setTextColor(0, 0, 0);
-  
+
   doc.text("SUMMARY OF RATING", centerX, 90, { align: "center" });
   doc.line(leftMarginSummary, 100, rightMarginSummary, 100);
-  
+
   // Performance Factors
   doc.setFont("Helvetica", "bold").setFontSize(10);
   doc.text("I. OBJECTIVE PERFORMANCE", leftMarginSummary, 120);
-  
+
   doc.setFont("Helvetica", "normal");
   const col1 = leftMarginSummary + 10, col2 = rightMarginSummary - 90, col3 = rightMarginSummary - 10;
-  
+
   // Rating Categories
   let yPositionSummary = 135;
   let totalWeightedScore = 0;
-  
+
   data[0].rating.forEach((category) => {
     const weightedScore = category.ratingPercentage ?? 0;
     totalWeightedScore += weightedScore;
-    
+
     const capitalizedCategory = category.categoryName
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
-    
+
     doc.text(capitalizedCategory, col1, yPositionSummary);
     doc.text(`${(category.percentage * 100).toFixed(0)}%`, col2, yPositionSummary);
     doc.text(`${(category.ratingPercentage ?? 0).toFixed(2)}%`, col3, yPositionSummary, { align: "right" });
     yPositionSummary += 15;
   });
-  
+
   // Total Rating
   doc.setFont("Helvetica", "bold");
   doc.text("TOTAL RATING", col1, yPositionSummary);
   doc.text("100%", col2, yPositionSummary);
   doc.text(`${totalWeightedScore.toFixed(2)}%`, col3, yPositionSummary, { align: "right" });
-  
+
   // Legend
   yPositionSummary += 10;
   doc.line(leftMarginSummary, yPositionSummary, rightMarginSummary, yPositionSummary);
-  
+
   doc.text("Legend:", leftMarginSummary, yPositionSummary + 20);
   const sortedTemplateSummary = [...data[0].template].sort((a, b) => b.score - a.score);
   sortedTemplateSummary.forEach((template, i) => {
@@ -367,7 +366,7 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
       .join(' ');
     doc.text(`${template.score} – ${capitalizedTitle}`, leftMarginSummary + 20, yPositionSummary + 35 + (i * 15));
   });
-  
+
   // Recommended Areas
   doc.setFont("Helvetica", "normal");
   doc.text("Recommended Areas for Improvement:", leftMarginSummary, yPositionSummary + 120);
@@ -375,7 +374,7 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
     const cleanComment = data[0].comment.replace(/<[^>]*>/g, '').trim();
     const lines = doc.splitTextToSize(cleanComment, contentWidth - 20);
     doc.text(lines, leftMarginSummary + 10, yPositionSummary + 140);
-    
+
     const linesStartY = yPositionSummary + 140 + (lines.length * 7);
     const linesCount = Math.max(0, 4 - lines.length);
     for (let i = 0; i < linesCount; i++) {
@@ -390,42 +389,42 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
   // Signature Section
   doc.line(leftMarginSummary, signatureYStart, leftMarginSummary + signatureWidth, signatureYStart);
   doc.text("Ratees' Signature", leftMarginSummary, signatureYStart + 10);
-  
+
   doc.line(leftMarginSummary, signatureYStart + 30, leftMarginSummary + signatureWidth, signatureYStart + 30);
   doc.text("Signature over Printed Name", leftMarginSummary, signatureYStart + 40);
-  
+
   doc.line(leftMarginSummary, signatureYStart + 60, leftMarginSummary + signatureWidth, signatureYStart + 60);
   doc.text("Date", leftMarginSummary, signatureYStart + 70);
-  
+
   // Rater's Signature
   doc.line(leftMarginSummary + signatureWidth + 20, signatureYStart, rightMarginSummary, signatureYStart);
   doc.text("Raters' Signature", leftMarginSummary + signatureWidth + 20, signatureYStart + 10);
-  
+
   doc.setFont("Helvetica").setFontSize(8);
   doc.line(leftMarginSummary + signatureWidth + 20, signatureYStart + 30, rightMarginSummary, signatureYStart + 30);
   doc.text("Signature over Printed Name of Immediate Supervisor/Dept. Head",
     leftMarginSummary + signatureWidth + 20, signatureYStart + 40, { maxWidth: signatureWidth });
-  
+
   doc.setFont("Helvetica").setFontSize(10);
   doc.line(leftMarginSummary + signatureWidth + 20, signatureYStart + 60, rightMarginSummary, signatureYStart + 60);
   doc.text(data[0].evaluatedBy, leftMarginSummary + signatureWidth + 20, signatureYStart + 70);
-  
+
   // Noted By Section
   const notedByYStart = signatureYStart + 180;
   const notedByWidth = 250;
-  
-  doc.text("Noted by:", centerX, notedByYStart - 50, { align: "center" });
-  
+
+  doc.text("Noted by:", centerX, notedByYStart - 30, { align: "center" });
+
   doc.setFont("Helvetica", "bold");
-  doc.text("ENGR. MILAGROS S. TAMAYO, MIM", centerX, notedByYStart + 35, { align: "center" });
-  
+  doc.text("ENGR. MILAGROS S. TAMAYO, MIM", centerX, notedByYStart + 20, { align: "center" });
+
   doc.setFont("Helvetica", "normal");
-  doc.text("Vice President for Admin and Finance", centerX, notedByYStart + 55, { align: "center" });
-  doc.text("Human Resource Development Officer", centerX, notedByYStart + 75, { align: "center" });
-  
+  doc.text("Vice President for Admin and Finance", centerX, notedByYStart + 40, { align: "center" });
+  doc.text("Human Resource Development Officer", centerX, notedByYStart + 50, { align: "center" });
+
   // Date
-  doc.line(centerX - (notedByWidth / 2), notedByYStart + 110, centerX + (notedByWidth / 2), notedByYStart + 110);
-  doc.text("Date", centerX, notedByYStart + 120, { align: "center" });
+  doc.line(centerX - (notedByWidth / 2), notedByYStart + 90, centerX + (notedByWidth / 2), notedByYStart + 90);
+  doc.text("Date", centerX, notedByYStart + 100, { align: "center" });
 
   // Final Output
   window.open(doc.output("bloburl"));

@@ -1,46 +1,69 @@
-export const MENU_ITEMS: MenuItem[] = [
-  { label: "Navigation", type: 'label' },
+import type { NavigationMenuItem } from "@nuxt/ui";
+
+
+
+export const ADMIN_MENU_ITEMS: NavigationMenuItem[] = [
+  { label: "Navigation", type: "label" },
   { label: "Dashboard", icon: "i-tabler-device-analytics", to: "/Dashboard" },
-  { label: "Applicants", icon: "i-tdesign-user-filled", to: "/applicants" },
-  { label: "Employees", icon: "i-clarity-employee-group-solid", to: "/employees" },
-  { label: "Departments", icon: "i-game-icons-organigram", to: "/department" },
+  { label: "Applicants", icon: "i-tdesign-user-filled", to: "/Applicants" },
+  { label: "Employees", icon: "i-clarity-employee-group-solid", to: "/Employees" },
+  { label: "Departments", icon: "i-game-icons-organigram", to: "/Department" },
   {
     label: "Performance",
     icon: "i-mdi-graph-line",
-    to: "/performance"
+    to: "/Performance",
   },
   {
     label: "Evaluation",
     icon: "i-mdi-file-graph",
     children: [
-      { label: "Manage Evaluation", icon: "i-hugeicons-question", to: "/evaluation" },
-      { label: "Template", icon: "i-mingcute-user-question-fill", to: "/evaluation/template" },
+      { label: "Manage Evaluation", icon: "i-hugeicons-question", to: "/Evaluation" },
+      {
+        label: "Template",
+        icon: "i-mingcute-user-question-fill",
+        to: "/Evaluation/template",
+      },
     ],
   },
-
-  { label: "Job Offers", icon: "i-fluent-mdl2-recruitment-management", to: "/job" },
-  { label: "Screening", icon: "material-symbols:action-key", to: "/screening" },
-  { label: "Requirements", icon: "i-carbon-document-requirements", to: "/requirements" },
-  { label: "Settings", icon: "i-mdi-cogs", to: "/settings" },
+  { label: "Job Offers", icon: "i-fluent-mdl2-recruitment-management", to: "/Job" },
+  { label: "Screening", icon: "material-symbols:action-key", to: "/Screening" },
+  {
+    label: "Requirements",
+    icon: "i-carbon-document-requirements",
+    to: "/Requirements",
+  },
 ];
 
 
-export const MENU_ITEMS_EMP: MenuItem[] = [
-  { label: "Navigation", type: 'label' },
+
+export const EMPLOYEE_MENU_ITEMS: NavigationMenuItem[] = [
+  { label: "Navigation", type: "label" },
   { label: "Evaluate Colleague", icon: "i-hugeicons-peer-to-peer-02", to: "/emp" },
-  { label: "Received Evaluation", icon: "i-hugeicons-peer-to-peer-03", to: "/emp/result" },
-  { label: "My Requirements", icon: "i-carbon-document-requirements", to: "/emp/requirements" },
-
-
+  {
+    label: "Received Evaluation",
+    icon: "i-hugeicons-peer-to-peer-03",
+    to: "/emp/result",
+  },
+  {
+    label: "My Requirements",
+    icon: "i-carbon-document-requirements",
+    to: "/emp/requirements",
+  },
 ];
 
-export const MENU_ITEMS_TEAM: MenuItem[] = [
-  { label: "Navigation", type: 'label' },
-  // { label: "Dashboard", icon: "i-tabler-device-analytics", to: "/Dashboard" },
-  { label: "Evaluate Colleague", icon: "i-hugeicons-peer-to-peer-02", to: "/team/evaluate" },
-  { label: "My Requirements", icon: "i-carbon-document-requirements", to: "/team/requirements" },
+export const TEAM_LEAD_MENU_ITEMS: NavigationMenuItem[] = [
+  { label: "Navigation", type: "label" },
+  {
+    label: "Evaluate Colleague",
+    icon: "i-hugeicons-peer-to-peer-02",
+    to: "/team/evaluate",
+  },
+  {
+    label: "My Requirements",
+    icon: "i-carbon-document-requirements",
+    to: "/team/requirements",
+  },
   { label: "Evaluate Forms", icon: "i-hugeicons-question", to: "/team/categories" },
-
 ];
 
 export const TAB_ITEMS = [

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const config = useRuntimeConfig();
 const { $datefns } = useNuxtApp();
+const { getRole } = useAuthStore();
 const props = defineProps({
   data: {
     type: Array as PropType<EmployeeRating[]>,
@@ -41,6 +42,8 @@ const openModal = defineModel("open", {
   default: false,
   required: true,
 });
+const peerResult = inject<EmployeeRating[]>("peer", []);
+const teamResult = inject<EmployeeRating[]>("team", []);
 </script>
 
 <template>
@@ -111,6 +114,13 @@ const openModal = defineModel("open", {
               :average-rating="pdata?.summaryRating?.rating"
               :adjective-rating="pdata?.summaryRating?.adjectiveRating"
             />
+            <UButton
+              v-if="getRole === 'Admin'"
+              icon="i-lucide-printer"
+              size="lg"
+              @click="usePrintPeerResult(peerResult)"
+              >Print Result</UButton
+            >
           </UCard>
           <div class="flex flex-col justify-center items-center" v-else>
             <svg-icon
@@ -150,6 +160,13 @@ const openModal = defineModel("open", {
               :average-rating="data[0]?.summaryRating?.rating"
               :adjective-rating="data[0]?.summaryRating?.adjectiveRating"
             />
+            <UButton
+              v-if="getRole === 'Admin'"
+              icon="i-lucide-printer"
+              size="lg"
+              @click="usePrintTeamResult(teamResult)"
+              >Print Result</UButton
+            >
           </UCard>
 
           <div class="flex flex-col justify-center items-center" v-else>

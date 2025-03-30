@@ -12,14 +12,14 @@ export interface ApiResponse<T> {
 export interface BreadcrumbItem {
   label: string;
   icon?: string;
-  to?: string;
+  // to?: string;
 }
 
 export interface SummaryModel {
-  departmentsCount:number;
-  employeesCount:number;
-  applicantsCount:number;
-  jobsCount:number;
+  departmentsCount: number;
+  employeesCount: number;
+  applicantsCount: number;
+  jobsCount: number;
 }
 
 export interface MenuItem {
@@ -32,6 +32,17 @@ export interface MenuItem {
 }
 
 
+export interface SMSSSetings {
+  serverAddress: string;
+  username: string;
+  password: string
+}
+
+
+export interface SendMessage {
+  message: string;
+  phoneNumbers: string[]
+}
 
 
 export interface DirectionModel {
@@ -45,10 +56,10 @@ export interface ChartModel {
 }
 
 export interface RankingModel {
-  name:string;
-  departmentName:string;
-  photo_path:string;
-  averageRating:number;
+  name: string;
+  departmentName: string;
+  photo_path: string;
+  averageRating: number;
 
 }
 

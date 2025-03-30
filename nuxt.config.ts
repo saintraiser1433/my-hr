@@ -10,6 +10,8 @@ export default defineNuxtConfig({
     '/team': { redirect: '/team/evaluate' },
 
   },
+
+
   modules: [
     '@nuxt/ui',
     '@nuxt/eslint',
@@ -22,6 +24,10 @@ export default defineNuxtConfig({
     "@pinia/nuxt"
   ],
   app: {
+    rootAttrs: {
+      'data-vaul-drawer-wrapper': '',
+      'class': 'bg-(--ui-bg)'
+    },
     head: {
       title: "SUPERHURE",
       link: [

@@ -1,9 +1,19 @@
 <script setup lang="ts">
 const model = defineModel<string | number | undefined>();
+defineProps({
+  isCapitalize: {
+    type: Boolean,
+    default: true,
+  },
+});
 </script>
 
 <template>
-  <UInput v-model="model" class="w-full" :ui="{ trailing: 'pe-1' }">
+  <UInput
+    v-model="model"
+    class="w-full"
+    :ui="{ trailing: 'pe-1', base: !isCapitalize ? 'normal-case' : '' }"
+  >
     <template v-if="String(model).length" #trailing>
       <UButton
         color="neutral"

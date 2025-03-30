@@ -25,27 +25,12 @@ const props = defineProps({
   role: {
     type: String,
   },
-  hidePrint: {
-    type: Boolean,
-    default: false,
-  },
 });
-
-const peerResult = inject<EmployeeRating[]>("peer", []);
-const teamResult = inject<EmployeeRating[]>("team", []);
 </script>
 
 <template>
-
   <div class="flex gap-2 justify-between items-center">
     <div class="flex gap-2">
-      <UButton
-        v-if="!hidePrint"
-        icon="i-lucide-printer"
-        size="lg"
-        @click="usePrintTeamResult(teamResult)"
-        >Print Result</UButton
-      >
       <UButton
         icon="i-lucide-view"
         size="lg"

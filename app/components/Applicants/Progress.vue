@@ -31,6 +31,7 @@ const columns: TableColumn<any>[] = [
 const model = ref<InterviewDate>({
   date: "",
   id: 0,
+  screening: "",
 });
 
 const updateDate = async (data: InterviewDate) => {
@@ -39,7 +40,7 @@ const updateDate = async (data: InterviewDate) => {
 
 const onSubmit = async (data: InterviewDate) => {
   emits("dataDate", data);
-  model.value = { date: "", id: 0 };
+  model.value = { date: "", id: 0, screening: "" };
 };
 
 const updateStatus = async (data: InterviewStatus) => {
@@ -121,7 +122,13 @@ watch(
             label="Open"
             color="neutral"
             :variant="row.original.dateInterview ? 'solid' : 'subtle'"
-            @click="updateDate({ id: row.original.id, date: row.original.dateInterview })"
+            @click="
+              updateDate({
+                id: row.original.id,
+                date: row.original.dateInterview,
+                screening: row.original.screening.title,
+              })
+            "
             >{{
               row.original.dateInterview
                 ? $datefns.format(
@@ -202,16 +209,6 @@ watch(
               </div>
             </template>
           </UPopover>
-
-          <UButton
-            v-if="row.original.dateInterview"
-            icon="i-lucide-send"
-            title="Remind User"
-            variant="outline"
-            size="sm"
-            :to="{ path: `/applicants/${row.original.id}` }"
-          >
-          </UButton>
         </div>
       </template>
     </UTable>

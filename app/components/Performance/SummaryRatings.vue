@@ -78,7 +78,6 @@ const { optionCategory } = useStackedBar(categoryData);
 
   <PerformanceActions
     :role="role"
-    :hide-print="hidePrint"
     :peer-evaluation-id="peerEvaluationId"
     :acad-id="acadId"
     :employee-id="employeeId"

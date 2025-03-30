@@ -9,14 +9,8 @@ export const useAcademicYearStore = defineStore("academicYearStore", {
   }),
   actions: {
     async fetchActiveYear() {
-      const nuxtApp = useNuxtApp();
-
       try {
-        const { data } = await useAPI<EvaluationModel>("/evaluation/ongoing", {
-          getCachedData(key) {
-            return nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-          }
-        });
+        const { data } = await useAPI<EvaluationModel>("/evaluation/ongoing");
         console.log(data);
         this.activeYear = data.value?.school_year || null;
         this.semester = data.value?.semester || null;

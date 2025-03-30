@@ -13,6 +13,7 @@ useSeoMeta({
 
 const { $api, $toast, $datefns } = useNuxtApp();
 const config = useRuntimeConfig();
+const {send } = useSms();
 const { handleApiError } = useErrorHandler();
 const pendingData = ref<PendingApplicantModel[]>([]);
 const rejectedData = ref<RejectApplicantModel[]>([]);
@@ -95,6 +96,7 @@ const proceed = async (applicantId: number) => {
 };
 
 const rejectRepo = repository<RejectApplicantModel>($api, "/applicant/reject");
+
 const reject = async (applicantId: number) => {
     try {
         const response = await rejectRepo.updateById(applicantId);
@@ -104,12 +106,19 @@ const reject = async (applicantId: number) => {
         rejectedData.value = [...rejectedData.value, response.data as RejectApplicantModel];
         open.value = false;
         $toast.success(response.message);
+        await send(
+            `Dear ${response.data?.applicantName} ,\n\n` +
+            `Thank you for your interest in the position at SEAIT School and for the time you invested in the application process.\n\n` +
+            `After careful consideration, we regret to inform you that we have decided to move forward with other candidates whose qualifications more closely align with our current needs.\n\n` +
+            `We appreciate your application and encourage you to apply for future opportunities that may be a better fit for your skills and experience.\n\n` +
+            `Best regards,\n` +
+            `SEAIT School Hiring Committee`,
+            response.data?.contactNumber ?? ''
+        );
     } catch (error) {
         return handleApiError(error);
     }
 };
-
-
 
 </script>
 
