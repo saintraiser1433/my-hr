@@ -3,7 +3,6 @@ import type { TableColumn } from "@nuxt/ui";
 import { getPaginationRowModel } from "@tanstack/vue-table";
 
 const UButton = resolveComponent("UButton") as Component;
-const UBadge = resolveComponent("UBadge") as Component;
 const props = defineProps<{ data: { [key: string]: any }[] }>();
 const emits = defineEmits<{ (e: "view"): void }>();
 
@@ -75,6 +74,8 @@ const view = () => {
       :columns="columns"
     >
       <template #empty>
+
+        
         <div class="flex flex-col items-center justify-center py-6 gap-3">
           <span class="italic text-sm">Click button to shuffle peers!</span>
           <UButton size="lg" @click="view" label="Random Shuffling" />

@@ -14,9 +14,10 @@ const { $toast } = useNuxtApp();
 const route = useRoute();
 const { openModal, isOpen, title, description } = useCustomModal();
 const employeeIds = ref(0);
-const selectedDepartment = ref<ListDepartment>({});
-const deptId = computed(() => selectedDepartment.value.id || 0);
+const selectedDepartment = ref<ListDepartment | undefined>({});
+const deptId = computed(() => selectedDepartment.value?.id || 0);
 const selectedEmployee = ref<EmployeeRatingStatus>();
+
 const departmentItems = computed(
   () =>
     departments.value?.map((item) => ({
@@ -92,11 +93,23 @@ const viewRating = async (data: EmployeeRatingStatus) => {
   selectedEmployee.value = data;
 };
 
+watch(
+  departmentItems,
+  (newItems) => {
+    if (newItems.length > 0) {
+      selectedDepartment.value = newItems[0];
+    }
+  },
+  { immediate: true } 
+);
+
+
 provide("peer", peerResult);
 provide("team", teamResult);
 </script>
 
 <template>
+
   <PerformanceViewRatings
     v-model:open="isOpen"
     :information-data="selectedEmployee"

@@ -15,6 +15,18 @@ const props = defineProps({
   },
 });
 
+const { data } = toRefs(props);
+
+const {
+  value,
+  selectedItems,
+  rowSelection:rowSelectionMultiple,
+  unAssigned,
+  handleAssign,
+  resetAssign,
+  checkEmpty,
+} = useMultipleSelect(data);
+
 const emits = defineEmits<{
   (e: "dataDate", payload: InterviewDate): void;
   (e: "dataStatus", payload: InterviewStatus): void;
@@ -78,9 +90,9 @@ watch(
 </script>
 
 <template>
-
   <div class="flex items-center gap-2 my-2 px-2">
       <USelectMenu
+        v-model="value"
         :items="items"
         label-key="title"
         size="md"

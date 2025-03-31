@@ -15,23 +15,14 @@ const { handleApiError } = useErrorHandler();
 const route = useRoute();
 const { openModal, description, isOpen, title } = useCustomModal();
 const acadId = ref<number>(Number(route.params.acadId));
-const departmentItems = computed(
-  () =>
-    departments.value?.map((item) => ({
-      id: item.id,
-      label: item.title,
-    })) || []
-);
-const checkSelectedDepartment = computed(
-  () => Object.keys(selectedDepartment.value).length === 0
-);
+
 
 const { data: departments, status, error } = await useAPI<DepartmentModel[]>(
   "/department"
 );
-const selectedDepartment = ref<ListDepartment>({});
+const selectedDepartment = ref<ListDepartment | undefined>({});
+const deptId = computed(() => selectedDepartment.value?.id || 0);
 
-const deptId = computed(() => selectedDepartment.value.id || 0);
 
 const { data: result, error: errorEvaluation } = await useAPI<EvaluationResult[]>(
   `/evaluation/viewPeer`,
@@ -45,6 +36,17 @@ const { data: result, error: errorEvaluation } = await useAPI<EvaluationResult[]
     server: false,
   }
 );
+const { data: countEmployee, error: errorEmployee } = await useAPI<number>(
+  `/employees/deptCount`,
+  {
+    watch: [selectedDepartment],
+    immediate: false,
+    params: {
+      deptId: deptId,
+    },
+    server: false,
+  }
+);
 
 if (error.value) {
   $toast.error(error.value.message || "Failed to fetch items");
@@ -52,6 +54,17 @@ if (error.value) {
 if (errorEvaluation.value) {
   $toast.error(errorEvaluation.value.message || "Failed to fetch items");
 }
+if (errorEmployee.value) {
+  $toast.error(errorEmployee.value.message || "Failed to fetch items");
+}
+
+const departmentItems = computed(
+  () =>
+    departments.value?.map((item) => ({
+      id: item.id,
+      label: item.title,
+    })) || []
+);
 
 const groups = ref([
   {
@@ -62,6 +75,9 @@ const groups = ref([
 ]);
 
 const view = () => {
+  if(countEmployee.value === 0){
+    return $toast.error('Cant do random shuffling. Reason: No employee attached in that department')
+  }
   openModal("Peers to evaluate");
 };
 
@@ -76,12 +92,25 @@ const assign = async (data: AssignPeerEvaluations) => {
     handleApiError(err);
   }
 };
+
+
+watch(
+  departmentItems,
+  (newItems) => {
+    if (newItems.length > 0) {
+      selectedDepartment.value = newItems[0];
+    }
+  },
+  { immediate: true } 
+);
 </script>
 
 <template>
+
   <EvaluationPeerAssigningForm
     :academic-year-id="acadId"
-    :department-id="selectedDepartment.id"
+    :employee-count="countEmployee"
+    :department-id="selectedDepartment?.id"
     :description="description"
     :title="title"
     v-model:open="isOpen"
@@ -116,16 +145,10 @@ const assign = async (data: AssignPeerEvaluations) => {
         }"
       >
         <EvaluationPeerAssigning
-          :data="result"
-          v-if="!checkSelectedDepartment && result"
+          :data="result ?? []"
           @view="view"
         />
-        <div v-else class="flex justify-center flex-col items-center py-50">
-          <h5 class="italic">Image Here</h5>
-          <h2 class="font-semibold">
-            Please select department to assign peers to evaluate
-          </h2>
-        </div>
+       
       </UCard>
     </div>
   </div>

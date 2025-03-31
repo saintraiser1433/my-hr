@@ -24,6 +24,11 @@ const props = defineProps({
     required: true,
     default: 0,
   },
+  employeeCount :{
+    type:Number,
+    default:0
+  }
+
 });
 
 const peersToEvaluate = ref(1);
@@ -47,7 +52,7 @@ const onSubmit = () => {
   >
     <template #body>
       <div class="flex flex-col items-center gap-2">
-        <h4 class="font-semibold">PEERS: <span class="font-normal">13</span></h4>
+        <h4 class="font-semibold">PEERS: <span class="font-normal">{{employeeCount}}</span></h4>
         <USeparator class="py-2"></USeparator>
         <div class="flex flex-col items-center gap-2">
           <h4 class="font-semibold">PEERS TO EVALUATE:</h4>
