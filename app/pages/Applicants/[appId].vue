@@ -10,22 +10,23 @@ useSeoMeta({
 });
 
 const ongoingData = ref<OngoingApplicantDetails[]>([]);
-
 const route = useRoute();
 const { handleApiError } = useErrorHandler();
 const { $api, $toast, $datefns } = useNuxtApp();
 const { send } = useSms();
+const { updateStatus } = useUpdateStatus(ongoingData);
 const { templates } = useInterviewResults();
 const screenData = ref<ScreeningModel[]>([]);
+
 const { data: ongoing, status: ongoingStatus, error: ongoingError } = await useAPI<
   OngoingApplicantDetails[]
->(`/applicant/ongoing/${route.params.id}`);
+>(`/applicant/ongoing/${route.params.appId}`);
 if (ongoing.value) {
   ongoingData.value = ongoing.value;
 }
 
 const { data: screeningData, error: errorScreening } = await useAPI<ScreeningModel[]>(
-  `/screening/f/${ongoing.value?.[0]?.jobId}`
+  `/screening/app/${route.params.appId}`
 );
 if (screeningData.value) {
   screenData.value = screeningData.value;
@@ -63,76 +64,6 @@ const updateTime = async (data: InterviewDate) => {
     }
   } catch (err) {
     return handleApiError(err);
-  }
-};
-
-const ISRepo = repository<InterviewStatus>($api, "/interview/status");
-const updateStatus = async (data: InterviewStatus) => {
-  try {
-    const response = await ISRepo.update(data);
-
-    if (!ongoingData.value?.[0]?.progressList) return;
-
-    const firstOngoingData = ongoingData.value[0];
-
-    // Update progress list statuses reactively
-    firstOngoingData.progressList = firstOngoingData.progressList?.map((item) => {
-      if (item.id === data.id) {
-        if (item.status === ApplicationStatus.PENDING) {
-          if (typeof firstOngoingData.countApplicantScreening === "number") {
-            firstOngoingData.countApplicantScreening += 1;
-          }
-        }
-        return { ...item, status: response.data?.status as ApplicationStatus };
-      }
-      return item;
-    });
-
-    // Recalculate currentStage, nextStep, and nextSched
-    const sortedProgressList = firstOngoingData.progressList ?? [];
-
-    let currentStage = null;
-    let nextStep = null;
-    let nextSched = null;
-
-    for (let i = 0; i < sortedProgressList.length; i++) {
-      const screening = sortedProgressList[i];
-
-      if (screening?.status === ApplicationStatus.PENDING) {
-        if (!currentStage) {
-          // First "PENDING" is the current stage
-          currentStage = screening.screening.title;
-        } else if (!nextStep) {
-          // Next "PENDING" is the next step
-          nextStep = screening.screening.title;
-          nextSched = screening.dateInterview;
-          break;
-        }
-      }
-    }
-
-    // Update remarks
-    const allPassed = sortedProgressList.every(
-      (item) => item.status === ApplicationStatus.PASSED
-    );
-
-    if (allPassed) {
-      firstOngoingData.remarks = ApplicationStatus.PASSED;
-    } else if (response.data?.status == ApplicationStatus.PASSED && !allPassed) {
-      firstOngoingData.remarks = ApplicationStatus.ONGOING;
-    } else if (response.data?.status == ApplicationStatus.FAILED) {
-      firstOngoingData.remarks = ApplicationStatus.FAILED;
-    } else {
-      firstOngoingData.remarks = ApplicationStatus.ONGOING;
-    }
-
-    firstOngoingData.currentStage = currentStage;
-    firstOngoingData.nextStep = nextStep;
-    firstOngoingData.nextSched = nextSched || null;
-
-    $toast.success(response.message);
-  } catch (err: any) {
-    $toast.error(err.data?.details || "An error occurred");
   }
 };
 
@@ -190,10 +121,32 @@ const finalizeApplicant = () => {
     }
   });
 };
+
+//add screening
+// const screeningRepo = repository<JobScreeningModel[]>($api, "/screening/assign");
+// const assignData = async (data: ScreeningModel[]) => {
+//   try {
+//     const payload = data.map((item, index) => ({
+//       job_id: Number(route.params.jobId),
+//       screening_id: Number(item.id),
+//     }));
+//     const response = await jobScreenRepo.add(payload);
+//     jobScreenData.value = [
+//       ...jobScreenData.value,
+//       ...(response.data as JobScreeningModel[]),
+//     ];
+//     screenData.value =
+//       screenData.value?.filter((item) => !data.some((items) => items.id === item.id)) ||
+//       [];
+//     $toast.success(response.message);
+//   } catch (err) {
+//     return handleApiError(err);
+//   }
+// };
 </script>
 
 <template>
-  <ApplicantsProgressHeader :ongoingData="ongoingData"/> 
+  <ApplicantsProgressHeader :ongoingData="ongoingData" />
   <UCard
     :ui="{
       root: 'border-b-3 border-(--ui-primary) rounded-md',
@@ -208,7 +161,6 @@ const finalizeApplicant = () => {
   </UCard>
 
   <div class="flex justify-end items-center mt-2 gap-2">
-
     <UButton
       v-if="ongoingData[0]?.remarks === 'FAILED' || ongoingData[0]?.remarks === 'PASSED'"
       size="md"

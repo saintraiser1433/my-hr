@@ -22,7 +22,7 @@ const titleName = useState(
 
 //typescreening
 const { data: screeningData, error: errorScreening } = await useAPI<ScreeningModel[]>(
-  `/screening/f/${route.params.jobId}`
+  `/screening/job/${route.params.jobId}`
 );
 if (screeningData.value) {
   screenData.value = screeningData.value;
@@ -63,7 +63,7 @@ const assignData = async (data: ScreeningModel[]) => {
   }
 };
 
-const jobScreenRmvRepo = repository<ScreeningModel[]>($api, "/screening/assign/delete");
+const jobScreenRmvRepo = repository<ScreeningModel[]>($api, "/screening/assign");
 const unAssignJob = (data: number[]) => {
   setAlert("warning", "Are you sure you want to delete?", "", "Confirm delete").then(
     async (result) => {

@@ -33,11 +33,11 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
         });
     },
 
-    
 
-    async deleteMany(data: any): Promise<ApiResponse<T>> {
+
+    async deleteMany(data: number[]): Promise<ApiResponse<T>> {
         return fetch<ApiResponse<T>>(`${basePath}`, {
-            method: 'POST',
+            method: 'DELETE',
             body: JSON.stringify(data)
         });
     },
@@ -103,9 +103,9 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
     },
 
 
-    async updateFileCustom(body: any,file:any,keyFile:string): Promise<ApiResponse<T>> {
+    async updateFileCustom(body: any, file: any, keyFile: string): Promise<ApiResponse<T>> {
         const formData = new FormData();
-    
+
         Object.entries(body).forEach(([key, value]) => {
             if (value !== undefined) {
                 formData.append(key, String(value));
@@ -115,9 +115,9 @@ export const repository = <T>(fetch: $Fetch<ApiResponse<T>, NitroFetchRequest>, 
         if (file) {
             formData.append(keyFile, file);
         }
-    
+
         return fetch<ApiResponse<T>>(`${basePath}/${body.id}`, {
-            method: 'PUT',  
+            method: 'PUT',
             body: formData,
         });
     },
