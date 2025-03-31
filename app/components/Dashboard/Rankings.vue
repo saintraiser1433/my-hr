@@ -32,11 +32,11 @@ const transformData = computed(() => data.value.slice(0,10));
     <div class="grid grid-cols-12 gap-3 p-2 text-center font-bold">
       <div class="col-span-1"></div>
       <div class="col-span-1">Rank</div>
-      <div class="col-span-5">Name</div>
-      <div class="col-span-3">Department</div>
-      <div class="col-span-2">Rating</div>
+      <div class="col-span-4">Name</div>
+      <div class="col-span-4">Department</div>
+      <div class="col-span-1">Rating</div>
     </div>
-
+    <USeparator></USeparator>
     <div class="divide-y divide-gray-200 dark:divide-gray-700">
       <!-- v-for="(data, index) in data" -->
       <div v-for="(i,index) in transformData" :key="index" class="grid grid-cols-12 gap-3 p-2 text-sm text-center">
@@ -46,11 +46,11 @@ const transformData = computed(() => data.value.slice(0,10));
           <svg-icon v-else-if="index + 1 === 3" name="iconx/thirdmedal" width="24" height="24" />
         </div>
         <div class="col-span-1 capitalize flex gap-2 items-center justify-center">{{ index+1 }}</div>
-        <div class="col-span-5 capitalize flex gap-2 items-center justify-center font-semibold"><UAvatar size="lg" :src="`${config.public.STORAGE_URL_AVATAR}/${i.photo_path}`"/>{{ i.name }}</div>
-        <div class="col-span-3 capitalize flex gap-2 items-center justify-center line-clamp-3">
+        <div class="col-span-4 mx-auto capitalize flex gap-2 items-center font-semibold"><UAvatar size="lg" :src="`${config.public.STORAGE_URL_AVATAR}/${i.photo_path}`"/>{{ i.name }}</div>
+        <div class="col-span-4 capitalize flex gap-2 items-center justify-center line-clamp-3">
           {{ i.departmentName }}
         </div>
-        <div class="col-span-2 flex gap-2 items-center justify-center font-semibold">{{ i.averageRating }}</div>
+        <div class="col-span-1 flex gap-2 items-center justify-center font-semibold">{{ i.averageRating }}</div>
       </div>
       
     </div>

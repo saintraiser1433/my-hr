@@ -26,7 +26,6 @@
     "@tiptap/extension-table-header": "^2.11.5",
     "@tiptap/extension-table-row": "^2.11.5",
     "@tiptap/starter-kit": "^2.11.5",
-    "android-sms-gateway": "^2.0.0",
     "circle-progress.vue": "^3.3.0",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",

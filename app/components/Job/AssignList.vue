@@ -69,7 +69,7 @@ watch(
 
 <template>
   <div class="flex justify-between items-center gap-2">
-    <div class="flex items-center gap-2 my-2">
+    <div class="flex items-center gap-2 my-2 px-2">
       <USelectMenu
         v-model="value"
         :items="items"
@@ -125,6 +125,13 @@ watch(
       :data="data"
       :columns="columns"
     >
+    <template #empty>
+      <div class="flex gap-2 flex-col items-center text-center">
+          <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
+          <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
+          <p class="text-sm text-gray-500">Try adjusting your filters or check back later.</p>
+      </div>
+    </template>
       <template #screening_title-cell="{ row }">
         <span class="capitalize">{{ row.original.screening_title }}</span>
       </template>

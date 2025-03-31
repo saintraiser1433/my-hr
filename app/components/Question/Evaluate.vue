@@ -41,6 +41,13 @@ const handleCheckboxChange = (rowId: string, data: SubmitResult) => {
   <UCard>
     <UTable :data="data" :columns="columns" v-model:grouping="groupingState">
       <!-- Question cell -->
+      <template #empty>
+      <div class="flex gap-2 flex-col items-center text-center">
+          <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
+          <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
+          <p class="text-sm text-gray-500">Try adjusting your filters or check back later.</p>
+      </div>
+    </template>
       <template #question-cell="{ row }">
         <div class="text-wrap max-w-3xl" v-html="row.original.question"></div>
       </template>

@@ -49,6 +49,17 @@ export const useStackedBarChartv2 = () => {
         bottom: '3%',
         containLabel: true
       },
+      graphic: {
+        type: "text",
+        left: "center",
+        top: "middle",
+        style: {
+          text: data.value.length === 0 ? "No Data Available " : "",
+          fontSize: 18,
+          fontWeight: "bold",
+          fill: "#999",
+        },
+      },
       xAxis: {
         type: 'category',
         data: jobNames,

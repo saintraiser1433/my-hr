@@ -20,6 +20,32 @@ export const useBarChart = () => {
         type: "value",
         axisLabel: { color: "#666" },
       },
+      graphic: data.value.length === 0 ? [
+        // SVG Icon
+        {
+          type: "image",
+          left: "center",
+          top: "30%",
+          style: {
+            image: "/static-icon/file.png", // Replace with your SVG URL
+            width: 50,
+            height: 50,
+          },
+        },
+        // No Data Text
+        {
+          type: "text",
+          left: "center",
+          top: "50%",
+          style: {
+            text: "Please Select Department / No Data Available ",
+            fontSize: 18,
+            fontWeight: "bold",
+            fill: "#999",
+            textAlign: "center",
+          },
+        },
+      ] : [],
       series: [
         {
           name: "Count",

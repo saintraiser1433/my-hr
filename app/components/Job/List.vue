@@ -113,6 +113,13 @@ watch(
     body: 'p-0 sm:p-0',
     footer: 'p-0 sm:px-0',
   }">
+     <template #empty>
+      <div class="flex gap-2 flex-col items-center text-center">
+          <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
+          <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
+          <p class="text-sm text-gray-500">Try adjusting your filters or check back later.</p>
+      </div>
+    </template>
     <UTable sticky class="overflow-y-auto custom-scrollbar h-100 lg:h-170 cursor-auto" ref="table"
       v-model:global-filter="globalFilter" v-model:pagination="pagination" :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
@@ -124,7 +131,10 @@ watch(
         <UBadge v-if="row.original.status" color="neutral" variant="solid">Active</UBadge>
         <UBadge v-else color="neutral" variant="outline">Inactive</UBadge>
       </template>
-
+      <template #totalAvailable-cell="{ row }">
+       <span class="font-semibold" :class="row.original.totalAvailable === 0 ? 'text-red-500' : 'text-black'">{{row.original.totalAvailable}}</span>
+      </template>
+ 
       <template #action-cell="{ row }">
         <UDropdownMenu :items="getDropdownActions(row.original)">
           <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />

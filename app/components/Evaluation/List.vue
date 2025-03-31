@@ -125,6 +125,13 @@ watch(
       footer: 'p-0 sm:px-0',
     }"
   >
+  <template #empty>
+      <div class="flex gap-2 flex-col items-center text-center">
+          <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
+          <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
+          <p class="text-sm text-gray-500">Try adjusting your filters or check back later.</p>
+      </div>
+    </template>
     <UTable
       sticky
       class="overflow-y-auto custom-scrollbar h-auto cursor-auto"

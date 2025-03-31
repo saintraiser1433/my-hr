@@ -8,6 +8,11 @@ const props = defineProps({
     type: Array as PropType<ScreeningProgressList[]>,
     default: () => [],
   },
+  items: {
+    type: Array as PropType<ScreeningModel[]>,
+    required: true,
+    default: () => [],
+  },
 });
 
 const emits = defineEmits<{
@@ -19,7 +24,7 @@ const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { $datefns } = useNuxtApp();
 const { pagination, globalFilter, refreshTable } = usePagination();
-
+const rowSelection = ref<{ [key: number]: boolean }>({});
 const columns: TableColumn<any>[] = [
   createColumn("increment", "#", true, (row) => `${row.index + 1}`),
   createColumn("screening", "Screening Title", true),
@@ -47,7 +52,7 @@ const updateStatus = async (data: InterviewStatus) => {
   emits("dataStatus", data);
 };
 
-const rowSelection = ref<{ [key: number]: boolean }>({});
+
 
 watch(
   () => props.data,
@@ -73,13 +78,29 @@ watch(
 </script>
 
 <template>
-  <UCard
-    :ui="{
-      root: 'overflow-hidden ',
-      body: 'p-0 sm:p-0',
-      footer: 'p-0 sm:px-0',
-    }"
-  >
+
+  <div class="flex items-center gap-2 my-2 px-2">
+      <USelectMenu
+        :items="items"
+        label-key="title"
+        size="md"
+        placeholder="Select Screening Type"
+        class="w-100"
+        :ui="{
+          value: 'text-wrap',
+          item: 'capitalize',
+        }"
+        multiple
+      />
+      <UButton
+        icon="i-typcn-plus"
+        color="primary"
+        variant="solid"
+        size="md"
+      >
+      </UButton>
+    </div>
+    <USeparator></USeparator>
     <UTable
       sticky
       class="overflow-y-auto custom-scrollbar h-auto cursor-auto"
@@ -213,5 +234,5 @@ watch(
       </template>
     </UTable>
     <UITablePagination :table="table" v-if="table"> </UITablePagination>
-  </UCard>
+
 </template>

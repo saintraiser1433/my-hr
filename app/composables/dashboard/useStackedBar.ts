@@ -50,6 +50,17 @@ export const useStackedBar = (
                 right: "2%",
                 bottom: "10%",
             },
+            graphic: {
+                type: "text",
+                left: "center",
+                top: "middle",
+                style: {
+                  text: data.value.length === 0 ? "No Data Available" : "",
+                  fontSize: 18,
+                  fontWeight: "bold",
+                  fill: "#999",
+                },
+              },
             toolbox: {
                 show: false,
                 feature: {

@@ -16,11 +16,22 @@ const { handleApiError } = useErrorHandler();
 const { $api, $toast, $datefns } = useNuxtApp();
 const { send } = useSms();
 const { templates } = useInterviewResults();
+const screenData = ref<ScreeningModel[]>([]);
 const { data: ongoing, status: ongoingStatus, error: ongoingError } = await useAPI<
   OngoingApplicantDetails[]
 >(`/applicant/ongoing/${route.params.id}`);
 if (ongoing.value) {
   ongoingData.value = ongoing.value;
+}
+
+const { data: screeningData, error: errorScreening } = await useAPI<ScreeningModel[]>(
+  `/screening/f/${ongoing.value?.[0]?.jobId}`
+);
+if (screeningData.value) {
+  screenData.value = screeningData.value;
+}
+if (errorScreening.value) {
+  $toast.error(errorScreening.value.message || "Failed to fetch items");
 }
 
 const IDRepo = repository<InterviewDate>($api, "/interview/date");
@@ -182,14 +193,14 @@ const finalizeApplicant = () => {
 </script>
 
 <template>
-  <ApplicantsProgressHeader :ongoingData="ongoingData"> </ApplicantsProgressHeader>
-  <USeparator class="pb-2"></USeparator>
+  <ApplicantsProgressHeader :ongoingData="ongoingData"/> 
   <UCard
     :ui="{
       root: 'border-b-3 border-(--ui-primary) rounded-md',
     }"
   >
     <ApplicantsProgress
+      :items="screeningData"
       @data-status="updateStatus"
       @data-date="updateTime"
       :data="ongoingData[0]?.progressList"
@@ -197,6 +208,7 @@ const finalizeApplicant = () => {
   </UCard>
 
   <div class="flex justify-end items-center mt-2 gap-2">
+
     <UButton
       v-if="ongoingData[0]?.remarks === 'FAILED' || ongoingData[0]?.remarks === 'PASSED'"
       size="md"

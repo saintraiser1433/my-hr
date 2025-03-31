@@ -50,6 +50,17 @@ export const usePieChart = () => {
           saveAsImage: { show: true },
         },
       },
+      graphic: {
+        type: "text",
+        left: "center",
+        top: "middle",
+        style: {
+          text: data.value.length === 0 ? "No Data Available" : "",
+          fontSize: 18,
+          fontWeight: "bold",
+          fill: "#999",
+        },
+      },
       series: [
         {
           name: "Area Mode",

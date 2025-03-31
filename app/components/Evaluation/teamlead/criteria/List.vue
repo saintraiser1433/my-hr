@@ -109,12 +109,13 @@ watch(
       :data="data"
       :columns="columns"
     >
-      <!-- <template #empty>
-        <div class="flex flex-col items-center justify-center py-6 gap-3">
-          <svg-icon name="icons/emptybox" width="64" height="64" />
-          <span class="italic text-sm">Oops, nothing here!</span>
-        </div>
-      </template> -->
+    <template #empty>
+      <div class="flex gap-2 flex-col items-center text-center">
+          <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
+          <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
+          <p class="text-sm text-gray-500">Try adjusting your filters or check back later.</p>
+      </div>
+    </template>
       <template #action-cell="{ row }">
         <div class="flex items-center gap-2">
           <UDropdownMenu :items="getDropdownActions(row.original)">
