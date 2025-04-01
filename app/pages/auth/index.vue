@@ -29,7 +29,6 @@ const onSubmit = async (data: AccountCredentials) => {
 
     $toast.error("No role Assigned");
   } catch (err) {
-    console.error(err);
     handleApiError(err);
   }
 };

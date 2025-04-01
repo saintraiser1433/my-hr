@@ -73,15 +73,17 @@ const submitForm = () => {
         @submit="onSubmit"
       >
         <UFormField label="Submitted Date" name="submittedAt" required>
-          <UITextInput
+          <UInput
             type="date"
+            class="w-full"
             v-model="submittedAtFormatted"
             placeholder="Select Submitted Date"
           />
         </UFormField>
         <UFormField label="Expiry Date" name="expiryDate" required>
-          <UITextInput
+          <UInput
             type="date"
+            class="w-full"
             v-model="expiryDateFormatted"
             placeholder="Selected Expiry Date"
           />

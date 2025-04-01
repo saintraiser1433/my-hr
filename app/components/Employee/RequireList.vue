@@ -22,7 +22,7 @@ const emits = defineEmits<{
   (e: "submit", payload: EmployeeRequirements): void;
 }>();
 const config = useRuntimeConfig();
-const { $datefns } = useNuxtApp();
+const { $datefns, $toast } = useNuxtApp();
 const { pagination, globalFilter } = usePagination();
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
@@ -34,7 +34,6 @@ const {
   selectedItems,
   rowSelection,
   unAssigned,
-  handleAssign,
   resetAssign,
   checkEmpty,
 } = useMultipleSelect(data);
@@ -61,7 +60,9 @@ const submit = (data: EmployeeRequirements) => {
 };
 
 const assign = () => {
-  handleAssign();
+  if (!value.value.length) {
+    return $toast.error("No selected type found");
+  }
   emits("assign", value.value);
   resetAssign();
 };
@@ -136,13 +137,15 @@ const columns: TableColumn<any>[] = [
       :data="data"
       :columns="columns"
     >
-    <template #empty>
-      <div class="flex gap-2 flex-col items-center text-center">
+      <template #empty>
+        <div class="flex gap-2 flex-col items-center text-center">
           <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
           <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
-          <p class="text-sm text-gray-500">Try adjusting your filters or check back later.</p>
-      </div>
-    </template>
+          <p class="text-sm text-gray-500">
+            Try adjusting your filters or check back later.
+          </p>
+        </div>
+      </template>
       <template #submitted_date-cell="{ row }">
         <span v-if="row.original.submittedAt">
           {{ $datefns.format(new Date(row.original.submittedAt), "dd-MMM-yyyy") }}
@@ -220,7 +223,8 @@ const columns: TableColumn<any>[] = [
             icon="i-lucide-eye"
             :disabled="
               row.original.status === 'NOT_SUBMITTED' ||
-              row.original.status === 'REJECTED'
+              row.original.status === 'REJECTED' ||
+              row.original.status === 'EXPIRED'
             "
             title="Review"
             size="sm"

@@ -7,7 +7,6 @@ defineProps({
 });
 
 const maxLength = 11;
-
 </script>
 
 <template>
@@ -26,7 +25,6 @@ const maxLength = 11;
           <h3 class="font-semibold">Personal Information</h3>
           <span class="text-gray-500">Enter your information</span>
         </div>
-        <!-- <svg-icon name="vector/empty" title="Empty Evaluation" /> -->
       </div>
     </template>
     <div class="grid grid-cols-12 gap-5">
@@ -94,9 +92,7 @@ const maxLength = 11;
               class="text-xs text-(--ui-text-muted) tabular-nums"
               aria-live="polite"
               role="status"
-            >
-
-            </div>
+            ></div>
           </template>
         </UITextInput>
       </UFormField>

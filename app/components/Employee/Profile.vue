@@ -30,14 +30,19 @@ const emit = defineEmits(["submit"]);
   <div
     class="flex gap-5 py-3 px-2 bg-(--sidebar-background) w-full shadow-lg border-l-3 border-(--ui-primary) rounded-md"
   >
-    <div
-      class="flex items-center justify-center p-1 ml-5 border-1 bg-(--primary) rounded-full w-42 h-42"
-    >
+    <div class="relative p-1 ml-5 border-1 bg-(--primary) rounded-full w-42 h-42">
       <NuxtImg
         class="rounded-full"
         :src="`${config.public.STORAGE_URL_AVATAR}/${information.photo_path}`"
         quality="100"
       ></NuxtImg>
+      <UButton
+        icon="i-lucide-edit"
+        class="absolute right-7 top-5 rounded-full shadow-lg"
+        size="xs"
+        variant="solid"
+        color="success"
+      ></UButton>
     </div>
     <div
       class="flex flex-1 flex-col items-start justify-center mb-5 font-(family-name:--font-poppins)"

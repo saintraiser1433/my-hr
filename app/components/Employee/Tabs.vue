@@ -27,9 +27,19 @@ defineProps({
     required: true,
     default: () => [],
   },
+  credentials: {
+    type: Object as PropType<AccountCredentials>,
+    default: () => [],
+  },
 });
 
-const emit = defineEmits(["add-educ", "add-work", "add-skills", "add-references"]);
+const emit = defineEmits([
+  "add-educ",
+  "add-work",
+  "add-skills",
+  "add-references",
+  "update-credentials",
+]);
 </script>
 
 <template>
@@ -71,7 +81,10 @@ const emit = defineEmits(["add-educ", "add-work", "add-skills", "add-references"
         />
       </template>
       <template #settings="{ item }">
-        <EmployeeAccount :information="information" />
+        <EmployeeAccount
+          :credentials="credentials"
+          @add-references="emit('update-credentials')"
+        />
       </template>
     </UTabs>
   </div>

@@ -1,13 +1,10 @@
 <script setup lang="ts">
 defineProps({
-  information: {
-    type: Object,
+  credentials: {
+    type: Object as PropType<AccountCredentials>,
     required: true,
   },
 });
-
-const maxLength = 11;
-
 </script>
 
 <template>
@@ -30,31 +27,41 @@ const maxLength = 11;
       </div>
     </template>
     <div class="grid grid-cols-12 gap-5">
-      <UFormField class="lg:col-span-4 col-span-12" label="Username">
+      <UFormField class="lg:col-span-6 col-span-12" label="Username">
         <UITextInput
-          v-model="information.last_name"
+          :is-capitalize="false"
+          v-model="credentials.username"
           class="w-full"
           readonly
         />
       </UFormField>
-      <UFormField class="lg:col-span-4 col-span-12" label="New Password">
+      <UFormField class="lg:col-span-6 col-span-12" label="New Password">
         <UITextInput
-          v-model="information.last_name"
+          :is-capitalize="false"
+          v-model="credentials.password"
           type="password"
           class="w-full"
           placeholder="*********"
         />
       </UFormField>
-      <UFormField class="lg:col-span-4 col-span-6" label="Confirm Password">
+      <UFormField class="lg:col-span-6 col-span-12" label="Old Password">
         <UITextInput
-          v-model="information.middle_name"
+          :is-capitalize="false"
+          v-model="credentials.password"
+          type="password"
+          class="w-full"
+          placeholder="*********"
+        />
+      </UFormField>
+      <UFormField class="lg:col-span-6 col-span-6" label="Old Confirm Password">
+        <UITextInput
+          :is-capitalize="false"
+          v-model="credentials.confirmPassword"
           class="w-full"
           type="password"
           placeholder="*********"
         />
       </UFormField>
-
-
     </div>
   </UCard>
 </template>
