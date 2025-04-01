@@ -19,21 +19,19 @@ const props = defineProps({
 const emits = defineEmits<{
   (e: "assign", payload: ScreeningModel[]): void;
   (e: "unAssign", payload: number[]): void;
-  (e: "up", payload: DirectionModel): void;
-  (e: "down", payload: DirectionModel): void;
+
 }>();
 const { pagination, globalFilter, refreshTable } = usePagination();
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { createColumnWithCheckBox } = useTableColumnCheckBox(UCheckbox, table);
-
+const {$toast} = useNuxtApp();
 const { data } = toRefs(props);
 const {
   value,
   selectedItems,
   rowSelection,
   unAssigned,
-  handleAssign,
   resetAssign,
   checkEmpty,
 } = useMultipleSelect(data);
@@ -44,7 +42,9 @@ const unassign = () => {
 };
 
 const assign = () => {
-  handleAssign();
+  if (!value.value.length) {
+      return $toast.error("No selected type found");
+  }
   emits("assign", value.value);
   resetAssign();
 };
@@ -53,7 +53,6 @@ const columns: TableColumn<any>[] = [
   createColumnWithCheckBox(),
   createColumn("sequence_number", "Sequence", true),
   createColumn("screening_title", "Screening Type", true),
-  createColumn("action", "Action", true),
 ];
 
 watch(
@@ -68,6 +67,7 @@ watch(
 </script>
 
 <template>
+
   <div class="flex justify-between items-center gap-2">
     <div class="flex items-center gap-2 my-2 px-2">
       <USelectMenu
@@ -137,12 +137,7 @@ watch(
       <template #screening_title-cell="{ row }">
         <span class="capitalize">{{ row.original.screening_title }}</span>
       </template>
-      <template #action-cell="{ row }">
-        <div class="flex gap-2 items-center">
-          <UButton><UIcon name="mingcute:up-fill"></UIcon></UButton>
-          <UButton variant="outline"><UIcon name="mingcute:down-fill"></UIcon></UButton>
-        </div>
-      </template>
+     
     </UTable>
     <UITablePagination :table="table" v-if="table"> </UITablePagination>
   </UCard>

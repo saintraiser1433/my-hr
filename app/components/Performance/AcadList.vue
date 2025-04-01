@@ -28,7 +28,7 @@ const columns: TableColumn<any>[] = [
 ];
 
 
-const mydata = data.value.filter((item) => item.status !== 'NOT_SET');
+const mydata = data.value.filter((item) => item.status !== 'PENDING');
 
 
 </script>
@@ -67,14 +67,14 @@ const mydata = data.value.filter((item) => item.status !== 'NOT_SET');
       :columns="columns"
     >
       <template #status-cell="{ row }">
-        <UBadge v-if="row.original.status === 'NOT_SET'" color="error">NOT SET</UBadge>
+        <UBadge v-if="row.original.status === 'PENDING'" color="error">PENDING</UBadge>
         <UBadge
           v-else-if="row.original.status === 'ONGOING'"
           color="neutral"
           variant="outline"
           >ONGOING</UBadge
         >
-        <UBadge v-else color="neutral">FINISHED</UBadge>
+        <UBadge v-else color="neutral">COMPLETED</UBadge>
       </template>
 
       <template #semester-cell="{ row }">
@@ -87,7 +87,7 @@ const mydata = data.value.filter((item) => item.status !== 'NOT_SET');
       </template>
 
       <template #action-cell="{ row }">
-        <UButton icon="i-lucide-view" :to="`performance/${row.original.id}`">View</UButton>
+        <UButton icon="i-lucide-view" :to="`Performance/${row.original.id}`">View</UButton>
       </template>
     </UTable>
     <UITablePagination :table="table" v-if="table"> </UITablePagination>

@@ -143,7 +143,7 @@ export const TAB_EMP = [
     slot: 'reference'
   },
   {
-    label: 'Settings',
+    label: 'Account Settings',
     icon: 'mdi:cogs',
     slot: 'settings'
   }
@@ -161,8 +161,9 @@ export const SEMESTER_ITEM = [
 ]
 
 export const STATUS_ITEM: statusesEvaluation[] = [
+  'PENDING',
   'ONGOING',
-  'FINISHED'
+  'COMPLETED'
 ]
 
 export const shadcnPalette = [

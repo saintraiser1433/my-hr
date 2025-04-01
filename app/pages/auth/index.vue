@@ -13,7 +13,7 @@ const store = useAuthStore();
 const { signIn, info } = useAuthentication();
 const { handleApiError } = useErrorHandler();
 
-const onSubmit = async (data: Login) => {
+const onSubmit = async (data: AccountCredentials) => {
   try {
     await signIn(data);
     const role = JSON.parse(info.value).role as Role;

@@ -4,6 +4,7 @@ definePageMeta({
 });
 
 const {$toast} = useNuxtApp();
+const {acadId} = useAcademicYearStore();
 
 const peerValue = ref(0)
 const teamLeadValue = ref(0)
@@ -45,6 +46,9 @@ const {data:topJob,error:errorJob} = await useAPI<ChartModel[]>('/applicant/topj
 
 
 const { data: topPeerHighestRanking, error: topPeerError } = await useAPI<any[]>('/evaluation/peerResult', {
+  params: {
+    acadId
+  },
   transform: (data) => {
     const employeeRatings = data.reduce((acc, item) => {
       if (!acc[item.employeeId]) {
@@ -72,6 +76,9 @@ const { data: topPeerHighestRanking, error: topPeerError } = await useAPI<any[]>
 });
 
 const { data: topTLHighestRanking, error: topTLError } = await useAPI<any[]>('/evaluation/teamResult', {
+  params: {
+    acadId
+  },
   transform: (data) => {
     const employeeRatings = data.reduce((acc, item) => {
       if (!acc[item.employeeId]) {
@@ -177,7 +184,7 @@ const pieChartData = optionPie(jobData);
   </div>
 
   <div class="grid grid-cols-12 gap-2 py-4">
-    <div class="col-span-12 md:col-span- lg:col-span-6">
+    <div class="col-span-12  lg:col-span-6">
       <DashboardRankings
         :data="topPeerHighestRanking"
         title="Top 10 Overall Peer Highest Ranking"
@@ -188,7 +195,7 @@ const pieChartData = optionPie(jobData);
       </template>
       </DashboardRankings>
     </div>
-    <div class="col-span-12 md:col-span-6">
+    <div class="col-span-12 lg:col-span-6">
       <DashboardRankings
         :data="topTLHighestRanking"
         title="Top 10 Overall Teamlead Highest Ranking"

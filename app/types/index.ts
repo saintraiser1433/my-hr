@@ -45,6 +45,8 @@ export interface SendMessage {
 }
 
 
+
+
 export interface DirectionModel {
   id: number,
   direction: Directions

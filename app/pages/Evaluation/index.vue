@@ -12,6 +12,7 @@ useSeoMeta({
 
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
+const { setAcademicYear } = useAcademicYearStore();
 const {
   openModal,
   updateModal,
@@ -47,7 +48,8 @@ const submit = async (response: EvaluationModel) => {
   try {
     if (!isUpdate.value) {
       const res = await evaluationRepo.add(response); //error on this code
-      evaluationData.value = [res.data as EvaluationModel, ...evaluationData.value]; // Add new item at the start
+      evaluationData.value = [...evaluationData.value,res.data as EvaluationModel];
+
       $toast.success(res.message);
     } else {
       const res = await evaluationRepo.update(response); //error on this code
@@ -59,6 +61,9 @@ const submit = async (response: EvaluationModel) => {
       }
 
       $toast.success(res.message);
+    }
+    if(response.status ==='ONGOING') {
+        setAcademicYear(response)
     }
     resetModal();
   } catch (error) {

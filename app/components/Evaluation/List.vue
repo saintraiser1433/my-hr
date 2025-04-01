@@ -145,14 +145,14 @@ watch(
       :columns="columns"
     >
       <template #status-cell="{ row }">
-        <UBadge v-if="row.original.status === 'NOT_SET'" color="error">NOT SET</UBadge>
+        <UBadge v-if="row.original.status === 'PENDING'" color="error">PENDING</UBadge>
         <UBadge
           v-else-if="row.original.status === 'ONGOING'"
           color="neutral"
           variant="outline"
           >ONGOING</UBadge
         >
-        <UBadge v-else color="neutral">FINISHED</UBadge>
+        <UBadge v-else color="neutral">COMPLETED</UBadge>
       </template>
       <template #peerTemplate-cell="{ row }">
         <UBadge v-if="row.original.peerTemplate" class="uppercase">{{
@@ -177,7 +177,7 @@ watch(
       </template>
 
       <template #action-cell="{ row }">
-        <UDropdownMenu :items="getDropdownActions(row.original)">
+        <UDropdownMenu :items="getDropdownActions(row.original)" v-if="row.original.status !== 'COMPLETED'">
           <UButton icon="i-lucide-ellipsis-vertical" color="neutral" variant="ghost" />
         </UDropdownMenu>
       </template>

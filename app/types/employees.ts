@@ -163,10 +163,13 @@ export interface References {
     ref_contact_number?: string;
 }
 
+
+
 export interface CombinedInformation {
     id: number,
     status: boolean,
     applicantInfo: PersonalInformation,
+    accountData:AccountCredentials,
     educData: Education[],
     workData: WorkExperience[],
     skillsData: Skill[],

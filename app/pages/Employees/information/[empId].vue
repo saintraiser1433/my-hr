@@ -29,6 +29,10 @@ const educData = ref<Education[]>([
 ]);
 
 const statuses = ref(false);
+const accountData = ref<AccountCredentials>({
+  username: "",
+  password:""
+})
 const information = ref<PersonalInformation>({
   jobTitle: "",
 
@@ -85,7 +89,8 @@ const { data, status, error } = await useAPI<CombinedInformation>(
 );
 if (data.value) {
   statuses.value = data.value.status;
-  (information.value = data.value.applicantInfo), (educData.value = data.value.educData);
+  information.value = data.value.applicantInfo, 
+  educData.value = data.value.educData;
   workData.value = data.value.workData;
   skillsData.value = data.value.skillsData;
   referencesData.value = data.value.referencesData;
@@ -135,6 +140,7 @@ const submitData = async () => {
       workData: workData.value,
       skillsData: skillsData.value,
       referencesData: referencesData.value,
+      accountData:accountData.value
     };
     const response = await informationRepo.update(data);
     $toast.success(response.message);
@@ -164,4 +170,5 @@ const submitData = async () => {
       @add-references="addReferences"
     />
   </div>
+
 </template>

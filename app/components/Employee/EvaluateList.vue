@@ -105,15 +105,15 @@ watch(
       </template>
       <template #team-evaluation-status-cell="{ row }">
         <UBadge
-          :color="row.original.isEvaluatedByTeamLead ? 'success' : 'error'"
-          variant="subtle"
+          :color="row.original.isEvaluatedByTeamLead ? 'primary' : 'error'"
+          variant="solid"
           :label="row.original.isEvaluatedByTeamLead ? 'Evaluated' : 'Ongoing'"
         ></UBadge>
       </template>
       <template #peer-evaluation-status-cell="{ row }">
         <UBadge
-          :color="row.original.isFinishedPeerEvaluate ? 'success' : 'error'"
-          variant="subtle"
+          :color="row.original.isFinishedPeerEvaluate ? 'primary' : 'error'"
+          variant="solid"
           :label="row.original.isFinishedPeerEvaluate ? 'Evaluated' : 'Ongoing'"
         ></UBadge>
       </template>
@@ -145,7 +145,7 @@ watch(
           </UButton>
         </div>
         <div v-if="role === 'admin'">
-          <UButton icon="lucide:view" size="sm" @click="handleView(row.original)">
+          <UButton icon="lucide:view" variant="subtle" size="sm" @click="handleView(row.original)">
             View Ratings
           </UButton>
         </div>

@@ -176,7 +176,7 @@ watch(
       </template>
       <template #role-cell="{ row }">
         <UBadge v-if="row.original.role === 'Employee'" variant="outline">MEMBER</UBadge>
-        <UBadge v-if="row.original.role === 'TeamLead'" color="success" variant="solid"
+        <UBadge v-if="row.original.role === 'TeamLead'" color="error" variant="subtle"
           >TEAM LEAD</UBadge
         >
       </template>

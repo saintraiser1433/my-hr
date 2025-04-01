@@ -89,26 +89,7 @@ const unAssignJob = (data: number[]) => {
   );
 };
 
-const sequenceRepo = repository<DirectionModel>($api, "/screening/sequence");
-const up = async (datas: DirectionModel) => {
-  try {
-    await sequenceRepo.update(datas);
-    // shouldRefetch.value++; // Trigger API re-fetch
-    // jobScreenData.value = data.value?.map((item) => item);
-  } catch (error) {
-    handleApiError(error);
-  }
-};
 
-const down = async (datas: DirectionModel) => {
-  try {
-    await sequenceRepo.update(datas);
-    // shouldRefetch.value++; // Trigger API re-fetch
-    // jobScreenData.value = data.value?.map((item) => item);
-  } catch (error) {
-    handleApiError(error);
-  }
-};
 </script>
 
 <template>
@@ -126,8 +107,6 @@ const down = async (datas: DirectionModel) => {
     <JobAssignList
       :data="jobScreenData"
       :items="screenData"
-      @up="up"
-      @down="down"
       @assign="assignData"
       @unAssign="unAssignJob"
     >

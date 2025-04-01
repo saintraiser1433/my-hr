@@ -70,6 +70,9 @@ const emit = defineEmits(["add-educ", "add-work", "add-skills", "add-references"
           @add-references="emit('add-references')"
         />
       </template>
+      <template #settings="{ item }">
+        <EmployeeAccount :information="information" />
+      </template>
     </UTabs>
   </div>
 </template>

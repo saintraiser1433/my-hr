@@ -9,7 +9,7 @@ export interface TokenDetail {
     }
 }
 
-export interface Login {
+export interface AccountCredentials {
     username:string;
     password:string;
 }

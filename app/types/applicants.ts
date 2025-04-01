@@ -74,13 +74,13 @@ export interface OngoingApplicant extends PendingApplicantModel {
 }
 
 export interface OngoingApplicantDetails extends PendingApplicantModel {
-  countJobScreening?: number,
-  countApplicantScreening?: number,
-  progressList?: ScreeningProgressList[],
+  countJobScreening: number,
+  countApplicantScreening: number,
+  progressList: ScreeningProgressList[],
   currentStage: string | null,
   nextStep: string | null,
   nextSched: string | Date | null,
-  remarks?: string
+  remarks: string
 }
 
 export interface PassedApplicant extends OngoingApplicant {
@@ -93,9 +93,9 @@ export interface FailedApplicant extends OngoingApplicant {
 
 
 export interface ScreeningProgressList {
-  id: number,
+  id?: number,
   screeningId: number,
-  status: ApplicationStatus,
+  status?: ApplicationStatus,
   dateInterview?: string | Date,
   screening: ScreeningModel
 }

@@ -112,6 +112,6 @@ export interface GetEvaluateQuestion {
   }
 }
 
-export type statusesEvaluation = "NOT_SET" | "ONGOING" | "FINISHED";
+export type statusesEvaluation = "PENDING" | "ONGOING" | "COMPLETED";
 
 export type Mode = "Peer" | "TeamLead"

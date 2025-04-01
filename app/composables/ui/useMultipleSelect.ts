@@ -1,5 +1,4 @@
 export const useMultipleSelect = <T extends any[]>(data: Ref<T>) => {
-  const { $toast } = useNuxtApp();
   const value = ref([]);
   const rowSelection = ref({});
   const checkEmpty = computed(() => Object.keys(rowSelection.value).length > 0);
@@ -11,11 +10,7 @@ export const useMultipleSelect = <T extends any[]>(data: Ref<T>) => {
       .filter(Boolean) as number[];
   };
 
-  const handleAssign = () => {
-    if (!value.value.length) {
-      return $toast.error("No selected type found");
-    }
-  };
+
 
   const resetAssign = () => {
     value.value = [];
@@ -27,7 +22,6 @@ export const useMultipleSelect = <T extends any[]>(data: Ref<T>) => {
     selectedItems,
     rowSelection,
     unAssigned,
-    handleAssign,
     resetAssign,
     checkEmpty
   };

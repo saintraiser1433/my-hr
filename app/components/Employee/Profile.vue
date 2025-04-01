@@ -47,8 +47,6 @@ const emit = defineEmits(["submit"]);
         {{ information.jobTitle }}
       </h2>
       <div class="flex flex-col lg:flex-row mt-6 gap-5">
-        <h5 class="font-semibold lg:ml-2">Head:</h5>
-        <h5>Cyrus P. Teo</h5>
         <h5 class="font-semibold lg:ml-2">Department:</h5>
         <h5 class="capitalize">{{ information.department }}</h5>
         <h5 class="font-semibold">Hired date:</h5>
