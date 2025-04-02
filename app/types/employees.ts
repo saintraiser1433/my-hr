@@ -135,7 +135,7 @@ export interface PersonalInformation {
     mothers_occupation?: string;
     parents_address?: string;
     person_to_be_contact?: string;
-    photo_path?: string
+    photo_path?: File | null;
 }
 
 export interface Education {

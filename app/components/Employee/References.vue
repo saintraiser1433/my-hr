@@ -25,13 +25,16 @@ const emit = defineEmits(["add-references"]);
       <div class="flex justify-between items-center">
         <div>
           <h3 class="font-semibold">References</h3>
-          <span class="text-gray-500">Include all your references</span>
+          <span class="text-gray-500 italic">Include all your references</span>
         </div>
+        <svg-icon name="iconx/references" width="32" height="32"></svg-icon>
       </div>
     </template>
     <div class="flex flex-col">
-      <div v-if="referencesData.length === 0" class="text-center font-semibold text-xl">
-        No data available kindly click + button
+      <div v-if="referencesData.length === 0" class="flex gap-2 flex-col items-center text-center">
+          <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
+          <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
+          <p class="text-sm text-gray-500">Kindly click the + button to add.</p>
       </div>
       <div
         class="grid grid-cols-12 gap-5 flex-1 p-3 border-1 border-(--border) rounded-sm my-2"

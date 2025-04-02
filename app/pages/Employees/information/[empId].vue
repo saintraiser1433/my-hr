@@ -6,8 +6,9 @@ useSeoMeta({
   ogDescription: "CRUD for Employee",
 });
 
-const { $api, $toast, $joi } = useNuxtApp();
+const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
+const fileValue = useState<File | null>('employee-image', () => null)
 const route = useRoute();
 const year = ref<string[]>([]);
 const username = ref<string | undefined>('');
@@ -55,6 +56,7 @@ const information = ref<PersonalInformation>({
   mothers_occupation: "",
   parents_address: "",
   person_to_be_contact: "",
+  photo_path:undefined,
 });
 
 const workData = ref<WorkExperience[]>([
@@ -127,7 +129,9 @@ const addReferences = () => {
 };
 
 const informationRepo = repository<CombinedInformation>($api, "/employees/info");
+const imageEmployeeRepo = repository<CombinedInformation>($api, "/employees/infoImage");
 const submitData = async () => {
+
   try {
     const data = {
       id: Number(route.params.empId),
@@ -138,7 +142,11 @@ const submitData = async () => {
       skillsData: skillsData.value,
       referencesData: referencesData.value,
     };
-    const response = await informationRepo.update(data);
+     const response = await informationRepo.update(data);
+     if(fileValue.value) {
+       await imageEmployeeRepo.updateFileCustom({id: Number(route.params.empId)},fileValue.value,'photo_path');
+     }
+
     $toast.success(response.message);
   } catch (err) {
     return handleApiError(err);
@@ -149,6 +157,7 @@ provide('username',username.value)
 </script>
 
 <template>
+
   <div class="flex flex-col p-2">
     <EmployeeProfile
       v-model:status="statuses"

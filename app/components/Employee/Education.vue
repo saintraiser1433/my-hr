@@ -24,16 +24,21 @@ const emit = defineEmits(["add-educ"]);
     }"
   >
     <template #header>
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center gap-2">
         <div>
           <h3 class="font-semibold">Education Attainment</h3>
-          <span class="text-gray-500">Include all college or university degrees</span>
+          <span class="text-gray-500 italic">Include all college or university degrees</span>
         </div>
+        <svg-icon name="iconx/education" width="32" height="32"></svg-icon>
       </div>
+      
     </template>
     <div class="flex flex-col">
-      <div v-if="educData.length === 0" class="text-center font-semibold text-xl">
-        No data available kindly click + button
+      <div v-if="educData.length === 0" class="flex gap-2 flex-col items-center text-center">
+          <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
+          <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
+          <p class="text-sm text-gray-500">Kindly click the + button to add.</p>
+     
       </div>
       <div
         class="grid grid-cols-12 gap-5 flex-1 p-3 border border-(--border) rounded-sm my-2"

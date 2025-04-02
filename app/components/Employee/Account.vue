@@ -56,8 +56,9 @@ const username = inject<string>('username');
       <div class="flex justify-between items-center gap-2">
         <div>
           <h3 class="font-semibold">Account Settings</h3>
-          <span class="text-gray-500">Update your account settings</span>
+          <span class="text-gray-500 italic">Update your account settings</span>
         </div>
+        <svg-icon name="iconx/settings" width="32" height="32"></svg-icon>
       </div>
     </template>
 

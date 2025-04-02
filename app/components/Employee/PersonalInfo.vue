@@ -23,8 +23,9 @@ const maxLength = 11;
       <div class="flex justify-between items-center gap-2">
         <div>
           <h3 class="font-semibold">Personal Information</h3>
-          <span class="text-gray-500">Enter your information</span>
+          <span class="text-gray-500 italic">Enter your information</span>
         </div>
+        <svg-icon name="iconx/info" width="32" height="32"></svg-icon>
       </div>
     </template>
     <div class="grid grid-cols-12 gap-5">

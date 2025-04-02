@@ -18,8 +18,14 @@ defineProps({
     }"
   >
     <template #header>
-      <h3 class="font-semibold">Family Background</h3>
-      <span class="text-gray-500">Enter your family background</span>
+      <div class="flex justify-between items-center gap-2">
+        <div>
+          <h3 class="font-semibold">Family Background</h3>
+          <span class="text-gray-500 italic">Enter your family background</span>
+        </div>
+        <svg-icon name="iconx/family" width="32" height="32"></svg-icon>
+      </div>
+      <span class="text-gray-500"></span>
     </template>
     <div class="grid grid-cols-12 gap-5">
       <UFormField class="col-span-6" label="Father's Name">
