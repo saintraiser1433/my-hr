@@ -150,7 +150,7 @@ const columns: TableColumn<any>[] = [
         <span v-if="row.original.submittedAt">
           {{ $datefns.format(new Date(row.original.submittedAt), "dd-MMM-yyyy") }}
         </span>
-        <UBadge color="error" variant="solid" v-else>NO SUBMISSION YET</UBadge>
+        <UBadge color="error" variant="solid" icon="lucide-x" v-else>NO SUBMISSION YET</UBadge>
       </template>
       <template #expiry_date-cell="{ row }">
         <span v-if="row.original.expiryDate">

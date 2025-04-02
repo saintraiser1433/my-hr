@@ -9,6 +9,7 @@ export const useAuthStore = defineStore("authStore", {
     middle_name: null as string | null,
     role: null as string | null,
     departmentId: null as number | null,
+    photo_path: null as string | null
   }),
   getters: {
     getFullName: (state) => {
@@ -26,6 +27,7 @@ export const useAuthStore = defineStore("authStore", {
       this.middle_name = data.middle_name || null;
       this.role = data.role || null
       this.departmentId = data.departmentId || null;
+      this.photo_path = data.photo_path || null;
     },
 
 

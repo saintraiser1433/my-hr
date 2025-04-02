@@ -105,15 +105,17 @@ watch(
       </template>
       <template #team-evaluation-status-cell="{ row }">
         <UBadge
-          :color="row.original.isEvaluatedByTeamLead ? 'primary' : 'error'"
-          variant="solid"
+          :icon="row.original.isEvaluatedByTeamLead ? 'lucide-check' : 'majesticons-timer-line'"
+          :color="row.original.isEvaluatedByTeamLead ? 'primary' : 'neutral'"
+          :variant="row.original.isEvaluatedByTeamLead ? 'solid' : 'outline'"
           :label="row.original.isEvaluatedByTeamLead ? 'Evaluated' : 'Ongoing'"
         ></UBadge>
       </template>
       <template #peer-evaluation-status-cell="{ row }">
         <UBadge
-          :color="row.original.isFinishedPeerEvaluate ? 'primary' : 'error'"
-          variant="solid"
+          :icon="row.original.isFinishedPeerEvaluate ? 'lucide-check' : 'majesticons-timer-line'"
+          :color="row.original.isFinishedPeerEvaluate ? 'primary' : 'neutral'"
+          :variant="row.original.isFinishedPeerEvaluate ? 'solid' : 'outline'"
           :label="row.original.isFinishedPeerEvaluate ? 'Evaluated' : 'Ongoing'"
         ></UBadge>
       </template>

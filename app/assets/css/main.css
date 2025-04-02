@@ -8,9 +8,10 @@
 :root {
   --font-teko: "Teko", sans-serif;
   --font-sans: "Public Sans", sans-serif;
-  --font-roboto: "Roboto", sans-serif;
+  --font-roboto: "Archivo", sans-serif; 
+  --font-archivo: "Archivo", "DM Sans" , "Roboto" , sans-serif; 
   --font-poppins: "Poppins", system-ui, sans-serif;
-
+/* DM SANS */
   --ui-border-accented: var(--border);
   --ui-bg: var(--background);
   --ui-primary: var(--primary);
@@ -157,7 +158,7 @@
   } */
 
   body {
-    font-family: var(--font-roboto);
+    font-family: var(--font-archivo);
     @apply bg-(--background) text-(--foreground) text-sm;
   }
 

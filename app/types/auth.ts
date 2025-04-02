@@ -12,7 +12,15 @@ export interface TokenDetail {
 export interface AccountCredentials {
     username: string;
     password: string;
-    confirmPassword?: string;
+    
+}
+
+export interface AccountSettings {
+    id:number;
+    username: string;
+    newPassword:string;
+    oldPassword:string;
+    confirmPassword?:string;
 }
 
 export interface User {
@@ -22,4 +30,5 @@ export interface User {
     middle_name: string;
     role: string
     departmentId: number;
+    photo_path:string;
 }

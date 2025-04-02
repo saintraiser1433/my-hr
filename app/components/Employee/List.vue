@@ -171,7 +171,7 @@ watch(
         </div>
       </template>
       <template #status-cell="{ row }">
-        <UBadge v-if="row.original.status" color="neutral" variant="solid">Active</UBadge>
+        <UBadge  v-if="row.original.status" color="neutral" variant="solid">Active</UBadge>
         <UBadge v-else color="neutral" variant="outline">Inactive</UBadge>
       </template>
       <template #role-cell="{ row }">

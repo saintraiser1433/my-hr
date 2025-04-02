@@ -10,23 +10,13 @@ const { $api, $toast, $joi } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
 const route = useRoute();
 const year = ref<string[]>([]);
+const username = ref<string | undefined>('');
 const yearsStart = 1900;
 for (let i = yearsStart; i <= new Date().getFullYear(); i++) {
   year.value.push(i.toString());
 }
 
-const schema = $joi.object({
-  password: $joi.string().min(6).required().messages({
-    "any.required": `Department Name is Required`,
-    "string.empty": `Department Name is Required`,
-  }),
-  confirmPassword: $joi
-    .string()
-    .valid($joi.ref("password"))
-    .required()
-    .label("Confirm Password")
-    .messages({ "any.only": "Confirm Password must match Password" }),
-});   
+  
 const educData = ref<Education[]>([
   {
     school_name: "",
@@ -38,11 +28,8 @@ const educData = ref<Education[]>([
 ]);
 
 const statuses = ref(false);
-const accountData = ref<AccountCredentials>({
-  username: "",
-  password: "",
-  
-});
+
+
 const information = ref<PersonalInformation>({
   jobTitle: "",
   hiredDate: "",
@@ -103,7 +90,7 @@ if (data.value) {
   workData.value = data.value.workData;
   skillsData.value = data.value.skillsData;
   referencesData.value = data.value.referencesData;
-  accountData.value.username = data.value.accountData.username;
+  username.value = data.value.accountData?.username;
 }
 
 const addEduc = () => {
@@ -141,13 +128,6 @@ const addReferences = () => {
 
 const informationRepo = repository<CombinedInformation>($api, "/employees/info");
 const submitData = async () => {
-  // const { error } = schema.validate(data);
-
-  // if (error) {
-  //   console.log(error.details.map((err) => err.message));
-  // } else {
-  //   console.log("Validation passed");
-  // }
   try {
     const data = {
       id: Number(route.params.empId),
@@ -157,7 +137,6 @@ const submitData = async () => {
       workData: workData.value,
       skillsData: skillsData.value,
       referencesData: referencesData.value,
-      accountData: accountData.value,
     };
     const response = await informationRepo.update(data);
     $toast.success(response.message);
@@ -165,6 +144,8 @@ const submitData = async () => {
     return handleApiError(err);
   }
 };
+
+provide('username',username.value)
 </script>
 
 <template>
@@ -175,7 +156,6 @@ const submitData = async () => {
       @submit="submitData"
     />
     <EmployeeTabs
-      :credentials="accountData"
       :information="information"
       :educData="educData"
       :workData="workData"

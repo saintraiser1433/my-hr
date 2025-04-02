@@ -38,9 +38,9 @@ const emit = defineEmits(["submit"]);
       ></NuxtImg>
       <UButton
         icon="i-lucide-edit"
-        class="absolute right-7 top-5 rounded-full shadow-lg"
+        class="absolute right-7 top-5 p-1 rounded-full shadow-lg"
         size="xs"
-        variant="solid"
+        variant="soft"
         color="success"
       ></UButton>
     </div>
@@ -64,18 +64,19 @@ const emit = defineEmits(["submit"]);
         </h5>
       </div>
       <div v-if="type">
-        <USeparator class="py-2"></USeparator>
+        <USeparator class="py-2 w-full col-span-12"></USeparator>
         <div class="flex items-center justify-between gap-5">
           <USwitch
             v-if="store.getRole === 'Admin'"
             v-model="statusModel"
-            size="lg"
+             size="sm"
             label="Active Status"
           />
           <UButton
-            icon="i-lucide-edit"
-            variant="subtle"
+            icon="i-lucide-check"
+            variant="solid"
             color="success"
+            size="xs"
             @click="emit('submit')"
             >Save</UButton
           >

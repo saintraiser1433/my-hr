@@ -169,7 +169,7 @@ export interface CombinedInformation {
     id: number,
     status: boolean,
     applicantInfo: PersonalInformation,
-    accountData:AccountCredentials,
+    accountData?:AccountSettings,
     educData: Education[],
     workData: WorkExperience[],
     skillsData: Skill[],

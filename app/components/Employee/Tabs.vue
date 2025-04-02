@@ -28,7 +28,7 @@ defineProps({
     default: () => [],
   },
   credentials: {
-    type: Object as PropType<AccountCredentials>,
+    type: Object as PropType<AccountSettings>,
     default: () => [],
   },
 });
@@ -81,10 +81,7 @@ const emit = defineEmits([
         />
       </template>
       <template #settings="{ item }">
-        <EmployeeAccount
-          :credentials="credentials"
-          @add-references="emit('update-credentials')"
-        />
+        <EmployeeAccount/>
       </template>
     </UTabs>
   </div>

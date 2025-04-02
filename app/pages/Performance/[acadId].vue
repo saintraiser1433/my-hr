@@ -88,7 +88,7 @@ if (peerResultError.value) {
 }
 
 const viewRating = async (data: EmployeeRatingStatus) => {
-  openModal("View Ratings");
+  openModal("View Ratings","View rating of employee");
   employeeIds.value = data.employeeId;
   selectedEmployee.value = data;
 };
