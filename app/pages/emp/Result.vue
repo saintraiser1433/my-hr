@@ -11,10 +11,26 @@ useSeoMeta({
 });
 
 const { $toast } = useNuxtApp();
-const { getId } = useAuthStore();
+const { getId, getDeptId } = useAuthStore();
 const { acadId } = useAcademicYearStore();
 const teamData = computed(() => teamResult.value ?? []);
 const peerData = computed(() => peerResult.value ?? []);
+
+const { data: result, error: errorEvaluation } = await useAPI<EmployeeRatingStatus[]>(
+  `/evaluation/status`,
+  {
+    params: {
+      acadId: acadId,
+      deptId: getDeptId,
+      empId: getId,
+    },
+    server: false,
+  }
+);
+if (errorEvaluation.value) {
+  $toast.error(errorEvaluation.value.message || "Failed to fetch items");
+}
+
 const { data: teamResult, error: resultError } = await useAPI<EmployeeRating[]>(
   `/evaluation/teamResult`,
   {
@@ -61,7 +77,10 @@ if (peerResultError.value) {
             <h5>Module rating for Peer</h5>
           </div>
           <div>
-            <h3><span class="font-bold">1</span>/3 Evaluated</h3>
+            <h3>
+              <span class="font-bold">{{ result?.[0]?.peerToEvaluate ?? "0/0" }} </span>
+              Evaluated
+            </h3>
           </div>
         </div>
       </template>

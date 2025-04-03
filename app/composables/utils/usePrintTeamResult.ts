@@ -34,6 +34,12 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
   const rightMarginSummary = doc.internal.pageSize.width - 40;
   let yPosition = 180;
   const templateSpacing = 10;
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  }).toUpperCase().replace(/ /g, '-');
 
   // Signature Section Constants
   const signatureYStart = 420;
@@ -113,31 +119,31 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
   doc.line(leftMarginSummary + 130, 260, rightMarginSummary - 10, 260);
 
   // Position
-  doc.text("Position:", leftMarginSummary + 10, 275);
-  doc.line(leftMarginSummary + 130, 278, rightMarginSummary - 10, 278);
+  // doc.text("Position:", leftMarginSummary + 10, 275);
+  // doc.line(leftMarginSummary + 130, 278, rightMarginSummary - 10, 278);
 
   // Years in Position
-  doc.text("No. of Years in Position:", leftMarginSummary + 10, 290);
-  doc.line(leftMarginSummary + 130, 293, rightMarginSummary - 10, 293);
+  // doc.text("No. of Years in Position:", leftMarginSummary + 10, 290);
+  // doc.line(leftMarginSummary + 130, 293, rightMarginSummary - 10, 293);
 
   // Department
-  doc.text("Department:", leftMarginSummary + 10, 305);
-  doc.text(data[0].departmentName, leftMarginSummary + 130, 305);
-  doc.line(leftMarginSummary + 130, 308, rightMarginSummary - 10, 308);
+  doc.text("Department:", leftMarginSummary + 10, 275);
+  doc.text(data[0].departmentName, leftMarginSummary + 130, 273);
+  doc.line(leftMarginSummary + 130, 275, rightMarginSummary - 10, 275);
 
   // Rating Period
-  doc.text("Rating Period:", leftMarginSummary + 10, 320);
-  doc.line(leftMarginSummary + 130, 323, rightMarginSummary - 10, 323);
+  // doc.text("Rating Period:", leftMarginSummary + 10, 320);
+  // doc.line(leftMarginSummary + 130, 323, rightMarginSummary - 10, 323);
 
   // Summary Rating
   doc.setFont("Helvetica", "bold").setFontSize(12);
-  doc.text("SUMMARY OF RATING", centerX, 350, { align: "center" });
+  doc.text("SUMMARY OF RATING", centerX, 320, { align: "center" });
 
   // Numerical Rating
   doc.setFont("Helvetica", "normal").setFontSize(10);
-  doc.text("Numerical Rating:", leftMarginSummary + 100, 380);
-  doc.text(data[0]?.summaryRating?.rating?.toFixed(2) || "N/A", 220, 378);
-  doc.line(220, 380, rightMarginSummary - 100, 380);
+  doc.text("Numerical Rating:", leftMarginSummary + 100, 340);
+  doc.text(data[0]?.summaryRating?.rating?.toFixed(2) || "N/A", 260, 337);
+  doc.line(220, 340, rightMarginSummary - 100, 340);
 
   // Adjective Rating
   const capitalizedAdjective = (data[0].summaryRating?.adjectiveRating ?? "")
@@ -145,9 +151,9 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 
-  doc.text("Adjective Rating:", leftMargin + 100, 400);
-  doc.text(capitalizedAdjective, 220, 400);
-  doc.line(220, 402, rightMarginSummary - 100, 402);
+  doc.text("Adjective Rating:", leftMargin + 100, 355);
+  doc.text(capitalizedAdjective, 248, 351);
+  doc.line(220, 355, rightMarginSummary - 100, 355);
 
   doc.addPage();
 
@@ -393,21 +399,19 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
   doc.line(leftMarginSummary, signatureYStart + 30, leftMarginSummary + signatureWidth, signatureYStart + 30);
   doc.text("Signature over Printed Name", leftMarginSummary, signatureYStart + 40);
 
-  doc.line(leftMarginSummary, signatureYStart + 60, leftMarginSummary + signatureWidth, signatureYStart + 60);
-  doc.text("Date", leftMarginSummary, signatureYStart + 70);
+  doc.line(centerX - 115, signatureYStart + 70, leftMarginSummary + signatureWidth + 100, signatureYStart + 70);
+  doc.text(formattedDate, centerX - 35, signatureYStart + 67);
+  doc.text("Date", centerX - 20, signatureYStart + 80);
 
   // Rater's Signature
   doc.line(leftMarginSummary + signatureWidth + 20, signatureYStart, rightMarginSummary, signatureYStart);
   doc.text("Raters' Signature", leftMarginSummary + signatureWidth + 20, signatureYStart + 10);
 
-  doc.setFont("Helvetica").setFontSize(8);
-  doc.line(leftMarginSummary + signatureWidth + 20, signatureYStart + 30, rightMarginSummary, signatureYStart + 30);
-  doc.text("Signature over Printed Name of Immediate Supervisor/Dept. Head",
-    leftMarginSummary + signatureWidth + 20, signatureYStart + 40, { maxWidth: signatureWidth });
-
   doc.setFont("Helvetica").setFontSize(10);
-  doc.line(leftMarginSummary + signatureWidth + 20, signatureYStart + 60, rightMarginSummary, signatureYStart + 60);
-  doc.text(data[0].evaluatedBy, leftMarginSummary + signatureWidth + 20, signatureYStart + 70);
+  doc.text(data[0].evaluatedBy, leftMarginSummary + signatureWidth + 80, signatureYStart + 25);
+  doc.line(leftMarginSummary + signatureWidth + 20, signatureYStart + 30, rightMarginSummary, signatureYStart + 30);
+  doc.text("Signature over Printed Name of Dept. Head",
+    leftMarginSummary + signatureWidth + 20, signatureYStart + 40, { maxWidth: signatureWidth });
 
   // Noted By Section
   const notedByYStart = signatureYStart + 180;
@@ -424,6 +428,7 @@ export const usePrintTeamResult = (data: EmployeeRating[]) => {
 
   // Date
   doc.line(centerX - (notedByWidth / 2), notedByYStart + 90, centerX + (notedByWidth / 2), notedByYStart + 90);
+  doc.text(formattedDate, centerX, notedByYStart + 87, { align: "center" });
   doc.text("Date", centerX, notedByYStart + 100, { align: "center" });
 
   // Final Output

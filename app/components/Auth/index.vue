@@ -3,6 +3,7 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 const emits = defineEmits<{
   (e: "submit", payload: AccountCredentials): void;
 }>();
+
 const { $joi } = useNuxtApp();
 const state = ref<AccountCredentials>({
   username: "",
@@ -80,7 +81,8 @@ const onSubmit = async (event: FormSubmitEvent<AccountCredentials>) => {
           </UForm>
         </div>
         <div
-          class="lg:col-span-1 bg-[url('bg/image.png')] w-full h-auto bg-repeat bg-[center_bottom_-6rem]"
+          class="lg:col-span-1 w-full h-auto bg-cover bg-center"
+          style="background-image: url('/bg/image.png')"
         ></div>
       </div>
     </div>

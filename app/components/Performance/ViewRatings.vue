@@ -75,7 +75,7 @@ const teamResult = inject<EmployeeRating[]>("team", []);
             {{ informationData.job }}
           </h2>
           <div class="flex flex-col lg:flex-row mt-6 gap-5">
-            <h5 class="font-semibold ">Department:</h5>
+            <h5 class="font-semibold">Department:</h5>
             <h5 class="capitalize">{{ informationData.department }}</h5>
             <h5 class="font-semibold">Hired date:</h5>
             <h5>
