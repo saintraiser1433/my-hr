@@ -31,6 +31,12 @@ const items = questionnaires.value?.map((q) => {
       <h2 class="font-extrabold text-2xl">View Evaluation Form</h2>
       <span class="text-sm">Viewing evaluation of the evaluated user!</span>
     </div>
+    <UCard
+    :ui="{
+      root: 'border-b-3 border-(--ui-primary) rounded-md shadow-lg',
+      body: 'p-3 sm:p-3',
+    }"
+  >
     <UTabs :items="items" variant="pill" class="gap-4 w-full" :ui="{ trigger: 'flex-1' }">
       <template v-for="q in questionnaires" #[sanitizeKey(q.evaluation.name)]="{ item }">
         <UCard
@@ -65,5 +71,6 @@ const items = questionnaires.value?.map((q) => {
         :disabled="true"
       />
     </div>
+  </UCard>
   </div>
 </template>

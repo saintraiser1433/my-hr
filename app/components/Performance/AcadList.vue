@@ -47,13 +47,7 @@ const mydata = data.value.filter((item) => item.status !== 'PENDING');
       footer: 'p-0 sm:px-0',
     }"
   >
-  <template #empty>
-      <div class="flex gap-2 flex-col items-center text-center">
-          <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
-          <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
-          <p class="text-sm text-gray-500">Try adjusting your filters or check back later.</p>
-      </div>
-   </template>
+
     <UTable
       sticky
       class="overflow-y-auto custom-scrollbar h-auto cursor-auto"
@@ -66,15 +60,22 @@ const mydata = data.value.filter((item) => item.status !== 'PENDING');
       :data="mydata"
       :columns="columns"
     >
+      <template #empty>
+        <div class="flex gap-2 flex-col items-center text-center">
+            <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
+            <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
+            <p class="text-sm text-gray-500">Try adjusting your filters or check back later.</p>
+        </div>
+    </template>
       <template #status-cell="{ row }">
-        <UBadge v-if="row.original.status === 'PENDING'" color="error">PENDING</UBadge>
         <UBadge
-          v-else-if="row.original.status === 'ONGOING'"
+          v-if="row.original.status === 'ONGOING'"
+          icon="i-majesticons-timer-line"
           color="neutral"
           variant="outline"
           >ONGOING</UBadge
         >
-        <UBadge v-else color="neutral">COMPLETED</UBadge>
+        <UBadge v-else-if="row.original.status === 'COMPLETED'" icon="lucide-check" color="neutral">COMPLETED</UBadge>
       </template>
 
       <template #semester-cell="{ row }">

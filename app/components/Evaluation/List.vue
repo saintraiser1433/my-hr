@@ -16,7 +16,7 @@ const emits = defineEmits<{
 }>();
 
 const table = useTemplateRef("table");
-
+const store = useAcademicYearStore();
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
 
@@ -29,12 +29,13 @@ const handleUpdate = (item: EvaluationModel) => {
 };
 
 const columns: TableColumn<any>[] = [
-  createColumn("increment", "#", true, (row) => `${row.index + 1}`),
+  createColumn("increment", "#", true),
   createColumn("school_year", "School Year", true, (row) => row.getValue("school_year")),
   createColumn("semester", "Semester", true),
   createColumn("peerTemplate", "Peer Template", true),
   createColumn("teamLeadTemplate", "TeamLead Template", true),
   createColumn("status", "Status", true),
+  createColumn("view", "View", false),
   createColumn("action", "Action", false),
 ];
 
@@ -125,13 +126,7 @@ watch(
       footer: 'p-0 sm:px-0',
     }"
   >
-  <template #empty>
-      <div class="flex gap-2 flex-col items-center text-center">
-          <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
-          <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
-          <p class="text-sm text-gray-500">Try adjusting your filters or check back later.</p>
-      </div>
-    </template>
+
     <UTable
       sticky
       class="overflow-y-auto custom-scrollbar h-auto cursor-auto"
@@ -144,6 +139,26 @@ watch(
       :data="data"
       :columns="columns"
     >
+    <template #empty>
+      <div class="flex gap-2 flex-col items-center text-center">
+          <svg-icon name="iconx/nofound" width="64" height="64"></svg-icon>
+          <h3 class="text-lg font-semibold text-gray-600">No data available</h3>
+          <p class="text-sm text-gray-500">Try adjusting your filters or check back later.</p>
+      </div>
+    </template>
+      <template #increment-cell="{row}">
+        <div class="flex items-center gap-2">
+          {{row.index+1}}.
+        </div>
+      </template>
+      <template #view-cell="{row}">
+
+        <UButton icon="mdi:show" variant="subtle" :color="store.vAcadId === row.original.id ? 'success' : 'primary'" size="xs" @click="store.viewAcademicYear(
+          row.original.id,
+          row.original.semester,
+          row.original.school_year
+        )"></UButton>
+      </template>
       <template #status-cell="{ row }">
         <UBadge v-if="row.original.status === 'PENDING'" color="error">PENDING</UBadge>
         <UBadge

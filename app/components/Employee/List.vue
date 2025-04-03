@@ -15,7 +15,7 @@ const emits = defineEmits<{
   (e: "assign", data: EmployeeModel): void;
   (e: "unassign", data: EmployeeModel): void;
 }>();
-
+const titleName = useState("title", () => "");
 const table = useTemplateRef("table");
 const { createColumn } = useTableColumns(UButton);
 const { pagination, globalFilter, refreshTable } = usePagination();
@@ -87,6 +87,8 @@ const getDropdownActions = (user: EmployeeModel): DropdownMenuItem[][] => {
       label: "Check Requirements",
       icon: "i-hugeicons-assignments",
       onSelect: async () => {
+        titleName.value = user.job?.title || "";
+        localStorage.setItem("title", titleName.value);
         await navigateTo({
           name: "Employees-require-empId",
           params: { empId: Number(user.id) },
@@ -175,8 +177,8 @@ watch(
         <UBadge v-else color="neutral" variant="outline">Inactive</UBadge>
       </template>
       <template #role-cell="{ row }">
-        <UBadge v-if="row.original.role === 'Employee'" variant="outline">MEMBER</UBadge>
-        <UBadge v-if="row.original.role === 'TeamLead'" color="error" variant="subtle"
+        <UBadge v-if="row.original.role === 'Employee'" icon="tdesign:member" variant="outline">MEMBER</UBadge>
+        <UBadge v-if="row.original.role === 'TeamLead'" icon="fluent-mdl2:party-leader" color="error" variant="subtle"
           >TEAM LEAD</UBadge
         >
       </template>

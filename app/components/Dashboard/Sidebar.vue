@@ -70,7 +70,7 @@ const items = [
     aria-label="Main navigation"
   >
     <!-- Header -->
-    <div class="flex items-center gap-2 lg:px-2 h-14 flex-none">
+    <div class="flex items-center gap-2 px-3  h-14 flex-none">
       <div
         class="relative flex items-center justify-center p-1 rounded-lg bg-gray-700 dark:bg-gray-800"
       >

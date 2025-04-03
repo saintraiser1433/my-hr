@@ -95,12 +95,6 @@ export interface SubmittedRequirements {
     id?: number;
 }
 
-export interface SubmittedRequirements {
-    submittedAt?: Date | null;
-    expiryDate?: Date | null;
-    status: EmployeeRequirementStatus;
-    id?: number;
-}
 
 export enum EmployeeRequirementStatus {
     PENDING = "PENDING",

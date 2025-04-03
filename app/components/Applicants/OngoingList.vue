@@ -78,7 +78,7 @@ watch(
           v-if="row.original.remarks === 'ONGOING'"
           icon="i-majesticons-timer-line"
           color="neutral"
-          variant="outline"
+          variant="subtle"
           >ONGOING</UBadge
         >
         <UBadge

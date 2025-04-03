@@ -159,7 +159,7 @@ const reject = async (applicantId: number) => {
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <h4 class="font-bold">Status:</h4>
-                                    <UBadge color="neutral" variant="subtle">{{ pendingForm.status }}</UBadge>
+                                    <UBadge icon="mdi-account-pending" color="neutral" variant="subtle">{{ pendingForm.status }}</UBadge>
 
                                 </div>
                             </div>
@@ -182,7 +182,7 @@ const reject = async (applicantId: number) => {
         <h2 class="font-extrabold text-2xl">Applicants Module</h2>
         <span class="text-sm">Here's a list of pending,ongoing and rejected applicants!</span>
     </div>
-    <UTabs :items="TAB_ITEMS" class="w-full" :ui="{
+    <UTabs color="primary"  :items="TAB_ITEMS" class="w-full" :ui="{
         list: 'flex-wrap'
     }">
         <template #pending="{ item }">

@@ -12,7 +12,7 @@ useSeoMeta({
 
 const { $api, $toast } = useNuxtApp();
 const { handleApiError } = useErrorHandler();
-const { openModal, updateModal, resetModal, isOpen, isUpdate, title } = useCustomModal();
+const { openModal, updateModal, resetModal, isOpen, isUpdate, title,description } = useCustomModal();
 
 const initialState = {
   id: undefined,
@@ -93,6 +93,7 @@ const toggleModal = () => {
       @data-template="submit"
       v-model:state="templateForm"
       :title="title"
+      :description="description"
       v-model:open="isOpen"
     />
     <div class="flex flex-col items-center lg:items-start mb-3">

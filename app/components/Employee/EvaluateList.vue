@@ -107,7 +107,7 @@ watch(
         <UBadge
           :icon="row.original.isEvaluatedByTeamLead ? 'lucide-check' : 'majesticons-timer-line'"
           :color="row.original.isEvaluatedByTeamLead ? 'primary' : 'neutral'"
-          :variant="row.original.isEvaluatedByTeamLead ? 'solid' : 'outline'"
+          :variant="row.original.isEvaluatedByTeamLead ? 'solid' : 'subtle'"
           :label="row.original.isEvaluatedByTeamLead ? 'Evaluated' : 'Ongoing'"
         ></UBadge>
       </template>
@@ -115,7 +115,7 @@ watch(
         <UBadge
           :icon="row.original.isFinishedPeerEvaluate ? 'lucide-check' : 'majesticons-timer-line'"
           :color="row.original.isFinishedPeerEvaluate ? 'primary' : 'neutral'"
-          :variant="row.original.isFinishedPeerEvaluate ? 'solid' : 'outline'"
+          :variant="row.original.isFinishedPeerEvaluate ? 'solid' : 'subtle'"
           :label="row.original.isFinishedPeerEvaluate ? 'Evaluated' : 'Ongoing'"
         ></UBadge>
       </template>

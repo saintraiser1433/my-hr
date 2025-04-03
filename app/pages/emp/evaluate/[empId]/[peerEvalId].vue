@@ -128,6 +128,9 @@ const handleSubmit = async () => {
         </li>
         <li>3.To identify opportunities for personal and professional growth.</li>
       </ul>
+      <h4>
+        For each question please check the check box and fill in the comment section:
+      </h4>
       <USeparator class="py-2"></USeparator>
       <div class="flex items-center gap-5 capitalize">
         <h3 class="font-bold">Evaluate:</h3>

@@ -91,7 +91,15 @@ const unAssignJob = (data: number[]) => {
 
 const submissionRepo = repository<SubmittedRequirements>($api, "/employees/status");
 const updateSubmission = async (response: SubmittedRequirements) => {
-  const res = await submissionRepo.update(response); //error on this code
+  const submittedAt = response.submittedAt ? new Date(response.submittedAt) : new Date();
+  const expiryAt = response.expiryDate ? new Date(response.expiryDate) : new Date();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (submittedAt < today || expiryAt < today) {
+            $toast.error('Date must be today or in the future');
+            return;
+  }
+  const res = await submissionRepo.update(response); 
   const datas = res.data as EmployeeRequirements;
   requirementsData.value = requirementsData.value.map((item) =>
     item.id === response.id ? { ...item, ...datas } : item

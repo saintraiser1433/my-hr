@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 const {$toast} = useNuxtApp();
-const {acadId} = useAcademicYearStore();
+const {vAcadId,vSemester,vActiveYear} = useAcademicYearStore();
 
 const peerValue = ref(0)
 const teamLeadValue = ref(0)
@@ -15,6 +15,8 @@ const peerDepartment = computed(() => optionBarChart(peerRankingsByDept).value);
 const teamDepartment = computed(() => optionBarChart(teamRankingByDept).value);
 const recruitmentData = computed(() => recruitment.value || []);
 const jobData = computed(() => topJob.value || []);
+const subtitle = computed(() => `For academic year ${vActiveYear} - ${vSemester === 1 ? 'First Sem' : 'Second Sem'}`)
+
 
 const departmentItem = computed(() => department.value?.map((item) => ({
   id:item.id,
@@ -47,7 +49,7 @@ const {data:topJob,error:errorJob} = await useAPI<ChartModel[]>('/applicant/topj
 
 const { data: topPeerHighestRanking, error: topPeerError } = await useAPI<any[]>('/evaluation/peerResult', {
   params: {
-    acadId
+    acadId:vAcadId
   },
   transform: (data) => {
     const employeeRatings = data.reduce((acc, item) => {
@@ -77,7 +79,7 @@ const { data: topPeerHighestRanking, error: topPeerError } = await useAPI<any[]>
 
 const { data: topTLHighestRanking, error: topTLError } = await useAPI<any[]>('/evaluation/teamResult', {
   params: {
-    acadId
+    acadId:vAcadId
   },
   transform: (data) => {
     const employeeRatings = data.reduce((acc, item) => {
@@ -134,7 +136,7 @@ const pieChartData = optionPie(jobData);
 
   <div class="flex flex-col items-center lg:items-start mb-3">
     <h2 class="font-extrabold text-2xl capitalize">My Analytical Dashboard</h2>
-    <span class="text-sm italic">For academic year 2021-2022 - First Sem </span>
+    <span class="text-sm italic">{{subtitle}}</span>
   </div>
   <div class="grid grid-cols-12 gap-3 py-4">
     <div class="col-span-12 lg:col-span-3">

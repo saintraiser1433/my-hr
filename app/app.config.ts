@@ -120,6 +120,13 @@ export default defineAppConfig({
         footer: 'p-0 sm:px-0',
       }
     },
+    tabs:{
+      variants:{
+        pill:{
+          list:'bg-(--ui-bg) dark:bg-(--ui-bg)'
+        }
+      }
+    },
 
 
     dropdownMenu: {
