@@ -5,6 +5,10 @@ defineProps({
     type: Boolean,
     default: true,
   },
+  haveRemoveButton:{
+    type: Boolean,
+    default: true,
+  }
 });
 </script>
 
@@ -16,6 +20,7 @@ defineProps({
   >
     <template v-if="String(model).length" #trailing>
       <UButton
+        v-if="haveRemoveButton"
         color="neutral"
         variant="link"
         size="sm"

@@ -4,6 +4,10 @@ defineProps({
     type: Array as PropType<References[]>,
     required: true,
   },
+  isDisabled :{
+    type:Boolean,
+    default:false,
+  }
 });
 const maxLength = 11;
 
@@ -44,16 +48,21 @@ const emit = defineEmits(["add-references"]);
         <UFormField class="col-span-12 lg:col-span-4" label="Name of person">
           <UITextInput
             class="w-full"
+            :disabled="isDisabled"
+            :has-remove-button="isDisabled"
             v-model="data.name_of_person"
             placeholder="Enter name"
           />
         </UFormField>
         <UFormField class="col-span-6 lg:col-span-4" label="Position">
-          <UITextInput class="w-full" v-model="data.position" placeholder="Position" />
+          <UITextInput :disabled="isDisabled"
+          :has-remove-button="isDisabled" class="w-full" v-model="data.position" placeholder="Position" />
         </UFormField>
         <UFormField class="col-span-6 lg:col-span-4" label="Contact Number">
           <UITextInput
             type="text"
+            :disabled="isDisabled"
+            :has-remove-button="isDisabled"
             @input="(event:any) => validateMaxLength(event, maxLength)"
             v-model="data.ref_contact_number"
             class="w-full"
@@ -78,6 +87,8 @@ const emit = defineEmits(["add-references"]);
     <template #footer>
       <div class="flex justify-end">
         <UButton
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           icon="i-lucide-plus"
           size="md"
           variant="solid"

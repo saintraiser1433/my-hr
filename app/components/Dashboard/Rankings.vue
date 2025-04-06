@@ -46,7 +46,7 @@ const transformData = computed(() => data.value.slice(0,10));
           <svg-icon v-else-if="index + 1 === 3" name="iconx/thirdmedal" width="24" height="24" />
         </div>
         <div class="col-span-1 capitalize flex gap-2 items-center justify-center">{{ index+1 }}</div>
-        <div class="col-span-4 mx-auto capitalize flex gap-2 items-center font-semibold"><UAvatar size="lg" :src="`${config.public.STORAGE_URL_AVATAR}/${i.photo_path}`"/>{{ i.name }}</div>
+        <div class="col-span-4 ml-18 capitalize flex gap-2 items-center font-semibold"><UAvatar size="lg" :src="`${config.public.STORAGE_URL_AVATAR}/${i.photo_path}`"/>{{ i.name }}</div>
         <div class="col-span-4 capitalize flex gap-2 items-center justify-center line-clamp-3">
           {{ i.departmentName }}
         </div>

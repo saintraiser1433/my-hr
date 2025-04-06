@@ -8,12 +8,17 @@ defineProps({
     type: Array as PropType<string[]>,
     required: true,
   },
+  isDisabled :{
+    type:Boolean,
+    default:false,
+  }
 });
 
 const emit = defineEmits(["add-educ"]);
 </script>
 
 <template>
+
   <UCard
     class="w-full my-5"
     :ui="{
@@ -45,11 +50,13 @@ const emit = defineEmits(["add-educ"]);
         v-for="(data, index) in educData"
         :key="index"
       >
-        <div v-if="educData.length == 0">dasdasukjdhjk</div>
+       
         <UFormField class="col-span-6 lg:col-span-5" label="Name of the School">
           <UITextInput
+            :disabled="isDisabled"
             class="w-full"
             placeholder="School Name"
+            :has-remove-button="isDisabled"
             v-model="data.school_name"
           />
         </UFormField>
@@ -58,12 +65,16 @@ const emit = defineEmits(["add-educ"]);
             class="w-full"
             placeholder="Enter your degree"
             v-model="data.degree"
+            :disabled="isDisabled"
+            :has-remove-button="isDisabled"
           />
         </UFormField>
         <UFormField class="col-span-3 lg:col-span-1" label="Year Started">
           <USelectMenu
             v-model="data.year_started"
             :items="year"
+            :disabled="isDisabled"
+            :has-remove-button="isDisabled"
             class="w-full"
             placeholder="Started"
           />
@@ -72,6 +83,7 @@ const emit = defineEmits(["add-educ"]);
           <USelectMenu
             v-model="data.year_ended"
             :items="year"
+            :disabled="isDisabled"
             class="w-full"
             placeholder="End"
           />
@@ -81,6 +93,7 @@ const emit = defineEmits(["add-educ"]);
             v-model="data.description"
             :items="DESCRIPTION_ITEM"
             class="w-full"
+            :disabled="isDisabled"
             placeholder="Description"
           />
         </UFormField>
@@ -89,6 +102,7 @@ const emit = defineEmits(["add-educ"]);
     <template #footer>
       <div class="flex justify-end">
         <UButton
+          :disabled="isDisabled"
           icon="i-lucide-plus"
           size="md"
           variant="solid"

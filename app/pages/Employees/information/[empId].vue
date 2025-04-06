@@ -7,12 +7,14 @@ useSeoMeta({
 });
 
 const { $api, $toast } = useNuxtApp();
+const { getRole } = useAuthStore();
 const { handleApiError } = useErrorHandler();
 const fileValue = useState<File | null>('employee-image', () => null)
 const route = useRoute();
 const year = ref<string[]>([]);
 const username = ref<string | undefined>('');
 const yearsStart = 1900;
+
 for (let i = yearsStart; i <= new Date().getFullYear(); i++) {
   year.value.push(i.toString());
 }
@@ -128,6 +130,8 @@ const addReferences = () => {
   });
 };
 
+const isDisabled = computed(() => getRole === 'Employee' || getRole === 'TeamLead');
+
 const informationRepo = repository<CombinedInformation>($api, "/employees/info");
 const imageEmployeeRepo = repository<CombinedInformation>($api, "/employees/infoImage");
 const submitData = async () => {
@@ -171,6 +175,7 @@ provide('username',username.value)
       :skillsData="skillsData"
       :referencesData="referencesData"
       :year="year"
+      :is-disabled="isDisabled"
       @add-educ="addEduc"
       @add-work="addWork"
       @add-skills="addSkills"

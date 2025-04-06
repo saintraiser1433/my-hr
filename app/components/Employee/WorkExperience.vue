@@ -8,6 +8,10 @@ defineProps({
     type: Array as PropType<string[]>,
     required: true,
   },
+  isDisabled :{
+    type:Boolean,
+    default:false,
+  }
 });
 
 const emit = defineEmits(["add-work"]);
@@ -47,17 +51,21 @@ const emit = defineEmits(["add-work"]);
         <UFormField class="col-span-6 lg:col-span-5" label="Name of the company ">
           <UITextInput
             class="w-full"
+            :disabled="isDisabled"
+            :has-remove-button="isDisabled"
             v-model="data.company_name"
             placeholder="Company Name"
           />
         </UFormField>
         <UFormField class="col-span-6 lg:col-span-5" label="Job Title">
-          <UITextInput class="w-full" v-model="data.job_title" placeholder="Job Title" />
+          <UITextInput class="w-full" :disabled="isDisabled"
+          :has-remove-button="isDisabled" v-model="data.job_title" placeholder="Job Title" />
         </UFormField>
         <UFormField class="col-span-6 lg:col-span-1" label="Year Started">
           <USelectMenu
             v-model="data.work_year_started"
             :items="year"
+            :disabled="isDisabled"
             class="w-full"
             placeholder="Started"
           />
@@ -66,6 +74,7 @@ const emit = defineEmits(["add-work"]);
           <USelectMenu
             v-model="data.work_year_ended"
             :items="year"
+            :disabled="isDisabled"
             class="w-full"
             placeholder="End"
           />
@@ -75,6 +84,7 @@ const emit = defineEmits(["add-work"]);
     <template #footer>
       <div class="flex justify-end">
         <UButton
+          :disabled="isDisabled"
           icon="i-lucide-plus"
           size="md"
           variant="solid"

@@ -11,6 +11,7 @@ const props = defineProps({
     },
 });
 const fileInputRef = ref<InstanceType<typeof UInput> | null>(null)
+const { getRole } = useAuthStore();
 const {
     file,
     onFileChange,
@@ -51,6 +52,9 @@ watch(() => file.value,(newVal) => {
   fileValue.value = newVal;
 })
 
+const isNotAdmin = computed(() => getRole === 'Employee' || getRole === 'TeamLead');
+
+
 
 
 
@@ -84,7 +88,7 @@ watch(() => file.value,(newVal) => {
             <USeparator class="py-2 w-full col-span-12"></USeparator>
             <div class="flex items-center justify-between gap-5">
                 <USwitch v-if="store.getRole === 'Admin'" v-model="statusModel" size="sm" label="Active Status" />
-                <UButton icon="i-lucide-check" variant="solid" color="success" size="xs" @click="emit('submit')">Save</UButton>
+                <UButton v-if="!isNotAdmin" icon="i-lucide-check" variant="solid" color="success" size="xs" @click="emit('submit')">Save</UButton>
             </div>
         </div>
     </div>

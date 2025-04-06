@@ -12,16 +12,15 @@ export const useInterviewResults = () => {
       position: string;
       startDate?: string;
       hrContact?: string;
-    }) => `Dear ${details.name},\n\n` +
-    `On behalf of ${config.schoolName}, I am delighted to inform you that you have ` +
-    `successfully passed all stages of our selection process for the ${details.position} position.\n\n` +
-    `${details.startDate ? `Your onboarding will begin on ${details.startDate}. ` : ''}` +
-    `Our HR department ${details.hrContact || config.contactEmail} will contact you ` +
-    `within 48 hours with further instructions.\n\n` +
-    `Welcome to our team!\n\n` +
-    `Sincerely,\n` +
+    }) => 
+    `Dear ${details.name},\n\n` +
+    `Congratulations! You've passed all stages for the ${details.position} role at ${config.schoolName}.\n\n` +
+    `${details.startDate ? `Onboarding begins ${details.startDate}. ` : ''}` +
+    `HR Team will contact you within 48h.\n\n` +
+    `Welcome to the team!\n\n` +
+    `Best regards,\n` +
     `Academic Hiring Panel\n` +
-      `${config.schoolName}`,
+    `${config.schoolName}`,
 
     failed: (details: {
       name: string;

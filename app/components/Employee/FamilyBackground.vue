@@ -4,6 +4,10 @@ defineProps({
     type: Object,
     required: true,
   },
+  isDisabled: {
+    type:Boolean,
+    default:false
+  }
 });
 </script>
 
@@ -32,6 +36,8 @@ defineProps({
         <UITextInput
           v-model="information.fathers_name"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           placeholder="Enter your father's name"
         />
       </UFormField>
@@ -39,6 +45,8 @@ defineProps({
         <UITextInput
           v-model="information.mothers_name"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           placeholder="Enter your mother's name"
         />
       </UFormField>
@@ -46,6 +54,8 @@ defineProps({
         <UITextInput
           v-model="information.fathers_occupation"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           placeholder="Enter your father occupation"
         />
       </UFormField>
@@ -53,6 +63,8 @@ defineProps({
         <UITextInput
           v-model="information.mothers_occupation"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           placeholder="Enter your mother occupation"
         />
       </UFormField>
@@ -60,6 +72,8 @@ defineProps({
         <UITextInput
           v-model="information.parents_address"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           :ui="{ base: 'normal-case' }"
           placeholder="Enter your current address"
         />
@@ -68,6 +82,8 @@ defineProps({
         <UITextInput
           v-model="information.person_to_be_contact"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           placeholder="Enter your person to be contact"
         />
       </UFormField>

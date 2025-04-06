@@ -93,6 +93,7 @@ export interface SubmittedRequirements {
     expiryDate?: Date | null;
     status: EmployeeRequirementStatus;
     id?: number;
+    isCheck?:Boolean
 }
 
 

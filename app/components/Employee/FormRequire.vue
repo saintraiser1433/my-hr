@@ -16,17 +16,27 @@ defineProps({
 
 const open = defineModel("open", { default: false, required: true });
 const model = defineModel<SubmittedRequirements>("state", { required: true });
-const submittedAtFormatted = computed({
-  get: () =>
-    model.value.submittedAt ? model.value.submittedAt.toISOString().split("T")[0] : "",
+  const submittedAtFormatted = computed({
+  get: () => {
+    const value = model.value.submittedAt;
+    if (!value) return "";
+    const date = value instanceof Date ? value : new Date(value);
+    return isNaN(date.getTime()) ? "" : date.toISOString().split("T")[0];
+  },
   set: (val: string) => {
     model.value.submittedAt = val ? new Date(val) : undefined;
   },
 });
 
+
+
 const expiryDateFormatted = computed({
-  get: () =>
-    model.value.expiryDate ? model.value.expiryDate.toISOString().split("T")[0] : "",
+  get: () =>{
+    const value = model.value.expiryDate;
+    if (!value) return "";
+    const date = value instanceof Date ? value : new Date(value);
+    return isNaN(date.getTime()) ? "" : date.toISOString().split("T")[0];
+  },
   set: (val: string) => {
     model.value.expiryDate = val ? new Date(val) : undefined;
   },
@@ -41,11 +51,12 @@ const schema = $joi.object({
   status: $joi.string().optional(),
   id: $joi.number().optional(),
 });
-
+const isCheck = ref(false);
 const onSubmit = async (event: FormSubmitEvent<SubmittedRequirements>) => {
   emits("dataRequirement", {
     ...event.data,
     status: EmployeeRequirementStatus.SUBMITTED,
+    isCheck:isCheck.value
   });
 };
 
@@ -55,6 +66,14 @@ const submitForm = () => {
     formRef.value.submit();
   }
 };
+
+
+
+
+
+watch(() => isCheck.value,(newVal) => {
+  model.value.expiryDate = null;
+})
 </script>
 
 <template>
@@ -80,13 +99,22 @@ const submitForm = () => {
             placeholder="Select Submitted Date"
           />
         </UFormField>
-        <UFormField label="Expiry Date" name="expiryDate" required>
+        <UFormField v-if="!isCheck" label="Expiry Date" name="expiryDate" required>
           <UInput
             type="date"
             class="w-full"
             v-model="expiryDateFormatted"
             placeholder="Selected Expiry Date"
           />
+        </UFormField>
+        <UFormField label="No Expiry?" name="isExpiry" required>
+          <UCheckbox v-model="isCheck" />
+          <!-- <UInput
+            type="checkbox"
+            class="w-full"
+            v-model="expiryDateFormatted"
+            placeholder="Selected Expiry Date"
+          /> -->
         </UFormField>
       </UForm>
     </template>

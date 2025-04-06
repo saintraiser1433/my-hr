@@ -31,6 +31,10 @@ defineProps({
     type: Object as PropType<AccountSettings>,
     default: () => [],
   },
+  isDisabled :{
+    type:Boolean,
+    default:false,
+  }
 });
 
 const emit = defineEmits([
@@ -54,11 +58,12 @@ const emit = defineEmits([
       }"
     >
       <template #information="{ item }">
-        <EmployeePersonalInfo :information="information" />
-        <EmployeeFamilyBackground :information="information" />
+        <EmployeePersonalInfo :is-disabled="isDisabled" :information="information" />
+        <EmployeeFamilyBackground :is-disabled="isDisabled" :information="information" />
       </template>
       <template #education="{ item }">
         <EmployeeEducation
+          :is-disabled="isDisabled"
           :educData="educData"
           :year="year"
           @add-educ="emit('add-educ')"
@@ -66,16 +71,18 @@ const emit = defineEmits([
       </template>
       <template #work="{ item }">
         <EmployeeWorkExperience
+          :is-disabled="isDisabled"
           :workData="workData"
           :year="year"
           @add-work="emit('add-work')"
         />
       </template>
       <template #skill="{ item }">
-        <EmployeeSkills :skillsData="skillsData" @add-skills="emit('add-skills')" />
+        <EmployeeSkills :is-disabled="isDisabled" :skillsData="skillsData" @add-skills="emit('add-skills')" />
       </template>
       <template #reference="{ item }">
         <EmployeeReferences
+          :is-disabled="isDisabled"
           :referencesData="referencesData"
           @add-references="emit('add-references')"
         />

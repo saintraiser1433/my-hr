@@ -95,10 +95,14 @@ const updateSubmission = async (response: SubmittedRequirements) => {
   const expiryAt = response.expiryDate ? new Date(response.expiryDate) : new Date();
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        if (submittedAt < today || expiryAt < today) {
+        if (submittedAt < today) {
             $toast.error('Date must be today or in the future');
             return;
-  }
+        }else if(expiryAt < today  && !response.isCheck){
+            $toast.error('Date must be today or in the future');
+            return; 
+        }
+  
   const res = await submissionRepo.update(response); 
   const datas = res.data as EmployeeRequirements;
   requirementsData.value = requirementsData.value.map((item) =>

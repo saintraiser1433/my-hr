@@ -29,6 +29,7 @@ if (employeeError.value) {
 
 const assignTeamleadRepo = repository<EmployeeModel>($api, "/employees/assign");
 const assign = (data: EmployeeModel) => {
+  
   setAlert(
     "warning",
     "Are you sure you want to set this user as Team Lead?",
@@ -37,7 +38,7 @@ const assign = (data: EmployeeModel) => {
   ).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        const response = await assignTeamleadRepo.update(data);
+        const response = await assignTeamleadRepo.update({...data,departmentId:Number(route.params.deptId)});
         employeeData.value = employeeData.value.map((emp) =>
           emp.id === data.id
             ? { ...emp, role: response.data?.role as EmployeeModel["role"] }

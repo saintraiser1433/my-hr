@@ -75,7 +75,7 @@ const submit = async (response: JobModel) => {
 
     if (!isUpdate.value) {
       const res = await jobRepo.addWithImage(finalData, file);
-      jobData.value = [...jobData.value, res.data as JobModel];
+      jobData.value = [res.data as JobModel,...jobData.value];
       $toast.success(res.message);
     } else {
       const res = await jobRepo.updateWithImage(finalData, file);

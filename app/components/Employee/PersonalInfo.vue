@@ -4,12 +4,17 @@ defineProps({
     type: Object,
     required: true,
   },
+  isDisabled: {
+    type:Boolean,
+    default:false
+  }
 });
 
 const maxLength = 11;
 </script>
 
 <template>
+
   <UCard
     class="w-full"
     :ui="{
@@ -34,6 +39,8 @@ const maxLength = 11;
           v-model="information.first_name"
           class="w-full"
           placeholder="Enter your first name"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
         />
       </UFormField>
       <UFormField class="lg:col-span-4 col-span-6" label="Last Name">
@@ -41,6 +48,8 @@ const maxLength = 11;
           v-model="information.last_name"
           class="w-full"
           placeholder="Enter your last name"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
         />
       </UFormField>
       <UFormField class="lg:col-span-4 col-span-6" label="Middle Name">
@@ -48,6 +57,8 @@ const maxLength = 11;
           v-model="information.middle_name"
           class="w-full"
           placeholder="Enter your middle name"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
         />
       </UFormField>
       <UFormField class="lg:col-span-4 col-span-6" label="Gender">
@@ -55,6 +66,7 @@ const maxLength = 11;
           v-model="information.gender"
           :items="GENDER_ITEM"
           class="w-full"
+          :disabled="isDisabled"
           placeholder="Select gender"
         />
       </UFormField>
@@ -62,6 +74,8 @@ const maxLength = 11;
         <UITextInput
           v-model="information.date_of_birth"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           :ui="{ base: 'normal-case' }"
           type="date"
           placeholder="Enter your dob"
@@ -72,6 +86,8 @@ const maxLength = 11;
           v-model="information.email"
           class="w-full"
           type="email"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           :ui="{ base: 'normal-case' }"
           trailing-icon="i-lucide-at-sign"
           placeholder="Enter your email"
@@ -82,6 +98,8 @@ const maxLength = 11;
           type="text"
           v-model="information.contact_number"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           @input="(event:any) => validateMaxLength(event, maxLength)"
           aria-describedby="character-count"
           placeholder="Enter contact"
@@ -102,6 +120,7 @@ const maxLength = 11;
           type="text"
           v-model="information.telephone_number"
           class="w-full"
+          :disabled="isDisabled"
           @input="(event:any) => validateMaxLength(event, maxLength)"
           aria-describedby="character-count"
           placeholder="Enter telephone"
@@ -123,6 +142,8 @@ const maxLength = 11;
         <UITextInput
           v-model="information.permanent_address"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           :ui="{ base: 'normal-case' }"
           placeholder="Enter your permanent address"
         />
@@ -131,12 +152,15 @@ const maxLength = 11;
         <UITextInput
           v-model="information.current_address"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           :ui="{ base: 'normal-case' }"
           placeholder="Enter your current address"
         />
       </UFormField>
       <UFormField class="lg:col-span-4 col-span-6" label="Religion">
         <USelectMenu
+          :disabled="isDisabled"
           v-model="information.religion"
           :items="RELIGIONS_ITEM"
           class="w-full"
@@ -147,11 +171,15 @@ const maxLength = 11;
         <UITextInput
           v-model="information.citizenship"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           placeholder="Enter your citizenship"
         />
       </UFormField>
       <UFormField class="lg:col-span-4 col-span-6" label="Language Spoken">
         <UITextInput
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           v-model="information.language_spoken"
           class="w-full"
           placeholder="Enter your language"
@@ -162,6 +190,7 @@ const maxLength = 11;
           v-model="information.civil_status"
           :items="CIVIL_STATUS_ITEM"
           class="w-full"
+          :disabled="isDisabled"
           placeholder="Select your civil status"
         />
       </UFormField>
@@ -169,6 +198,8 @@ const maxLength = 11;
         <UITextInput
           v-model="information.nickname"
           class="w-full"
+          :disabled="isDisabled"
+          :has-remove-button="isDisabled"
           placeholder="Enter your nickname"
         />
       </UFormField>

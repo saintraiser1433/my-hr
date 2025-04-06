@@ -4,6 +4,10 @@ defineProps({
     type: Array as PropType<Skill[]>,
     required: true,
   },
+  isDisabled :{
+    type:Boolean,
+    default:false,
+  }
 });
 
 const emit = defineEmits(["add-skills"]);
@@ -41,9 +45,11 @@ const emit = defineEmits(["add-skills"]);
       >
         <UFormField class="col-span-12" label="Skills & Expertise">
           <UITextInput
+            :disabled="isDisabled"
+            :has-remove-button="isDisabled"
             class="w-full"
             v-model="data.skills_name"
-            placeholder="Company Name"
+            placeholder="Skills Name"
           />
         </UFormField>
       </div>
@@ -51,6 +57,7 @@ const emit = defineEmits(["add-skills"]);
     <template #footer>
       <div class="flex justify-end">
         <UButton
+          :disabled="isDisabled"
           icon="i-lucide-plus"
           size="md"
           variant="solid"
